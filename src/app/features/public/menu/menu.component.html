@@ -1,0 +1,52 @@
+<app-loading-spinner [show]="loading()"></app-loading-spinner>
+@if ( !loading()) {
+<div class="menu-page container">
+
+  <div class="menu-header">
+    <h1 class="page-title">Nuestro Menú</h1>
+    <p class="subtitle">Descubre el auténtico sabor gourmet en AListas</p>
+  </div>
+
+  <div class="filters-container">
+    <!-- Buscador -->
+    <div class="search-bar">
+      <nz-input-group [nzPrefix]="prefixIconSearch">
+        <input type="text" nz-input placeholder="Buscar productos..." [ngModel]="productoService.filtroBusqueda()"
+          (ngModelChange)="onSearchChange($event)" />
+      </nz-input-group>
+      <ng-template #prefixIconSearch>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
+
+    <!-- Chips de Categorías -->
+    <div class="categories-scroll">
+      <button class="cat-chip" [class.active]="productoService.filtroCategoria() === 'todas'"
+        (click)="setCategoria('todas')">
+        🍽️ Todas
+      </button>
+      @for (cat of categorias; track cat.id) {
+      <button class="cat-chip" [class.active]="productoService.filtroCategoria() === cat.id"
+        (click)="setCategoria(cat.id)">
+        {{ cat.nombre }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- Productos Grid -->
+  <div class="productos-section">
+    @if (productoService.menuFiltrado().length > 0) {
+    <div class="productos-grid">
+      @for (prod of productoService.menuFiltrado(); track prod.id) {
+      <app-producto-card [producto]="prod"></app-producto-card>
+      }
+    </div>
+    } @else {
+    <app-empty-state mensaje="No encontramos productos" subtitulo="Intenta con otra búsqueda o categoría">
+    </app-empty-state>
+    }
+  </div>
+
+</div>
+}

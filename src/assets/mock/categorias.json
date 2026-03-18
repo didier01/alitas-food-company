@@ -1,0 +1,44 @@
+[
+  {
+    "id": "cat-1",
+    "nombre": "Hamburguesas",
+    "icono": "fire",
+    "orden": 1,
+    "activa": true
+  },
+  {
+    "id": "cat-2",
+    "nombre": "Perros Calientes",
+    "icono": "star",
+    "orden": 2,
+    "activa": true
+  },
+  {
+    "id": "cat-3",
+    "nombre": "Papas & Acompañantes",
+    "icono": "appstore",
+    "orden": 3,
+    "activa": true
+  },
+  {
+    "id": "cat-4",
+    "nombre": "Bebidas",
+    "icono": "coffee",
+    "orden": 4,
+    "activa": true
+  },
+  {
+    "id": "cat-5",
+    "nombre": "Combos",
+    "icono": "gift",
+    "orden": 5,
+    "activa": true
+  },
+  {
+    "id": "cat-6",
+    "nombre": "Postres",
+    "icono": "heart",
+    "orden": 6,
+    "activa": true
+  }
+]

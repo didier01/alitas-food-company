@@ -1,0 +1,31 @@
+[
+  {
+    "id": "combo-1",
+    "nombre": "Combo Clásico",
+    "descripcion": "1 Alistas Clásica + Papas Francesas + Gaseosa 400ml",
+    "precio": 25000,
+    "imagenUrl": "https://images.unsplash.com/photo-1594998893017-36147cbcae05?q=80&w=600&auto=format&fit=crop",
+    "productosIncluidos": [
+      { "productoId": "prod-1", "cantidad": 1 },
+      { "productoId": "prod-8", "cantidad": 1 },
+      { "productoId": "prod-9", "cantidad": 1 }
+    ],
+    "sedeIds": ["ALL"],
+    "activo": true
+  },
+  {
+    "id": "combo-2",
+    "nombre": "Combo Familiar",
+    "descripcion": "2 Alistas Clásicas + 1 BBQ Bacon + Papas Cascos Superiores + 3 Gaseosas 400ml",
+    "precio": 65000,
+    "imagenUrl": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=600&auto=format&fit=crop",
+    "productosIncluidos": [
+      { "productoId": "prod-1", "cantidad": 2 },
+      { "productoId": "prod-2", "cantidad": 1 },
+      { "productoId": "prod-7", "cantidad": 2 },
+      { "productoId": "prod-9", "cantidad": 3 }
+    ],
+    "sedeIds": ["ALL"],
+    "activo": true
+  }
+]

@@ -1,0 +1,22 @@
+
+    <nz-card nzHoverable [nzCover]="coverTemplate" class="producto-card">
+      <div class="badges">
+        <app-promocion-badge *ngIf="isPromo" texto="Promo" [animar]="true"></app-promocion-badge>
+        <span *ngIf="producto.destacado" class="badge-destacado">⭐ Pop</span>
+      </div>
+      <nz-card-meta 
+        [nzTitle]="producto.nombre" 
+        [nzDescription]="producto.descripcion">
+      </nz-card-meta>
+      <div class="card-footer">
+        <span class="precio">{{ producto.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        <button nz-button nzType="primary" nzShape="round" (click)="pedirWhatsapp()">
+          <span nz-icon nzType="whatsapp"></span> Pedir
+        </button>
+      </div>
+    </nz-card>
+    <ng-template #coverTemplate>
+      <!-- Usar lazy loading nativo si no hemos creado directiva custom -->
+      <img [alt]="producto.nombre" [src]="producto.imagenUrl" loading="lazy" class="producto-img" />
+    </ng-template>
+  

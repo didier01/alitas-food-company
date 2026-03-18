@@ -1,0 +1,47 @@
+<div class="public-container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="brand">
+        <span class="logo">🔥</span>
+        <span class="brand-name">AListas</span>
+      </div>
+
+      <div class="desktop-menu" [class.show]="menuOpen">
+        <a routerLink="/inicio" routerLinkActive="active" (click)="closeMenu()">Inicio</a>
+        <a routerLink="/menu" routerLinkActive="active" (click)="closeMenu()">Menú</a>
+        <a routerLink="/sobre-nosotros" routerLinkActive="active" (click)="closeMenu()">Sobre Nosotros</a>
+        <a routerLink="/contacto" routerLinkActive="active" (click)="closeMenu()">Contacto</a>
+      </div>
+
+      <div class="actions">
+        <app-sede-select class="sede-select-desktop"></app-sede-select>
+        <button class="hamburger" (click)="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu sede select fallback -->
+    <div class="mobile-sede-select" *ngIf="menuOpen">
+      <app-sede-select></app-sede-select>
+    </div>
+  </nav>
+
+  <!-- Main Content con Animaciones -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 AListas Food Company. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp FAB Global -->
+  <a class="fab-whatsapp" href="https://wa.me/573000000000" target="_blank" aria-label="Chat en WhatsApp">
+    <img src="/assets/outline/whatsapp.svg" alt="WhatsApp" width="30" height="30" />
+    💬
+  </a>
+</div>

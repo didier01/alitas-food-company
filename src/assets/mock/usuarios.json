@@ -1,0 +1,16 @@
+[
+  {
+    "id": "user-1",
+    "nombre": "Administrador Principal",
+    "email": "admin@alistas.com",
+    "rol": "admin",
+    "activo": true
+  },
+  {
+    "id": "user-2",
+    "nombre": "Super Administrador",
+    "email": "super@alistas.com",
+    "rol": "superadmin",
+    "activo": true
+  }
+]

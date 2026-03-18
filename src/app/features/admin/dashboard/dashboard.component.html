@@ -1,0 +1,59 @@
+<app-loading-spinner [show]="loading()"></app-loading-spinner>
+@if (!loading()) {
+<div class="dashboard-page">
+  <div class="page-header">
+    <h1>Dashboard General</h1>
+    <p>Resumen de tu operación</p>
+  </div>
+
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" class="stat-col">
+      <nz-card>
+        <nz-statistic [nzValue]="stats.productos" [nzTitle]="'Total Productos'"
+          [nzPrefix]="prefixTplProd"></nz-statistic>
+        <ng-template #prefixTplProd><span nz-icon nzType="shopping"></span></ng-template>
+      </nz-card>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" class="stat-col">
+      <nz-card>
+        <nz-statistic [nzValue]="stats.categorias" [nzTitle]="'Categorías'" [nzPrefix]="prefixTplCat"></nz-statistic>
+        <ng-template #prefixTplCat><span nz-icon nzType="unordered-list"></span></ng-template>
+      </nz-card>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" class="stat-col">
+      <nz-card>
+        <nz-statistic [nzValue]="stats.sedes" [nzTitle]="'Sedes Activas'" [nzPrefix]="prefixTplSedes"></nz-statistic>
+        <ng-template #prefixTplSedes><span nz-icon nzType="shop"></span></ng-template>
+      </nz-card>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" class="stat-col">
+      <nz-card>
+        <nz-statistic [nzValue]="stats.promociones" [nzTitle]="'Promociones Vigentes'"
+          [nzPrefix]="prefixTplPromos"></nz-statistic>
+        <ng-template #prefixTplPromos><span nz-icon nzType="tag"></span></ng-template>
+      </nz-card>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <h2>Accesos Rápidos</h2>
+    <div nz-row [nzGutter]="16">
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <button nz-button nzType="primary" nzSize="large" nzBlock routerLink="/admin/productos">Gestionar
+          Productos</button>
+      </div>
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <button nz-button nzType="default" nzSize="large" nzBlock routerLink="/admin/menus">Modificar Menús de
+          Sedes</button>
+      </div>
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <button nz-button nzType="dashed" nzSize="large" nzBlock routerLink="/admin/promociones">Nueva
+          Promoción</button>
+      </div>
+    </div>
+  </div>
+</div>
+}

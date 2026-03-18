@@ -1,0 +1,19 @@
+
+    <div class="sede-select-wrapper">
+      <nz-select 
+        [ngModel]="safeSedeId()" 
+        (ngModelChange)="onSedeChange($event)"
+        nzPlaceHolder="Selecciona tu sede"
+        [nzCustomTemplate]="selectedTemplate">
+        @for (sede of sedes(); track sede.id) {
+          <nz-option [nzValue]="sede.id" [nzLabel]="sede.nombre" [nzCustomContent]="true">
+            <span class="option-content">📍 {{ sede.nombre }}</span>
+          </nz-option>
+        }
+      </nz-select>
+      
+      <ng-template #selectedTemplate let-selected>
+        <span class="selected-text">📍 {{ selected.nzLabel }}</span>
+      </ng-template>
+    </div>
+  

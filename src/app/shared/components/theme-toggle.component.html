@@ -1,0 +1,9 @@
+
+    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="'Cambiar tema'">
+      @if (themeService.temaAdmin() === 'dark') {
+        <span class="icon">☀️</span> Light Mode
+      } @else {
+        <span class="icon">🌙</span> Dark Mode
+      }
+    </button>
+  

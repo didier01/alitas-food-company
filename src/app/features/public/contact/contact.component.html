@@ -1,0 +1,85 @@
+<app-loading-spinner [show]="loading()"></app-loading-spinner>
+@if ( !loading()) {
+<div class="contact-page container">
+
+  <div class="contact-header">
+    <h1 class="page-title">Ponte en Contacto</h1>
+    <p class="subtitle">¿Tienes alguna duda o sugerencia? Envíanos un mensaje o contáctanos por WhatsApp.</p>
+  </div>
+
+  <div class="contact-content">
+
+    <!-- Formulario de Contacto -->
+    <div class="contact-form-container">
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+        <div class="form-group">
+          <label>Nombre Completo *</label>
+          <input nz-input formControlName="nombre" placeholder="Tu nombre" />
+          <div class="error-msg" *ngIf="contactForm.get('nombre')?.invalid && contactForm.get('nombre')?.touched">
+            El nombre es requerido.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Correo Electrónico *</label>
+          <input nz-input formControlName="email" type="email" placeholder="tu@email.com" />
+          <div class="error-msg" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+            Ingresa un correo válido.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Sede Relacionada</label>
+          <nz-select formControlName="sedeId" nzPlaceHolder="Selecciona una sede">
+            @for (sede of sedes; track sede.id) {
+            <nz-option [nzValue]="sede.id" [nzLabel]="sede.nombre"></nz-option>
+            }
+          </nz-select>
+        </div>
+
+        <div class="form-group">
+          <label>Mensaje *</label>
+          <textarea nz-input formControlName="mensaje" placeholder="Escribe tu mensaje aquí..."
+            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+          <div class="error-msg" *ngIf="contactForm.get('mensaje')?.invalid && contactForm.get('mensaje')?.touched">
+            El mensaje es requerido (mínimo 10 caracteres).
+          </div>
+        </div>
+
+        <button nz-button nzType="primary" nzSize="large" [disabled]="contactForm.invalid || enviando"
+          class="btn-submit">
+          {{ enviando ? 'Enviando...' : 'Enviar Mensaje' }}
+        </button>
+        <div class="success-msg" *ngIf="enviado">
+          ✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
+        </div>
+      </form>
+    </div>
+
+    <!-- Info Directa -->
+    <div class="contact-info">
+      <div class="info-card">
+        <h3>Atención al Cliente</h3>
+        <p>Estamos disponibles para atenderte en nuestros horarios de apertura.</p>
+
+        <div class="direct-contact">
+          <button nz-button nzType="default" class="btn-whatsapp" (click)="openDirectWhatsapp()">
+            <img src="/assets/outline/whatsapp.svg" alt="WhatsApp" width="20" height="20" class="icon-outline"> Chat Directo
+          </button>
+        </div>
+
+        <h4>Síguenos</h4>
+        <div class="social-links">
+          <a href="https://instagram.com/alistasfc" target="_blank">
+            <img src="/assets/outline/instagram.svg" alt="Instagram" width="20" height="20" class="icon-outline"> @alistasfc
+          </a>
+          <a href="https://facebook.com/alistasfc" target="_blank">
+            <img src="/assets/outline/facebook.svg" alt="Facebook" width="20" height="20" class="icon-outline"> /alistasfc
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+}

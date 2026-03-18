@@ -1,0 +1,130 @@
+
+    .contact-page {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .contact-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .page-title {
+      font-size: 2.5rem;
+      color: var(--brand-primary);
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: var(--public-text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .contact-content {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 40px;
+    }
+
+    /* Formulario */
+    .contact-form-container {
+      background: var(--public-bg-card);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--public-border);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--public-text-primary);
+    }
+    ::ng-deep .form-group .ant-input, ::ng-deep .form-group .ant-select-selector {
+      background-color: var(--public-bg-secondary) !important;
+      border-color: var(--public-border) !important;
+      color: var(--public-text-primary) !important;
+    }
+    ::ng-deep .form-group .ant-select { width: 100%; }
+    .error-msg {
+      color: #ff4d4f;
+      font-size: 0.85rem;
+      margin-top: 5px;
+    }
+    .btn-submit {
+      width: 100%;
+      background-color: var(--brand-primary);
+      border-color: var(--brand-primary);
+      font-weight: bold;
+    }
+    .btn-submit:hover {
+      background-color: var(--brand-secondary);
+      border-color: var(--brand-secondary);
+      color: #000;
+    }
+    .success-msg {
+      margin-top: 15px;
+      color: #52c41a;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Info */
+    .info-card {
+      background: var(--public-bg-card);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--public-border);
+      height: 100%;
+    }
+    .info-card h3 {
+      color: var(--brand-secondary);
+      margin-top: 0;
+    }
+    .info-card p {
+      color: var(--public-text-secondary);
+      margin-bottom: 30px;
+    }
+    .direct-contact {
+      margin-bottom: 40px;
+    }
+    .btn-whatsapp {
+      width: 100%;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      height: 45px;
+      font-size: 1.1rem;
+    }
+    .btn-whatsapp:hover {
+      background-color: #1EBE55;
+      color: white;
+    }
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .social-links a {
+      color: var(--public-text-primary);
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: color 0.2s;
+    }
+    .icon-outline {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .social-links a:hover {
+      color: var(--brand-primary);
+    }
+
+    @media (max-width: 768px) {
+      .contact-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  

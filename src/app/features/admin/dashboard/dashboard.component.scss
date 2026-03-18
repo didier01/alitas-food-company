@@ -1,0 +1,40 @@
+
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      margin-bottom: 5px;
+      color: var(--admin-text-primary);
+    }
+    .page-header p {
+      color: var(--admin-text-secondary);
+    }
+    .stat-col {
+      margin-bottom: 16px;
+    }
+    ::ng-deep .ant-statistic-title {
+      font-weight: 500;
+      color: var(--admin-text-secondary) !important;
+    }
+    ::ng-deep .ant-statistic-content {
+      color: var(--admin-accent) !important;
+      font-weight: 700;
+    }
+    ::ng-deep .ant-statistic-content-prefix {
+      margin-right: 10px;
+    }
+    .quick-actions {
+      margin-top: 40px;
+    }
+    .quick-actions h2 {
+      margin-bottom: 20px;
+      color: var(--admin-text-primary);
+    }
+    .quick-actions button {
+      margin-bottom: 16px;
+    }
+    ::ng-deep .ant-card {
+      background: var(--admin-bg-primary);
+      border-color: var(--admin-border);
+    }
+  

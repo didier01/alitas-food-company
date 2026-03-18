@@ -1,0 +1,71 @@
+
+    .admin-layout {
+      min-height: 100vh;
+      font-family: var(--font-body);
+    }
+    .logo-admin {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--admin-text-primary);
+      background: var(--admin-bg-secondary);
+      border-bottom: 1px solid var(--admin-border);
+    }
+    h2 { margin: 0; color: var(--admin-text-primary); font-family: var(--font-title); }
+    
+    .admin-header {
+      background: var(--admin-bg-secondary);
+      padding: 0;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      height: 100%;
+    }
+    .trigger {
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--admin-text-primary);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .user-greeting {
+      color: var(--admin-text-primary);
+      font-weight: 500;
+    }
+    .logout-btn {
+      background: none;
+      border: none;
+      color: var(--admin-text-primary);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .logout-btn:hover {
+      color: var(--admin-accent);
+    }
+    
+    .admin-content-wrapper {
+      padding: 24px;
+      background: var(--admin-bg-primary);
+      transition: background 0.3s;
+    }
+    .inner-content {
+      background: var(--admin-bg-card);
+      padding: 24px;
+      min-height: calc(100vh - 112px); /* 100vh - header(64) - padding(48) */
+      border-radius: var(--border-radius);
+      border: 1px solid var(--admin-border);
+      color: var(--admin-text-primary);
+    }
+
+    /* Sobreescribiendo Sider en caso de que theme-light quiera algo más suave (opcional) */
+  

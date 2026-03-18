@@ -1,11 +1,86 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
+import { ApplicationConfig, provideZonelessChangeDetection, importProvidersFrom } from '@angular/core';
+import { provideRouter, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { mockInterceptor } from './core/interceptors/mock.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+
+import { NZ_I18N, es_ES } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import es from '@angular/common/locales/es';
+import { FormsModule } from '@angular/forms';
+
+registerLocaleData(es);
+
+import { provideNzIcons } from 'ng-zorro-antd/icon';
+import { 
+  // Outlines
+  PlusOutline, EditOutline, DeleteOutline, SearchOutline, 
+  EnvironmentOutline, PhoneOutline, ClockCircleOutline, 
+  InstagramOutline, FacebookOutline, WhatsAppOutline, 
+  AppstoreOutline, DashboardOutline, ShopOutline, 
+  UnorderedListOutline, ShoppingOutline, TagOutline, 
+  GiftOutline, TeamOutline, LogoutOutline, 
+  InfoCircleOutline, SettingOutline, GlobalOutline, 
+  StarOutline, DragOutline, SafetyCertificateOutline, 
+  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline, 
+  HeartOutline, FireOutline, RocketOutline, 
+  ThunderboltOutline, CrownOutline, RestOutline, 
+  HddOutline, HomeOutline, MessageOutline, 
+  MailOutline, UserOutline, LockOutline, 
+  EyeOutline, EyeInvisibleOutline, FilterOutline, 
+  ReloadOutline, ArrowLeftOutline, ArrowRightOutline, 
+  CloseOutline, CheckOutline,
+  
+  // Fills
+  InfoCircleFill, StarFill, SafetyCertificateFill, 
+  HeartFill, FireFill, CheckCircleFill, 
+  CloseCircleFill, ExclamationCircleFill,
+  
+  // TwoTones
+  EditTwoTone, DeleteTwoTone, SettingTwoTone, 
+  CheckCircleTwoTone, CloseCircleTwoTone, 
+  ExclamationCircleTwoTone, InfoCircleTwoTone, 
+  HeartTwoTone, StarTwoTone
+} from '@ant-design/icons-angular/icons';
+
+const icons = [
+  PlusOutline, EditOutline, DeleteOutline, SearchOutline, 
+  EnvironmentOutline, PhoneOutline, ClockCircleOutline, 
+  InstagramOutline, FacebookOutline, WhatsAppOutline, 
+  AppstoreOutline, DashboardOutline, ShopOutline, 
+  UnorderedListOutline, ShoppingOutline, TagOutline, 
+  GiftOutline, TeamOutline, LogoutOutline, 
+  InfoCircleOutline, SettingOutline, GlobalOutline, 
+  StarOutline, DragOutline, SafetyCertificateOutline, 
+  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline, 
+  HeartOutline, FireOutline, RocketOutline, 
+  ThunderboltOutline, CrownOutline, RestOutline, 
+  HddOutline, HomeOutline, MessageOutline, 
+  MailOutline, UserOutline, LockOutline, 
+  EyeOutline, EyeInvisibleOutline, FilterOutline, 
+  ReloadOutline, ArrowLeftOutline, ArrowRightOutline, 
+  CloseOutline, CheckOutline,
+  
+  InfoCircleFill, StarFill, SafetyCertificateFill, 
+  HeartFill, FireFill, CheckCircleFill, 
+  CloseCircleFill, ExclamationCircleFill,
+  
+  EditTwoTone, DeleteTwoTone, SettingTwoTone, 
+  CheckCircleTwoTone, CloseCircleTwoTone, 
+  ExclamationCircleTwoTone, InfoCircleTwoTone, 
+  HeartTwoTone, StarTwoTone
+];
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
+    provideZonelessChangeDetection(),
+    provideRouter(routes, withViewTransitions()),
+    provideHttpClient(withInterceptors([authInterceptor, mockInterceptor])),
+    provideAnimationsAsync(),
+    provideNzIcons(icons),
+    { provide: NZ_I18N, useValue: es_ES },
+    importProvidersFrom(FormsModule)
   ]
 };

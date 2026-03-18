@@ -1,0 +1,12 @@
+
+    .page-container { background: var(--admin-bg-primary); }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h2 { margin: 0; color: var(--admin-text-primary); }
+    .action-buttons { display: flex; gap: 8px; }
+    .muted-text { color: var(--admin-text-secondary); font-size: 0.9rem;}
+
+    ::ng-deep .ant-table { background: transparent !important; color: var(--admin-text-primary); }
+    ::ng-deep .ant-table-thead > tr > th { background: var(--admin-bg-secondary); color: var(--admin-text-primary); border-bottom: 1px solid var(--admin-border); }
+    ::ng-deep .ant-table-tbody > tr > td { border-bottom: 1px solid var(--admin-border); }
+    ::ng-deep .ant-table-tbody > tr:hover > td { background: var(--admin-bg-secondary) !important; }
+  

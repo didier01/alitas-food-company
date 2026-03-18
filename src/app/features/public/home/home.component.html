@@ -1,0 +1,73 @@
+
+    <app-loading-spinner [show]="loading()"></app-loading-spinner>
+    
+    <div class="home-wrapper" *ngIf="!loading()">
+      
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>Auténtico Sabor Gourmet</h1>
+          <p>Disfruta de las mejores hamburguesas, acompañantes y combos en AListas Food Company.</p>
+          <button routerLink="/menu" class="btn-primary-large">Ver Menú Completo</button>
+        </div>
+      </section>
+ 
+      <!-- Promociones Activas -->
+      <section class="promos-section" *ngIf="promociones().length > 0">
+        <div class="container">
+          <h2 class="section-title">Promociones Activas <span class="emoji">🔥</span></h2>
+          <div class="promos-grid">
+            @for (promo of promociones(); track promo.id) {
+              <div class="promo-card">
+                <img [src]="promo.imagenUrl" [alt]="promo.titulo" loading="lazy">
+                <div class="promo-info">
+                  <h3>{{ promo.titulo }}</h3>
+                  <p>{{ promo.descripcion }}</p>
+                  <p class="promo-dias">Aplica los: {{ promo.diasAplica.join(', ') }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+ 
+      <!-- Productos Destacados -->
+      <section class="destacados-section">
+        <div class="container">
+          <h2 class="section-title">Nuestros Destacados <span class="emoji">⭐</span></h2>
+          <div class="productos-grid">
+            @for (prod of destacados(); track prod.id) {
+              <app-producto-card [producto]="prod"></app-producto-card>
+            }
+          </div>
+        </div>
+      </section>
+ 
+      <!-- Combos Section -->
+      <section class="combos-section" *ngIf="combos().length > 0">
+        <div class="container">
+          <h2 class="section-title">Combos AListas <span class="emoji">🎁</span></h2>
+          <div class="combos-grid">
+            @for (combo of combos(); track combo.id) {
+              <div class="combo-card">
+                <div class="combo-img">
+                  <img [src]="combo.imagenUrl" [alt]="combo.nombre" loading="lazy">
+                  <div class="combo-badge">Ahorra</div>
+                </div>
+                <div class="combo-content">
+                  <h3>{{ combo.nombre }}</h3>
+                  <p>{{ combo.descripcion }}</p>
+                  <div class="combo-footer">
+                    <span class="precio">{{ combo.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                    <button class="btn-primary" (click)="pedirCombo(combo)">Pedir Combo</button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+    </div>
+  

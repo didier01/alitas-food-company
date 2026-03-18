@@ -1,0 +1,37 @@
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+      text-align: center;
+      color: var(--public-text-secondary);
+      background: var(--public-bg-card);
+      border-radius: var(--border-radius);
+      border: 1px dashed var(--public-border);
+    }
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    h3 {
+      margin: 0 0 0.5rem;
+      color: var(--public-text-primary);
+      font-size: 1.25rem;
+    }
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    /* Estilos adaptables para dashboard (admin) */
+    :host-context(.admin-layout) .empty-state {
+      background: var(--admin-bg-card);
+      color: var(--admin-text-secondary);
+      border-color: var(--admin-border);
+    }
+    :host-context(.admin-layout) h3 {
+      color: var(--admin-text-primary);
+    }
+  

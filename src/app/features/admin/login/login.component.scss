@@ -1,0 +1,59 @@
+
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--admin-bg-primary, #141414);
+      color: var(--admin-text-primary, #fff);
+      padding: 20px;
+    }
+    .login-container {
+      background-color: var(--admin-bg-card, #262626);
+      border: 1px solid var(--admin-border, #434343);
+      padding: 40px;
+      border-radius: var(--border-radius, 12px);
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      font-size: 3rem;
+    }
+    .brand-name {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--admin-accent, #FF6B35);
+    }
+    /* Adapters visuales NG-ZORRO a dark mode standalone */
+    ::ng-deep .login-wrapper.theme-dark .ant-form-item-label > label {
+      color: var(--admin-text-primary);
+    }
+    ::ng-deep .login-wrapper.theme-dark .ant-input {
+      background-color: transparent;
+      color: var(--admin-text-primary);
+      border-color: var(--admin-border);
+    }
+    ::ng-deep .login-wrapper.theme-dark .ant-btn-primary {
+      background-color: var(--admin-accent);
+      border-color: var(--admin-accent);
+    }
+    ::ng-deep .login-wrapper.theme-dark .ant-btn-primary:hover {
+      background-color: #e65a26;
+      border-color: #e65a26;
+    }
+    .demo-creds {
+      margin-top: 30px;
+      text-align: center;
+      color: var(--admin-text-secondary, #8C8C8C);
+      font-size: 0.85rem;
+      padding-top: 20px;
+      border-top: 1px solid var(--admin-border, #434343);
+    }
+    .demo-creds p { margin: 0 0 5px; }
+  

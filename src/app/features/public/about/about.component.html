@@ -1,0 +1,55 @@
+<app-loading-spinner [show]="loading()"></app-loading-spinner>
+@if ( !loading()) {
+<div class="about-page">
+  <!-- Hero de Historia -->
+  <section class="history-section">
+    <div class="container">
+      <div class="history-content">
+        <h1>Nuestra Historia <span class="emoji">🍔</span></h1>
+        <p>
+          AListas Food Company nació con la visión de revolucionar la comida rápida gourmet en Medellín.
+          Nos apasiona la calidad, los ingredientes frescos y las recetas que rompen esquemas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nuestras Sedes -->
+  <section class="sedes-section">
+    <div class="container">
+      <h2 class="section-title">Encuéntranos en</h2>
+
+      <div class="sedes-grid">
+        @for (sede of sedes; track sede.id) {
+        <div class="sede-card">
+          <div class="sede-img">
+            <img [src]="sede.imagenUrl" [alt]="sede.nombre" loading="lazy">
+          </div>
+          <div class="sede-info">
+            <h3>{{ sede.nombre }}</h3>
+            <div class="info-row">
+              <img src="/assets/outline/environment.svg" alt="Ubicación" width="18" height="18" class="icon-outline">
+              <span>{{ sede.direccion }}</span>
+            </div>
+            <div class="info-row">
+              <img src="/assets/outline/phone.svg" alt="WhatsApp" width="18" height="18" class="icon-outline">
+              <span>{{ sede.whatsapp }}</span>
+            </div>
+            <div class="info-row">
+              <span nz-icon nzType="clock-circle"></span>
+              <span>{{ sede.horario.apertura }} - {{ sede.horario.cierre }}</span>
+            </div>
+
+            <div class="map-container">
+              <iframe [src]="getMapUrl(sede)" width="100%" height="200" style="border:0;" allowfullscreen=""
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+</div>
+}

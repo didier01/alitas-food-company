@@ -1,0 +1,162 @@
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--brand-secondary);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .emoji {
+      font-size: 1.8rem;
+    }
+    /* Hero */
+    .hero-section {
+      height: 70vh;
+      min-height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(13,13,13,1));
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: var(--public-text-primary);
+    }
+    .btn-primary-large {
+      background-color: var(--brand-primary);
+      color: #fff;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-primary-large:hover {
+      background-color: #e65a26;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(255, 107, 53, 0.4);
+    }
+
+    /* Generics for grids */
+    .promos-section, .destacados-section, .combos-section {
+      padding: 4rem 0;
+    }
+    .productos-grid, .combos-grid, .promos-grid {
+      display: grid;
+      gap: 24px;
+    }
+    .productos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    .combos-grid {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+    .promos-grid {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    /* Cards Personalizadas para promos y combos */
+    .promo-card, .combo-card {
+      background: var(--public-bg-card);
+      border: 1px solid var(--public-border);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+    .promo-card:hover, .combo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .promo-card img, .combo-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .promo-info, .combo-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .combo-img {
+      position: relative;
+    }
+    .combo-badge {
+      position: absolute;
+      top: 15px; left: 15px;
+      background: var(--brand-primary);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .promo-info h3, .combo-content h3 {
+      margin-top: 0;
+      color: var(--public-text-primary);
+      font-size: 1.3rem;
+    }
+    .promo-dias {
+      color: var(--brand-secondary);
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+    .combo-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+    }
+    .btn-primary {
+      background-color: var(--brand-primary);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 { font-size: 2.5rem; }
+      .combos-grid, .promos-grid { grid-template-columns: 1fr; }
+    }
+  

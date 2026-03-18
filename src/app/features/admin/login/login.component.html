@@ -1,0 +1,39 @@
+
+    <div class="login-wrapper theme-dark">
+      <div class="login-container">
+        <div class="brand">
+          <span class="logo">🔥</span>
+          <br>
+          <span class="brand-name">AListas Admin</span>
+        </div>
+        
+        <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()" nzLayout="vertical">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Email</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Introduce un email válido">
+              <input nz-input formControlName="email" id="email" type="email" placeholder="admin@alistas.com" />
+            </nz-form-control>
+          </nz-form-item>
+          
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Contraseña</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Requerido">
+              <input nz-input formControlName="password" id="password" type="password" placeholder="••••••••" />
+            </nz-form-control>
+          </nz-form-item>
+          
+          <nz-form-item nz-row class="form-actions">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
+              <button nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="loading">Ingresar</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+        
+        <div class="demo-creds">
+          <p>Credenciales de prueba:</p>
+          <small>admin&#64;alistas.com / Admin123</small><br>
+          <small>super&#64;alistas.com / Super123</small>
+        </div>
+      </div>
+    </div>
+  

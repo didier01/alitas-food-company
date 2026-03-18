@@ -1,0 +1,135 @@
+<app-loading-spinner [show]="loadingData()"></app-loading-spinner>
+
+<div class="page-container">
+  <div class="page-header">
+    <h2>Gestión de Combos</h2>
+    <button nz-button nzType="primary" (click)="openModal()">
+      <span nz-icon nzType="plus"></span> Nuevo Combo
+    </button>
+  </div>
+
+  <nz-table #basicTable [nzData]="combos" [nzFrontPagination]="true" [nzPageSize]="10">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Precio Combo</th>
+        <th>Productos en Combo</th>
+        <th>Sedes</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of basicTable.data; track data.id) {
+      <tr>
+        <td><strong>{{ data.nombre }}</strong></td>
+        <td>{{ data.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+        <td>
+          <span class="muted-text">{{ data.productosIncluidos.length }} productos seleccionados</span>
+        </td>
+        <td>
+          <nz-tag *ngIf="data.sedeIds.length === 0 || data.sedeIds.includes('TODAS')"
+            nzColor="processing">Todas</nz-tag>
+          <ng-container *ngIf="data.sedeIds.length > 0 && !data.sedeIds.includes('TODAS')">
+            <nz-tag *ngFor="let s of data.sedeIds">{{ getSedeName(s) }}</nz-tag>
+          </ng-container>
+        </td>
+        <td>
+          <nz-tag [nzColor]="data.activo ? 'success' : 'default'">
+            {{ data.activo ? 'Activo' : 'Inactivo' }}
+          </nz-tag>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="editCombo(data)">
+              <span nz-icon nzType="edit" nzTheme="twotone"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
+              nzPopconfirmTitle="¿Eliminar este combo?" (nzOnConfirm)="deleteCombo(data)">
+              <span nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Modal Combo -->
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Combo' : 'Nuevo Combo'" [nzWidth]="700"
+  (nzOnCancel)="closeModal()" (nzOnOk)="saveCombo()" [nzOkLoading]="loadingAction()" [nzOkDisabled]="comboForm.invalid">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="comboForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="16">
+          <nz-form-item>
+            <nz-form-label nzRequired>Nombre del Combo</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="nombre" placeholder="Ej: Combo Pareja" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>Precio Especial</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <nz-input-number formControlName="precio" [nzMin]="0" [nzStep]="1000"
+                style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Descripción</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <textarea nz-input formControlName="descripcion" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Productos que conforman el Combo</nz-form-label>
+        <nz-form-control nzErrorTip="Se requieren productos">
+          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Productos" formControlName="productosIncluidos">
+            @for (p of productos; track p.id) {
+            <nz-option [nzValue]="p.id" [nzLabel]="p.nombre + ' (' + p.precio + ' COP)' "></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="imagenUrl" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Sedes Aplicables</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="sedeIds">
+                <nz-option nzValue="TODAS" nzLabel="TODAS LAS SEDES"></nz-option>
+                @for (sede of sedes; track sede.id) {
+                <nz-option [nzValue]="sede.id" [nzLabel]="sede.nombre"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Disponible (Activo)</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="activo"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+  </ng-container>
+</nz-modal>

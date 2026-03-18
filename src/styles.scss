@@ -1,1 +1,190 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+/* Reset base y Tokens Visuales */
+:root {
+  /* Sitio Público: Tema oscuro fijo y Brand colors */
+  --brand-primary: #FF6B35;
+  --brand-secondary: #FFD700;
+  
+  --public-bg-primary: #0D0D0D;
+  --public-bg-secondary: #242424;
+  --public-bg-card: #1A1A1A;
+  --public-text-primary: #F5F5F5;
+  --public-text-secondary: #A0A0A0;
+  --public-border: #2E2E2E;
+
+  --font-title: 'Poppins', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  --border-radius: 12px;
+}
+
+/* Tema oscuro Admin (Predeterminado) */
+.theme-dark {
+  --admin-bg-primary: #141414;
+  --admin-bg-secondary: #1F1F1F;
+  --admin-bg-card: #262626;
+  --admin-text-primary: #FFFFFF;
+  --admin-text-secondary: #8C8C8C;
+  --admin-border: #434343;
+  --admin-accent: #FF6B35;
+}
+
+/* Tema claro Admin */
+.theme-light {
+  --admin-bg-primary: #F5F5F5;
+  --admin-bg-secondary: #FFFFFF;
+  --admin-bg-card: #FAFAFA;
+  --admin-text-primary: #141414;
+  --admin-text-secondary: #595959;
+  --admin-border: #D9D9D9;
+  --admin-accent: #FF6B35;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--public-bg-primary); /* Default behavior for public */
+  color: var(--public-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+}
+
+/* Utilities */
+.text-brand { color: var(--brand-primary); }
+.bg-brand { background-color: var(--brand-primary); }
+.br-12 { border-radius: var(--border-radius); }
+
+/* Global Admin Theming for NG-ZORRO Overlays */
+.theme-dark, .theme-light {
+  /* Tables */
+  .ant-table {
+    background: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+  }
+  .ant-table-thead > tr > th {
+    background: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border-bottom: 1px solid var(--admin-border);
+  }
+  .ant-table-tbody > tr > td {
+    border-bottom: 1px solid var(--admin-border);
+    background: transparent;
+  }
+  .ant-table-tbody > tr:hover > td {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Modals */
+  .ant-modal-content {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+  }
+  .ant-modal-header {
+    background-color: var(--admin-bg-secondary);
+    border-bottom: 1px solid var(--admin-border);
+    .ant-modal-title {
+      color: var(--admin-text-primary);
+    }
+  }
+  .ant-modal-footer {
+    border-top: 1px solid var(--admin-border);
+  }
+  .ant-modal-close-x {
+    color: var(--admin-text-secondary);
+  }
+
+  /* Drawers */
+  .ant-drawer-content {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+  }
+  .ant-drawer-header {
+    background-color: var(--admin-bg-secondary);
+    border-bottom: 1px solid var(--admin-border);
+    .ant-drawer-title {
+      color: var(--admin-text-primary);
+    }
+  }
+  .ant-drawer-close {
+    color: var(--admin-text-secondary);
+  }
+
+  /* Cards & Statistics */
+  .ant-card {
+    background: var(--admin-bg-card);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text-primary);
+  }
+  .ant-statistic-title {
+    color: var(--admin-text-secondary);
+  }
+  .ant-statistic-content {
+    color: var(--admin-text-primary);
+  }
+
+  /* Inputs & Forms */
+  .ant-input, .ant-input-number, .ant-select-selector {
+    background-color: var(--admin-bg-primary) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+  }
+  .ant-form-item-label > label {
+    color: var(--admin-text-primary);
+  }
+  .ant-select-arrow {
+    color: var(--admin-text-secondary);
+  }
+  
+  /* Select dropdowns (Portals) */
+  .ant-select-dropdown {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border);
+    .ant-select-item {
+      color: var(--admin-text-primary);
+      &.ant-select-item-option-active {
+        background: rgba(255, 107, 53, 0.1);
+      }
+    }
+  }
+
+  /* Sidebar & Sider Menu */
+  .ant-layout-sider {
+    background: var(--admin-bg-secondary) !important;
+  }
+  .ant-menu {
+    background: var(--admin-bg-secondary) !important;
+    color: var(--admin-text-primary);
+  }
+  .ant-menu-item {
+    color: var(--admin-text-secondary);
+    &.ant-menu-item-selected {
+      background: rgba(255, 107, 53, 0.1) !important;
+      color: var(--admin-accent) !important;
+      &::after {
+        border-right-color: var(--admin-accent) !important;
+      }
+    }
+    &:hover {
+      color: var(--admin-accent) !important;
+    }
+  }
+  .ant-layout-sider-trigger {
+    background: var(--admin-bg-card) !important;
+    color: var(--admin-text-primary) !important;
+    border-top: 1px solid var(--admin-border);
+  }
+}
+
+/* Specific layout adjustments */
+.admin-layout.theme-dark, .admin-layout.theme-light {
+  background-color: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+  min-height: 100vh;
+}

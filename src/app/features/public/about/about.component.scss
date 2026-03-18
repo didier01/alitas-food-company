@@ -1,0 +1,16 @@
+
+    .history-section { background: var(--public-bg-card); padding: 80px 20px; text-align: center; }
+    .history-content { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 3rem; color: var(--brand-primary); margin-bottom: 2rem; }
+    p { font-size: 1.2rem; line-height: 1.6; color: var(--public-text-secondary); }
+    .sedes-section { padding: 60px 20px; }
+    .section-title { font-size: 2.5rem; text-align: center; margin-bottom: 40px; }
+    .sedes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+    .sede-card { background: var(--public-bg-card); border-radius: var(--border-radius); overflow: hidden; border: 1px solid var(--public-border); }
+    .sede-img img { width: 100%; height: 250px; object-fit: cover; }
+    .sede-info { padding: 30px; }
+    .info-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: var(--public-text-secondary); font-size: 1.05rem; }
+    .icon-outline { filter: invert(31%) sepia(94%) Pride(100%) hue-rotate(1deg) brightness(103%) contrast(105%); } /* Match brand-primary if possible or just use currentColor filters */
+    /* Alternative: for simple white/brand icons, we can just let them be or use specific filter if they are black SVGs */
+    .map-container { margin-top: 24px; border-radius: 8px; overflow: hidden; background: #2e2e2e; }
+  

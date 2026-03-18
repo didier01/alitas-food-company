@@ -1,0 +1,24 @@
+
+    .sede-select-wrapper {
+      min-width: 200px;
+    }
+    ::ng-deep .sede-select-wrapper .ant-select {
+      width: 100%;
+    }
+    ::ng-deep .sede-select-wrapper .ant-select-selector {
+      background-color: var(--public-bg-secondary) !important;
+      border: 1px solid var(--public-border) !important;
+      color: var(--public-text-primary) !important;
+      border-radius: var(--border-radius) !important;
+      height: 40px !important;
+      align-items: center;
+    }
+    ::ng-deep .sede-select-wrapper .ant-select-arrow {
+      color: var(--public-text-secondary);
+    }
+    .option-content, .selected-text {
+      font-weight: 500;
+    }
+    /* Estilos globales para el dropdown flotante inyectado al body se verían sobreescritos 
+       por el theme global si hiciera falta */
+  
