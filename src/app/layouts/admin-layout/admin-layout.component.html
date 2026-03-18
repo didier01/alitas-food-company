@@ -1,0 +1,79 @@
+<!-- Añadimos dinámicamente el class theme-dark o theme-light al contenedor global -->
+<nz-layout class="admin-layout" [ngClass]="'theme-' + themeService.temaAdmin()">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" nzBreakpoint="md" [nzTheme]="themeService.temaAdmin()">
+    <div class="logo-admin">
+      <h2>{{ isCollapsed ? '🔥' : '🔥 AListas CMS' }}</h2>
+    </div>
+    <ul nz-menu [nzTheme]="themeService.temaAdmin()" nzMode="inline" class="menu-sider">
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/dashboard">
+          <span nz-icon nzType="dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/sedes">
+          <span nz-icon nzType="shop"></span>
+          <span>Sedes</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/menus">
+          <span nz-icon nzType="appstore"></span>
+          <span>Menús</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/categorias">
+          <span nz-icon nzType="unordered-list"></span>
+          <span>Categorías</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/productos">
+          <span nz-icon nzType="shopping"></span>
+          <span>Productos</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/promociones">
+          <span nz-icon nzType="tag"></span>
+          <span>Promociones</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/admin/combos">
+          <span nz-icon nzType="gift"></span>
+          <span>Combos</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter *ngIf="isSuperAdmin()">
+        <a routerLink="/admin/usuarios">
+          <span nz-icon nzType="team"></span>
+          <span>Usuarios</span>
+        </a>
+      </li>
+    </ul>
+  </nz-sider>
+
+  <nz-layout>
+    <nz-header class="admin-header">
+      <div class="header-content">
+        <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          (click)="isCollapsed = !isCollapsed"></span>
+        <div class="header-actions">
+          <span class="user-greeting">Hola, {{ authService.currentUser()?.nombre }}!</span>
+          <app-theme-toggle></app-theme-toggle>
+          <button class="logout-btn" (click)="logout()">
+            <span nz-icon nzType="logout"></span>
+          </button>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content class="admin-content-wrapper">
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
