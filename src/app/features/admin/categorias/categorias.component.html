@@ -28,18 +28,20 @@
         <td><span nz-icon [nzType]="data.icono || 'appstore'"></span></td>
         <td><strong>{{ data.nombre }}</strong></td>
         <td>
-          <nz-tag [nzColor]="data.activa ? 'success' : 'default'">
+          <nz-tag [nzColor]="data.activa ? 'success' : 'error'">
             {{ data.activa ? 'Activa' : 'Inactiva' }}
           </nz-tag>
         </td>
         <td>
           <div class="action-buttons">
-            <button nz-button nzType="text" nzSize="small" (click)="editCat(data)">
-              <span nz-icon nzType="edit" nzTheme="twotone"></span>
+            <button nz-button nzType="text" nzSize="small" (click)="editCat(data)" nz-tooltip
+              nzTooltipTitle="Editar Categoría">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
             </button>
-            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
-              nzPopconfirmTitle="¿Desactivar esta categoría?" (nzOnConfirm)="deleteCat(data)">
-              <span nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></span>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm nz-tooltip
+              nzTooltipTitle="Desactivar Categoría" nzPopconfirmTitle="¿Desactivar esta categoría?"
+              (nzOnConfirm)="deleteCat(data)">
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
             </button>
           </div>
         </td>

@@ -40,13 +40,15 @@
           </nz-tag>
         </td>
         <td>
-          <button nz-button nzType="text" nzSize="small" title="Configurar Productos">
-            <span nz-icon nzType="setting" nzTheme="twotone"></span>
+          <button nz-button nzType="text" nzSize="small" nz-tooltip nzTooltipTitle="Configurar Productos">
+            <nz-icon nzType="setting" nzTheme="outline" style="color:#fff" />
           </button>
-          <button nz-button nzType="text" nzSize="small" title="Compartir Globalmente" *ngIf="!item.menu.esCompartido"
-            (click)="compartirGlobal(item.menu)">
+          @if (item.menu.esCompartido) {
+          <button nz-button nzType="text" nzSize="small" nz-tooltip nzTooltipTitle="Compartir Globalmente"
+            (click)="shareGlobal(item.menu)">
             <span nz-icon nzType="global" nzTheme="outline" style="color:#FF6B35"></span>
           </button>
+          }
         </td>
       </tr>
       }

@@ -48,12 +48,12 @@
         <td>
           <div class="action-buttons">
             <button nz-button nzType="text" nzSize="small" (click)="editProducto(data)" title="Editar">
-              <span nz-icon nzType="edit" nzTheme="twotone"></span>
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
             </button>
             <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
               nzPopconfirmTitle="¿Seguro de eliminar este producto?" (nzOnConfirm)="deleteProducto(data)"
               title="Eliminar">
-              <span nz-icon nzType="delete" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></span>
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
             </button>
           </div>
         </td>

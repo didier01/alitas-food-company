@@ -15,6 +15,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { Categoria } from '../../../core/models/categoria.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-categorias',
@@ -23,7 +24,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
     CommonModule, ReactiveFormsModule, DragDropModule, NzTableModule,
     NzButtonModule, NzIconModule, NzModalModule, NzFormModule,
     NzInputModule, NzSwitchModule, NzTagModule,
-    NzPopconfirmModule, LoadingSpinnerComponent
+    NzPopconfirmModule, LoadingSpinnerComponent, NzTooltipModule
   ],
   templateUrl: './categorias.component.html',
   styleUrl: './categorias.component.scss'

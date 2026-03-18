@@ -3,7 +3,9 @@
   <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" nzBreakpoint="md" [nzTheme]="themeService.temaAdmin()"
     [ngClass]="'theme-' + themeService.temaAdmin()">
     <div class="logo-admin">
-      <h2>{{ isCollapsed ? '🔥' : '🔥 AListas CMS' }}</h2>
+      <h2 nz-tooltip nzTooltipTitle="Alitas Food Company" nzPlacement="right">{{ isCollapsed ? '🔥' : '🔥 Alitas Food
+        C...'
+        }}</h2>
     </div>
     <ul nz-menu [nzTheme]="themeService.temaAdmin()" nzMode="inline" class="menu-sider">
       <li nz-menu-item nzMatchRouter>

@@ -11,11 +11,12 @@ import { MenuSede } from '../../../core/models/menu-sede.model';
 import { Sede } from '../../../core/models/sede.model';
 import { forkJoin } from 'rxjs';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-menus',
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule, LoadingSpinnerComponent],
+  imports: [CommonModule, NzTableModule, NzButtonModule, NzIconModule, NzTagModule, LoadingSpinnerComponent, NzTooltipModule],
   templateUrl: './menus.component.html',
   styleUrl: './menus.component.scss'
 })
@@ -57,7 +58,7 @@ export class MenusComponent implements OnInit {
     return sede ? sede.nombre : 'Sede Desconocida';
   }
 
-  compartirGlobal(menu: MenuSede) {
+  shareGlobal(menu: MenuSede) {
     this.menuService.compartirMenuEntreTodasLasSedes(menu.id).subscribe(() => {
       this.message.success('Menú compartido a todas las sedes exitosamente.');
       this.loadData();
