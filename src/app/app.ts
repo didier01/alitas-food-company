@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { animate, style, transition, trigger, query, group } from '@angular/animations';
 import { ThemeService } from './core/services/theme.service';
-import { SedeService } from './core/services/sede.service';
+import { VenueService } from './core/services/venue.service';
 
 export const routeTransition = trigger('routeTransition', [
   transition('* => *', [
@@ -31,24 +31,24 @@ export const routeTransition = trigger('routeTransition', [
 export class App implements OnInit {
   title = 'alitas-company';
   themeService = inject(ThemeService);
-  sedeService = inject(SedeService);
+  venueService = inject(VenueService);
 
   private outlet = inject(RouterOutlet, { optional: true });
 
   ngOnInit() {
     
     // Inicializar sede data en global app state al arranque
-    this.sedeService.getAll().subscribe(res => {
+    this.venueService.getAll().subscribe(res => {
       const storedSedeId = localStorage.getItem('selectedSedeId');
       if (storedSedeId) {
         const found = res.find(s => s.id === storedSedeId);
         if (found) {
-           this.sedeService.selectedSede.set(found);
+           this.venueService.selectedVenue.set(found);
            return;
         }
       }
       if (res.length > 0) {
-        this.sedeService.selectedSede.set(res[0]); // fallback first sede
+        this.venueService.selectedVenue.set(res[0]); // fallback first sede
         localStorage.setItem('selectedSedeId', res[0].id);
       }
     });

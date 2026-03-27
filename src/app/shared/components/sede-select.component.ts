@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { SedeService } from '../../core/services/sede.service';
-import { Sede } from '../../core/models/sede.model';
+import { VenueService } from '../../core/services/venue.service';
+import { Venue } from '../../core/models/venue.model';
 
 @Component({
   selector: 'app-sede-select',
@@ -13,18 +13,18 @@ import { Sede } from '../../core/models/sede.model';
     styleUrl: './sede-select.component.scss'
 })
 export class SedeSelectComponent implements OnInit {
-  sedeService = inject(SedeService);
-  sedes = signal<Sede[]>([]);
+  venueService = inject(VenueService);
+  venues = signal<Venue[]>([]);
 
   ngOnInit() {
-    this.sedeService.getAll().subscribe(data => {
-      this.sedes.set(data.filter(s => s.activa));
+    this.venueService.getAll().subscribe(data => {
+      this.venues.set(data.filter(s => s.active));
       
       // Preseleccionar si no hay nada guardado, usando un microtask para evitar NG0100
-      if (!this.sedeService.selectedSede() && this.sedes().length > 0) {
+      if (!this.venueService.selectedVenue() && this.venues().length > 0) {
         Promise.resolve().then(() => {
-          if (!this.sedeService.selectedSede()) {
-            this.sedeService.setSede(this.sedes()[0]);
+          if (!this.venueService.selectedVenue()) {
+            this.venueService.setVenue(this.venues()[0]);
           }
         });
       }
@@ -32,13 +32,13 @@ export class SedeSelectComponent implements OnInit {
   }
 
   safeSedeId(): string {
-    return this.sedeService.selectedSede()?.id || '';
+    return this.venueService.selectedVenue()?.id || '';
   }
 
-  onSedeChange(sedeId: string) {
-    const s = this.sedes().find((x: Sede) => x.id === sedeId);
+  onSedeChange(venueId: string) {
+    const s = this.venues().find((x: Venue) => x.id === venueId);
     if (s) {
-      this.sedeService.setSede(s);
+      this.venueService.setVenue(s);
     }
   }
 }

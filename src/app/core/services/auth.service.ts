@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Usuario } from '../models/usuario.model';
+import { User } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 import { delay, map, Observable, of, tap } from 'rxjs';
 
@@ -12,24 +12,24 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
 
   // Signal global del usuario
-  currentUser = signal<Usuario | null>(null);
+  currentUser = signal<User | null>(null);
 
   constructor() {
     this.loadUserFromStorage();
   }
 
   private loadUserFromStorage() {
-    const userStr = localStorage.getItem('alistas_user');
+    const userStr = localStorage.getItem('alitas_user');
     if (userStr) {
       this.currentUser.set(JSON.parse(userStr));
     }
   }
 
-  login(email: string, password: string): Observable<Usuario> {
+  login(email: string, password: string): Observable<User> {
     // Simulamos la verificación
-    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`).pipe(
+    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
       map(usuarios => {
-        const user = usuarios.find(u => u.email === email && u.activo);
+        const user = usuarios.find(u => u.email === email && u.active);
         if (user && password !== '') { // En un escenario real validamos el hash de la contraseña
           return user;
         }
@@ -37,23 +37,23 @@ export class AuthService {
       }),
       tap(user => {
         this.currentUser.set(user);
-        localStorage.setItem('alistas_token', 'mock_jwt_token_123'); // Token mock
-        localStorage.setItem('alistas_user', JSON.stringify(user));
+        localStorage.setItem('alitas_token', 'mock_jwt_token_123'); // Token mock
+        localStorage.setItem('alitas_user', JSON.stringify(user));
       })
     );
   }
 
   logout() {
     this.currentUser.set(null);
-    localStorage.removeItem('alistas_token');
-    localStorage.removeItem('alistas_user');
+    localStorage.removeItem('alitas_token');
+    localStorage.removeItem('alitas_user');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('alistas_token');
+    return !!localStorage.getItem('alitas_token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('alistas_token');
+    return localStorage.getItem('alitas_token');
   }
 }

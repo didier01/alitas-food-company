@@ -2,14 +2,24 @@
     <nz-card nzHoverable [nzCover]="coverTemplate" class="producto-card">
       <div class="badges">
         <app-promocion-badge *ngIf="isPromo" texto="Promo" [animar]="true"></app-promocion-badge>
-        <span *ngIf="producto.destacado" class="badge-destacado">⭐ Pop</span>
+        <span *ngIf="producto.featured" class="badge-featured">⭐ Pop</span>
+        <app-promocion-badge *ngIf="producto.showSavings && producto.realPrice! > producto.price" 
+                            [texto]="'Ahorra ' + ((producto.realPrice! - producto.price) | currency:'COP':'symbol-narrow':'1.0-0')" 
+                            [animar]="false"></app-promocion-badge>
       </div>
       <nz-card-meta 
-        [nzTitle]="producto.nombre" 
-        [nzDescription]="producto.descripcion">
+        [nzTitle]="producto.name" 
+        [nzDescription]="producto.description">
       </nz-card-meta>
       <div class="card-footer">
-        <span class="precio">{{ producto.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        <div class="price-container" style="display: flex; flex-direction: column;">
+          <span class="price">{{ producto.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+          <span *ngIf="producto.showSavings && producto.realPrice! > producto.price" 
+                class="old-price" 
+                style="text-decoration: line-through; font-size: 0.8rem; color: #8c8c8c;">
+            {{ producto.realPrice | currency:'COP':'symbol-narrow':'1.0-0' }}
+          </span>
+        </div>
         <button nz-button nzType="primary" nzShape="round" (click)="pedirWhatsapp()">
           <span nz-icon nzType="whatsapp"></span> Pedir
         </button>
@@ -17,6 +27,6 @@
     </nz-card>
     <ng-template #coverTemplate>
       <!-- Usar lazy loading nativo si no hemos creado directiva custom -->
-      <img [alt]="producto.nombre" [src]="producto.imagenUrl" loading="lazy" class="producto-img" />
+      <img [alt]="producto.name" [src]="producto.imageUrl" loading="lazy" class="producto-img" />
     </ng-template>
   

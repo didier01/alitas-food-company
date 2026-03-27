@@ -12,7 +12,7 @@
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Precio Combo</th>
+        <th>Precio / Ahorro</th>
         <th>Productos en Combo</th>
         <th>Sedes</th>
         <th>Estado</th>
@@ -22,21 +22,30 @@
     <tbody>
       @for (data of basicTable.data; track data.id) {
       <tr>
-        <td><strong>{{ data.nombre }}</strong></td>
-        <td>{{ data.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+        <td><strong>{{ data.name }}</strong></td>
         <td>
-          <span class="muted-text">{{ data.productosIncluidos.length }} productos seleccionados</span>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <strong>{{ data.price | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
+            <small class="muted-text" style="text-decoration: line-through;">{{ getComboRealPrice(data) |
+              currency:'COP':'symbol-narrow':'1.0-0' }} real</small>
+            <nz-tag *ngIf="getComboSavings(data) > 0" nzColor="success" style="width: fit-content; margin: 0;">
+              Ahorro {{ getComboSavings(data) | currency:'COP':'symbol-narrow':'1.0-0' }}
+            </nz-tag>
+          </div>
         </td>
         <td>
-          <nz-tag *ngIf="data.sedeIds.length === 0 || data.sedeIds.includes('TODAS')"
+          <span class="muted-text">{{ data.includedProducts?.length || 0 }} products seleccionados</span>
+        </td>
+        <td>
+          <nz-tag *ngIf="!data.venueIds || data.venueIds.length === 0 || data.venueIds.includes('TODAS')"
             nzColor="processing">Todas</nz-tag>
-          <ng-container *ngIf="data.sedeIds.length > 0 && !data.sedeIds.includes('TODAS')">
-            <nz-tag *ngFor="let s of data.sedeIds">{{ getSedeName(s) }}</nz-tag>
+          <ng-container *ngIf="data.venueIds && data.venueIds.length > 0 && !data.venueIds.includes('TODAS')">
+            <nz-tag *ngFor="let s of data.venueIds">{{ getSedeName(s) }}</nz-tag>
           </ng-container>
         </td>
         <td>
-          <nz-tag [nzColor]="data.activo ? 'success' : 'default'">
-            {{ data.activo ? 'Activo' : 'Inactivo' }}
+          <nz-tag [nzColor]="data.active ? 'success' : 'default'">
+            {{ data.active ? 'Activo' : 'Inactivo' }}
           </nz-tag>
         </td>
         <td>
@@ -66,7 +75,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Nombre del Combo</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <input nz-input formControlName="nombre" placeholder="Ej: Combo Pareja" />
+              <input nz-input formControlName="name" placeholder="Ej: Combo Pareja" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -74,7 +83,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Precio Especial</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <nz-input-number formControlName="precio" [nzMin]="0" [nzStep]="1000"
+              <nz-input-number formControlName="price" [nzMin]="0" [nzStep]="1000"
                 style="width: 100%"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -84,16 +93,16 @@
       <nz-form-item>
         <nz-form-label nzRequired>Descripción</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <textarea nz-input formControlName="descripcion" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzRequired>Productos que conforman el Combo</nz-form-label>
-        <nz-form-control nzErrorTip="Se requieren productos">
-          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Productos" formControlName="productosIncluidos">
-            @for (p of productos; track p.id) {
-            <nz-option [nzValue]="p.id" [nzLabel]="p.nombre + ' (' + p.precio + ' COP)' "></nz-option>
+        <nz-form-control nzErrorTip="Se requieren products">
+          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Productos" formControlName="includedProducts">
+            @for (p of products; track p.id) {
+            <nz-option [nzValue]="p.id" [nzLabel]="p.name + ' (' + p.price + ' COP)' "></nz-option>
             }
           </nz-select>
         </nz-form-control>
@@ -102,29 +111,57 @@
       <nz-form-item>
         <nz-form-label nzRequired>URL de Imagen</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="imagenUrl" />
+          <input nz-input formControlName="imageUrl" />
         </nz-form-control>
       </nz-form-item>
+
+      <nz-alert *ngIf="comboForm.get('includedProducts')?.value?.length > 0" nzType="info" nzShowIcon
+        [nzMessage]="'Análisis de Precio'" [nzDescription]="priceAnalysisTpl" style="margin-bottom: 24px;"></nz-alert>
+      <ng-template #priceAnalysisTpl>
+        <div style="font-size: 13px;">
+          Precio real por todos los productos: <strong>{{ getFormRealPrice() | currency:'COP':'symbol-narrow':'1.0-0'
+            }}</strong>
+          <br />
+          Precio especial (tu venta): <strong>{{ comboForm.get('price')?.value | currency:'COP':'symbol-narrow':'1.0-0'
+            }}</strong>
+          <br />
+          <span *ngIf="getFormSavings() > 0" style="color: #52c41a; display: block; margin-top: 4px;">
+            Ahorro al cliente (margen cedido): <strong>{{ getFormSavings() | currency:'COP':'symbol-narrow':'1.0-0' }}
+              ({{ getFormSavingsPercent() }}%)</strong>
+          </span>
+          <span *ngIf="getFormSavings() <= 0" style="color: #ff4d4f; display: block; margin-top: 4px;">
+            ¡Atención! El cliente no está ahorrando dinero con este precio de combo. Verifica los precios.
+          </span>
+        </div>
+      </ng-template>
 
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="12">
           <nz-form-item>
             <nz-form-label>Sedes Aplicables</nz-form-label>
             <nz-form-control>
-              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="sedeIds">
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="venueIds">
                 <nz-option nzValue="TODAS" nzLabel="TODAS LAS SEDES"></nz-option>
-                @for (sede of sedes; track sede.id) {
-                <nz-option [nzValue]="sede.id" [nzLabel]="sede.nombre"></nz-option>
+                @for (sede of venues; track sede.id) {
+                <nz-option [nzValue]="sede.id" [nzLabel]="sede.name"></nz-option>
                 }
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="12">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label>Disponible (Activo)</nz-form-label>
             <nz-form-control>
-              <nz-switch formControlName="activo"></nz-switch>
+              <nz-switch formControlName="active"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label>Mostrar Ahorro Publico</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="showSavings"></nz-switch>
             </nz-form-control>
           </nz-form-item>
         </div>

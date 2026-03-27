@@ -2,13 +2,17 @@
   {
     "id": "promo-1",
     "titulo": "Martes de 2x1 en Clásicas",
-    "descripcion": "Lleva dos Alistas Clásicas por el precio de una.",
+    "descripcion": "Lleva dos alitas Clásicas por el precio de una.",
     "descuentoPorcentaje": 50,
     "imagenUrl": "https://images.unsplash.com/photo-1605333145465-d4e511ebd558?q=80&w=600&auto=format&fit=crop",
-    "sedeIds": ["ALL"],
+    "sedeIds": [
+      "ALL"
+    ],
     "fechaInicio": "2024-01-01T00:00:00.000Z",
     "fechaFin": "2026-12-31T23:59:59.000Z",
-    "diasAplica": ["Martes"],
+    "diasAplica": [
+      "Martes"
+    ],
     "activa": true
   },
   {
@@ -17,10 +21,15 @@
     "descripcion": "Disfruta un 20% de descuento en todos los combos.",
     "descuentoPorcentaje": 20,
     "imagenUrl": "https://images.unsplash.com/photo-1544023772-aaeba811d7a3?q=80&w=600&auto=format&fit=crop",
-    "sedeIds": ["sede-1"],
+    "sedeIds": [
+      "sede-1"
+    ],
     "fechaInicio": "2024-01-01T00:00:00.000Z",
     "fechaFin": "2026-12-31T23:59:59.000Z",
-    "diasAplica": ["Sabado", "Domingo"],
+    "diasAplica": [
+      "Sabado",
+      "Domingo"
+    ],
     "activa": true
   }
 ]

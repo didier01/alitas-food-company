@@ -8,7 +8,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
   const currentUser = authService.currentUser();
 
-  if (currentUser && currentUser.rol === 'superadmin') {
+  if (currentUser && currentUser.role === 'superadmin') {
     return true;
   }
 

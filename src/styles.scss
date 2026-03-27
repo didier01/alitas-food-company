@@ -20,6 +20,7 @@
   --font-body: 'Roboto', sans-serif;
 
   --border-radius: 12px;
+  --border-radius-button: 8px;
 }
 
 /* Tema oscuro Admin (Predeterminado) */
@@ -79,8 +80,12 @@ h6 {
 .ant-btn-primary {
   border-color: var(--admin-bg-secondary) !important;
   background: var(--admin-accent) !important;
-  border-radius: 8px;
+  border-radius: var(--border-radius-button);
   color: #000 !important;
+}
+
+.ant-btn {
+  border-radius: var(--border-radius-button);
 }
 
 /* Tags */
@@ -88,15 +93,23 @@ h6 {
   color: #52c41a;
   background: #f6ffed;
   border-color: #b7eb8f;
-  border-radius: 8px;
+  border-radius: var(--border-radius-button);
 }
 
 .ant-tag-error {
   color: #ff4d4f;
   background: #fff1f0;
   border-color: #ffa39e;
-  border-radius: 8px;
+  border-radius: var(--border-radius-button);
 }
+
+.ant-tag-processing {
+  color: #1890ff;
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  border-radius: var(--border-radius-button);
+}
+
 
 /* Switch */
 .ant-switch-checked {
@@ -116,7 +129,7 @@ h6 {
     button.ant-btn.ant-btn-sm {
       background: none;
       color: white;
-      border-radius: 8px;
+      border-radius: var(--border-radius-button);
     }
 
     .ant-popover-inner {
@@ -173,11 +186,13 @@ h6 {
   .ant-modal-content {
     background-color: var(--admin-bg-secondary);
     color: var(--admin-text-primary);
+    border-radius: var(--border-radius);
   }
 
   .ant-modal-header {
     background-color: var(--admin-bg-secondary);
     border-bottom: 1px solid var(--admin-border);
+    border-radius: 12px 12px 0 0;
 
     .ant-modal-title {
       color: var(--admin-text-primary);
@@ -245,16 +260,40 @@ h6 {
 
   /* Select dropdowns (Portals) */
   .ant-select-dropdown {
-    background-color: var(--admin-bg-card);
-    border: 1px solid var(--admin-border);
+    background-color: var(--admin-bg-card) !important;
+    border: 1px solid var(--admin-border) !important;
 
     .ant-select-item {
-      color: var(--admin-text-primary);
+      color: var(--admin-text-primary) !important;
 
-      &.ant-select-item-option-active {
-        background: rgba(255, 107, 53, 0.1);
+      &.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+        background-color: var(--admin-bg-primary) !important;
+      }
+
+      &.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+        background-color: var(--admin-bg-secondary) !important;
+        font-weight: 600;
+
+        .ant-select-item-option-state {
+          color: var(--admin-accent) !important;
+        }
       }
     }
+  }
+
+  .ant-select-multiple.ant-select .ant-select-selection-item {
+    background-color: var(--admin-bg-primary) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+
+    .ant-select-selection-item-content,
+    .ant-select-selection-item-remove {
+      color: var(--admin-text-primary) !important;
+    }
+  }
+
+  .ant-select-multiple.ant-select .ant-select-selection-item:hover {
+    border-color: var(--admin-accent) !important;
   }
 
   /* Sidebar & Sider Menu */

@@ -74,11 +74,11 @@
     .promos-section, .destacados-section, .combos-section {
       padding: 4rem 0;
     }
-    .productos-grid, .combos-grid, .promos-grid {
+    .products-grid, .combos-grid, .promos-grid {
       display: grid;
       gap: 24px;
     }
-    .productos-grid {
+    .products-grid {
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
     .combos-grid {

@@ -1,0 +1,105 @@
+<app-loading-spinner [show]="loadingData"></app-loading-spinner>
+
+<div class="page-container">
+  <div class="page-header">
+    <h2>Gestión de Usuarios</h2>
+    <button nz-button nzType="primary" (click)="openModal()">
+      <span nz-icon nzType="plus"></span> Nuevo User
+    </button>
+  </div>
+
+  <div class="info-alert">
+    <span nz-icon nzType="safety-certificate" nzTheme="fill"></span>
+    Solo los users con role <strong>SUPERADMIN</strong> pueden ingresar a esta sección y modificar accesos.
+  </div>
+
+  <nz-table #basicTable [nzData]="users" [nzFrontPagination]="true" [nzPageSize]="10">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of basicTable.data; track data.id) {
+      <tr>
+        <td><strong>{{ data.name }}</strong></td>
+        <td>{{ data.email }}</td>
+        <td>
+          <nz-tag [nzColor]="data.role === 'superadmin' ? 'purple' : 'blue'">
+            {{ data.role | uppercase }}
+          </nz-tag>
+        </td>
+        <td>
+          <nz-tag [nzColor]="data.active ? 'success' : 'default'">
+            {{ data.active ? 'Activo' : 'Suspendido' }}
+          </nz-tag>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="editUser(data)">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
+              nzPopconfirmTitle="¿Suspender este usuario?" (nzOnConfirm)="deleteUser(data)"
+              [disabled]="data.role === 'superadmin' && users.length === 1">
+              <span nz-icon nzType="delete" nzTheme="twotone"
+                [nzTwotoneColor]="data.role === 'superadmin' && users.length === 1 ? '#ccc' : '#ff4d4f'"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Modal User -->
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar User' : 'Nuevo User'"
+  (nzOnCancel)="closeModal()" (nzOnOk)="saveUser()" [nzOkLoading]="loadingAction" [nzOkDisabled]="userForm.invalid">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="userForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre Completo</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Email</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido y válido">
+          <input nz-input formControlName="email" type="email" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="!editingId">
+        <nz-form-label nzRequired>Contraseña Temporal</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="password" type="password" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Rol de Acceso</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="role">
+            <nz-option nzValue="admin" nzLabel="Administrador (Sedes, Productos, etc)"></nz-option>
+            <nz-option nzValue="superadmin" nzLabel="Super Administrador (Acceso Total)"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>User Activo</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="active"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </ng-container>
+</nz-modal>

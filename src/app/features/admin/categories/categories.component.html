@@ -1,0 +1,84 @@
+<app-loading-spinner [show]="loadingData()"></app-loading-spinner>
+
+<div class="page-container">
+  <div class="page-header">
+    <h2>Gestión de Categorías</h2>
+    <div>
+      <span class="drag-hint">Arraste las filas para reordenar</span>
+      <button nz-button nzType="primary" (click)="openModal()">
+        <span nz-icon nzType="plus"></span> Nueva Categoría
+      </button>
+    </div>
+  </div>
+
+  <nz-table [nzData]="categories" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th nzWidth="50px"></th>
+        <th>Icono</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+      @for (data of categories; track data.id) {
+      <tr cdkDrag class="drag-row">
+        <td class="drag-handle"><span nz-icon nzType="drag" nzTheme="outline"></span></td>
+        <td><span nz-icon [nzType]="data.icon || 'appstore'"></span></td>
+        <td><strong>{{ data.name }}</strong></td>
+        <td>
+          <nz-tag [nzColor]="data.active ? 'success' : 'error'">
+            {{ data.active ? 'Activa' : 'Inactiva' }}
+          </nz-tag>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="editCat(data)" nz-tooltip
+              nzTooltipTitle="Editar Categoría">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm nz-tooltip
+              nzTooltipTitle="Desactivar Categoría" nzPopconfirmTitle="¿Desactivar esta categoría?"
+              (nzOnConfirm)="deleteCat(data)">
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Modal para Crear/Editar Categoría -->
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Categoría' : 'Nueva Categoría'"
+  (nzOnCancel)="closeModal()" (nzOnOk)="saveCat()" [nzOkLoading]="loadingAction" [nzOkDisabled]="catForm.invalid">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="catForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="name" placeholder="Ej: Hamburguesas" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>Icono (NG-ZORRO Identificador)</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="icon" placeholder="Ej: fire, star, heart, coffee" />
+          <div class="icon-preview">
+            Preview: <span nz-icon [nzType]="catForm.get('icon')?.value || 'appstore'"></span>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>Estado Activo</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="active"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

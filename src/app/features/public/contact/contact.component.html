@@ -14,9 +14,9 @@
       <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
         <div class="form-group">
           <label>Nombre Completo *</label>
-          <input nz-input formControlName="nombre" placeholder="Tu nombre" />
-          <div class="error-msg" *ngIf="contactForm.get('nombre')?.invalid && contactForm.get('nombre')?.touched">
-            El nombre es requerido.
+          <input nz-input formControlName="name" placeholder="Tu name" />
+          <div class="error-msg" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+            El name es requerido.
           </div>
         </div>
 
@@ -29,10 +29,10 @@
         </div>
 
         <div class="form-group">
-          <label>Sede Relacionada</label>
-          <nz-select formControlName="sedeId" nzPlaceHolder="Selecciona una sede">
-            @for (sede of sedes; track sede.id) {
-            <nz-option [nzValue]="sede.id" [nzLabel]="sede.nombre"></nz-option>
+          <label>Venue Relacionada</label>
+          <nz-select formControlName="venueId" nzPlaceHolder="Selecciona una sede">
+            @for (sede of venues; track sede.id) {
+            <nz-option [nzValue]="sede.id" [nzLabel]="sede.name"></nz-option>
             }
           </nz-select>
         </div>
@@ -60,21 +60,24 @@
     <div class="contact-info">
       <div class="info-card">
         <h3>Atención al Cliente</h3>
-        <p>Estamos disponibles para atenderte en nuestros horarios de apertura.</p>
+        <p>Estamos disponibles para atenderte en nuestros horarios de opening.</p>
 
         <div class="direct-contact">
           <button nz-button nzType="default" class="btn-whatsapp" (click)="openDirectWhatsapp()">
-            <img src="/assets/outline/whatsapp.svg" alt="WhatsApp" width="20" height="20" class="icon-outline"> Chat Directo
+            <img src="/assets/outline/whatsapp.svg" alt="WhatsApp" width="20" height="20" class="icon-outline"> Chat
+            Directo
           </button>
         </div>
 
         <h4>Síguenos</h4>
         <div class="social-links">
-          <a href="https://instagram.com/alistasfc" target="_blank">
-            <img src="/assets/outline/instagram.svg" alt="Instagram" width="20" height="20" class="icon-outline"> @alistasfc
+          <a href="https://instagram.com/alitasfc" target="_blank">
+            <img src="/assets/outline/instagram.svg" alt="Instagram" width="20" height="20" class="icon-outline">
+            @alitasfc
           </a>
-          <a href="https://facebook.com/alistasfc" target="_blank">
-            <img src="/assets/outline/facebook.svg" alt="Facebook" width="20" height="20" class="icon-outline"> /alistasfc
+          <a href="https://facebook.com/alitasfc" target="_blank">
+            <img src="/assets/outline/facebook.svg" alt="Facebook" width="20" height="20" class="icon-outline">
+            /alitasfc
           </a>
         </div>
       </div>

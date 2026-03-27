@@ -15,7 +15,7 @@
         </a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/sedes">
+        <a routerLink="/admin/venues">
           <span nz-icon nzType="shop"></span>
           <span>Sedes</span>
         </a>
@@ -27,19 +27,19 @@
         </a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/categorias">
+        <a routerLink="/admin/categories">
           <span nz-icon nzType="unordered-list"></span>
           <span>Categorías</span>
         </a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/productos">
+        <a routerLink="/admin/products">
           <span nz-icon nzType="shopping"></span>
           <span>Productos</span>
         </a>
       </li>
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/promociones">
+        <a routerLink="/admin/promotions">
           <span nz-icon nzType="tag"></span>
           <span>Promociones</span>
         </a>
@@ -51,7 +51,7 @@
         </a>
       </li>
       <li nz-menu-item nzMatchRouter *ngIf="isSuperAdmin()">
-        <a routerLink="/admin/usuarios">
+        <a routerLink="/admin/users">
           <span nz-icon nzType="team"></span>
           <span>Usuarios</span>
         </a>
@@ -65,7 +65,7 @@
         <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
           (click)="isCollapsed = !isCollapsed"></span>
         <div class="header-actions">
-          <span class="user-greeting">Hola, {{ authService.currentUser()?.nombre }}!</span>
+          <span class="user-greeting">Hola, {{ authService.currentUser()?.name }}!</span>
           <app-theme-toggle></app-theme-toggle>
           <button class="logout-btn" (click)="logout()">
             <span nz-icon nzType="logout"></span>

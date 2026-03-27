@@ -25,7 +25,7 @@ export class AdminLayoutComponent {
   router = inject(Router);
 
   isSuperAdmin(): boolean {
-    return this.authService.currentUser()?.rol === 'superadmin';
+    return this.authService.currentUser()?.role === 'superadmin';
   }
 
   logout() {

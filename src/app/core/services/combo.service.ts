@@ -15,9 +15,9 @@ export class ComboService {
     return this.http.get<Combo[]>(`${this.apiUrl}/combos`);
   }
 
-  getBySede(sedeId: string): Observable<Combo[]> {
+  getBySede(venueId: string): Observable<Combo[]> {
     return this.getAll().pipe(
-      map(combos => combos.filter(c => c.activo && (c.sedeIds.includes('ALL') || c.sedeIds.includes(sedeId))))
+      map(combos => combos.filter(c => c.active && (c.venueIds.includes('ALL') || c.venueIds.includes(venueId))))
     );
   }
 

@@ -13,12 +13,13 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { ComboService } from '../../../core/services/combo.service';
-import { ProductoService } from '../../../core/services/producto.service';
-import { SedeService } from '../../../core/services/sede.service';
+import { ProductService } from '../../../core/services/product.service';
+import { VenueService } from '../../../core/services/venue.service';
 import { Combo } from '../../../core/models/combo.model';
-import { Producto } from '../../../core/models/producto.model';
-import { Sede } from '../../../core/models/sede.model';
+import { Product } from '../../../core/models/product.model';
+import { Venue } from '../../../core/models/venue.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 import { forkJoin } from 'rxjs';
 
@@ -28,7 +29,7 @@ import { forkJoin } from 'rxjs';
   imports: [
     CommonModule, ReactiveFormsModule, NzTableModule, NzButtonModule,
     NzIconModule, NzModalModule, NzFormModule, NzInputModule, NzInputNumberModule,
-    NzSwitchModule, NzSelectModule, NzPopconfirmModule, NzTagModule,
+    NzSwitchModule, NzSelectModule, NzPopconfirmModule, NzTagModule, NzAlertModule,
     LoadingSpinnerComponent
   ],
   templateUrl: './combos.component.html',
@@ -36,14 +37,14 @@ import { forkJoin } from 'rxjs';
 })
 export class CombosComponent implements OnInit {
   comboService = inject(ComboService);
-  productoService = inject(ProductoService);
-  sedeService = inject(SedeService);
+  productService = inject(ProductService);
+  venueService = inject(VenueService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
 
   combos: Combo[] = [];
-  productos: Producto[] = [];
-  sedes: Sede[] = [];
+  products: Product[] = [];
+  venues: Venue[] = [];
   loadingData = signal(true);
   loadingAction = signal(false);
   modalVisible = false;
@@ -52,13 +53,14 @@ export class CombosComponent implements OnInit {
 
   constructor() {
     this.comboForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      precio: [0, [Validators.required, Validators.min(100)]],
-      productosIncluidos: [[], Validators.required],
-      sedeIds: [['TODAS']],
-      activo: [true],
-      imagenUrl: ['', Validators.required]
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(100)]],
+      includedProducts: [[], Validators.required],
+      venueIds: [['TODAS']],
+      active: [true],
+      showSavings: [true],
+      imageUrl: ['', Validators.required]
     });
   }
 
@@ -66,13 +68,14 @@ export class CombosComponent implements OnInit {
     this.loadingData.set(true);
     forkJoin({
       combos: this.comboService.getAll(),
-      productos: this.productoService.getAll(),
-      sedes: this.sedeService.getAll()
+      products: this.productService.getAll(),
+      venues: this.venueService.getAll()
     }).subscribe({
       next: (data) => {
+        console.log(data);
         this.combos = data.combos;
-        this.productos = data.productos;
-        this.sedes = data.sedes;
+        this.products = data.products;
+        this.venues = data.venues;
         this.loadingData.set(false);
       },
       error: () => {
@@ -83,26 +86,63 @@ export class CombosComponent implements OnInit {
   }
 
   getSedeName(id: string): string {
-    const s = this.sedes.find(x => x.id === id);
-    return s ? s.nombre : id;
+    const s = this.venues.find(x => x.id === id);
+    return s ? s.name : id;
+  }
+
+  getRealPrice(includedList: any[]): number {
+    if (!includedList || !this.products.length) return 0;
+    return includedList.reduce((acc, curr) => {
+      const id = typeof curr === 'string' ? curr : curr.id;
+      const q = typeof curr === 'string' ? 1 : curr.quantity;
+      const p = this.products.find(x => x.id === id);
+      return acc + (p ? p.price * q : 0);
+    }, 0);
+  }
+
+  getFormRealPrice(): number {
+    const includedIds = this.comboForm.get('includedProducts')?.value || [];
+    return this.getRealPrice(includedIds);
+  }
+
+  getFormSavings(): number {
+    const realPrice = this.getFormRealPrice();
+    const specialPrice = this.comboForm.get('price')?.value || 0;
+    return realPrice - specialPrice;
+  }
+
+  getFormSavingsPercent(): number {
+    const realPrice = this.getFormRealPrice();
+    if (realPrice === 0) return 0;
+    const savings = realPrice - (this.comboForm.get('price')?.value || 0);
+    return Math.max(0, Math.round((savings / realPrice) * 100));
+  }
+
+  getComboRealPrice(combo: Combo): number {
+    return this.getRealPrice(combo.includedProducts);
+  }
+
+  getComboSavings(combo: Combo): number {
+    return this.getComboRealPrice(combo) - combo.price;
   }
 
   openModal() {
     this.editingId = null;
-    this.comboForm.reset({ activo: true, precio: 0, sedeIds: ['TODAS'], productosIncluidos: [] });
+    this.comboForm.reset({ active: true, showSavings: true, price: 0, venueIds: ['TODAS'], includedProducts: [] });
     this.modalVisible = true;
   }
 
   editCombo(combo: Combo) {
     this.editingId = combo.id;
     this.comboForm.patchValue({
-      nombre: combo.nombre,
-      descripcion: combo.descripcion,
-      precio: combo.precio,
-      productosIncluidos: combo.productosIncluidos.map(p => p.productoId), // simplificado para view multiselect
-      sedeIds: combo.sedeIds,
-      activo: combo.activo,
-      imagenUrl: combo.imagenUrl
+      name: combo.name,
+      description: combo.description,
+      price: combo.price,
+      includedProducts: combo.includedProducts?.map(p => p.id), // simplificado para view multiselect
+      venueIds: combo.venueIds,
+      active: combo.active,
+      showSavings: combo.showSavings,
+      imageUrl: combo.imageUrl
     });
     this.modalVisible = true;
   }
@@ -118,13 +158,14 @@ export class CombosComponent implements OnInit {
     const formVal = this.comboForm.value;
     const saveObj: Combo = {
       id: this.editingId || `combo-${Date.now()}`,
-      nombre: formVal.nombre,
-      descripcion: formVal.descripcion,
-      precio: formVal.precio,
-      productosIncluidos: (formVal.productosIncluidos || []).map((id: string) => ({ productoId: id, cantidad: 1 })),
-      sedeIds: formVal.sedeIds,
-      activo: formVal.activo,
-      imagenUrl: formVal.imagenUrl
+      name: formVal.name,
+      description: formVal.description,
+      price: formVal.price,
+      includedProducts: (formVal.includedProducts || []).map((id: string) => ({ id: id, quantity: 1 })),
+      venueIds: formVal.venueIds,
+      active: formVal.active,
+      showSavings: formVal.showSavings,
+      imageUrl: formVal.imageUrl
     };
 
     const targetSub = this.editingId

@@ -1,0 +1,153 @@
+<app-loading-spinner [show]="loadingData()"></app-loading-spinner>
+
+<div class="page-container">
+  <div class="page-header">
+    <h2>Gestión de Sedes</h2>
+    <button nz-button nzType="primary" (click)="openDrawer()">
+      <span nz-icon nzType="plus"></span> Nueva Venue
+    </button>
+  </div>
+
+  <nz-table #basicTable [nzData]="venues" [nzFrontPagination]="true" [nzLoading]="loadingData()">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Teléfono / WhatsApp</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of basicTable.data; track data.id) {
+      <tr>
+        <td><strong>{{ data.name }}</strong></td>
+        <td>{{ data.address }}</td>
+        <td>📞 {{ data.phone }} <br> 💬 {{ data.whatsapp }}</td>
+        <td>
+          <nz-tag [nzColor]="data.active ? 'success' : 'default'">
+            {{ data.active ? 'Activa' : 'Inactiva' }}
+          </nz-tag>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="editSede(data)" title="Editar">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
+              nzPopconfirmTitle="¿Seguro de eliminar/desactivar sede?" (nzOnConfirm)="deleteSede(data)"
+              title="Eliminar">
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Drawer para Crear/Editar Venue -->
+<nz-drawer [nzClosable]="true" [nzVisible]="drawerVisible" [nzPlacement]="'right'" [nzWidth]="480"
+  [nzTitle]="editingId ? 'Editar Venue' : 'Nueva Venue'" (nzOnClose)="closeDrawer()">
+  <ng-container *nzDrawerContent>
+    <form nz-form [formGroup]="venueForm" (ngSubmit)="saveSede()" nzLayout="vertical">
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre de la Venue</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="name" placeholder="Ej: alitas El Poblado" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Dirección</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="address" placeholder="Ej: Cra 43A # 1-50" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Latitud</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="lat" type="number" step="any" placeholder="Ej: 6.2091" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Longitud</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="lng" type="number" step="any" placeholder="Ej: -75.5684" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Teléfono (Fijo/Móvil)</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="phone" placeholder="+57 300..." />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>WhatsApp (Pedidos)</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="whatsapp" placeholder="+57 300..." />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Hora Apertura</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="opening" type="time" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Hora Cierre</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="closing" type="time" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="imageUrl" placeholder="https://..." />
+        </nz-form-control>
+        <!-- Preview miniatura -->
+        <img *ngIf="venueForm.get('imageUrl')?.value" [src]="venueForm.get('imageUrl')?.value" class="preview-img"
+          onerror="this.src='https://placehold.co/400x200?text=Error+de+URL';" />
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>Estado de la Venue</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="active"></nz-switch>
+          <span style="margin-left: 10px;">{{ venueForm.get('active')?.value ? 'Activa' : 'Inactiva' }}</span>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="drawer-footer">
+        <button nz-button type="button" (click)="closeDrawer()">Cancelar</button>
+        <button nz-button nzType="primary" [nzLoading]="loadingAction" [disabled]="venueForm.invalid">
+          Guardar Venue
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-drawer>

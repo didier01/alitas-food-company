@@ -5,9 +5,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { SedeService } from '../../../core/services/sede.service';
+import { VenueService } from '../../../core/services/venue.service';
 import { SeoService } from '../../../core/services/seo.service';
-import { Sede } from '../../../core/models/sede.model';
+import { Venue } from '../../../core/models/venue.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 
 @Component({
@@ -19,20 +19,20 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 })
 export class ContactComponent implements OnInit {
   fb = inject(FormBuilder);
-  sedeService = inject(SedeService);
+  venueService = inject(VenueService);
   seoService = inject(SeoService);
 
   contactForm: FormGroup;
-  sedes: Sede[] = [];
+  venues: Venue[] = [];
   loading = signal(true);
   enviando = false;
   enviado = false;
 
   constructor() {
     this.contactForm = this.fb.group({
-      nombre: ['', Validators.required],
+      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      sedeId: [null],
+      venueId: [null],
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -40,16 +40,16 @@ export class ContactComponent implements OnInit {
   ngOnInit() {
     this.seoService.setTags({
       title: 'Contacto',
-      description: 'Ponte en contacto con AListas Food Company. Envíanos un mensaje o contáctanos directamente por WhatsApp.',
+      description: 'Ponte en contacto con alitas Food Company. Envíanos un mensaje o contáctanos directamente por WhatsApp.',
       route: '/contact'
     });
 
-    this.sedeService.getAll().subscribe(res => {
-      this.sedes = res.filter(s => s.activa);
+    this.venueService.getAll().subscribe(res => {
+      this.venues = res.filter(s => s.active);
 
-      const currentSede = this.sedeService.selectedSede();
+      const currentSede = this.venueService.selectedVenue();
       if (currentSede) {
-        this.contactForm.patchValue({ sedeId: currentSede.id });
+        this.contactForm.patchValue({ venueId: currentSede.id });
       }
 
       this.loading.set(false);
@@ -71,18 +71,18 @@ export class ContactComponent implements OnInit {
   }
 
   openDirectWhatsapp() {
-    const sedeId = this.contactForm.get('sedeId')?.value;
+    const venueId = this.contactForm.get('venueId')?.value;
     let phone = '+573000000000';
 
-    if (sedeId) {
-      const sede = this.sedes.find(s => s.id === sedeId);
+    if (venueId) {
+      const sede = this.venues.find(s => s.id === venueId);
       if (sede) phone = sede.whatsapp;
     } else {
-      const current = this.sedeService.selectedSede();
+      const current = this.venueService.selectedVenue();
       if (current) phone = current.whatsapp;
     }
 
-    const message = encodeURIComponent('Hola AListas, quisiera más información.');
+    const message = encodeURIComponent('Hola alitas, quisiera más información.');
     window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${message}`, '_blank');
   }
 }

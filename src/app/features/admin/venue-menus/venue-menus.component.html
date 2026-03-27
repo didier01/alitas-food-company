@@ -1,0 +1,58 @@
+<app-loading-spinner [show]="loading()"></app-loading-spinner>
+@if ( !loading()) {
+<div class="page-container">
+  <div class="page-header">
+    <h2>Menús por Venue</h2>
+    <div class="actions">
+      <button nz-button nzType="primary">
+        <span nz-icon nzType="plus"></span> Asignar Nuevo Menú
+      </button>
+    </div>
+  </div>
+
+  <div class="info-alert">
+    <span nz-icon nzType="info-circle" nzTheme="fill"></span>
+    La gestión del contenido de los menús (productos aprobados por local) facilita el control de inventario local.
+  </div>
+
+  <nz-table #menuTable [nzData]="menusSedesMap" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>Menú Asignado</th>
+        <th>Venue Asignada</th>
+        <th>Productos Habilitados</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of menuTable.data; track item.menu.id) {
+      <tr>
+        <td><strong>{{ item.menu.name }}</strong></td>
+        <td>
+          <nz-tag *ngIf="item.menu.isShared" nzColor="processing">TODAS (Compartido)</nz-tag>
+          <nz-tag *ngIf="!item.menu.isShared">{{ getSedeName(item.menu.venueId) }}</nz-tag>
+        </td>
+        <td>{{ item.menu.productIds.length }} productos <small>en catálogo</small></td>
+        <td>
+          <nz-tag [nzColor]="item.menu.active ? 'success' : 'default'">
+            {{ item.menu.active ? 'Activo' : 'Inactivo' }}
+          </nz-tag>
+        </td>
+        <td>
+          <button nz-button nzType="text" nzSize="small" nz-tooltip nzTooltipTitle="Configurar Productos">
+            <nz-icon nzType="setting" nzTheme="outline" style="color:#fff" />
+          </button>
+          @if (item.menu.isShared) {
+          <button nz-button nzType="text" nzSize="small" nz-tooltip nzTooltipTitle="Compartir Globalmente"
+            (click)="shareGlobal(item.menu)">
+            <span nz-icon nzType="global" nzTheme="outline" style="color:#FF6B35"></span>
+          </button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+}

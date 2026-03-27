@@ -4,14 +4,14 @@
 
   <div class="menu-header">
     <h1 class="page-title">Nuestro Menú</h1>
-    <p class="subtitle">Descubre el auténtico sabor gourmet en AListas</p>
+    <p class="subtitle">Descubre el auténtico sabor gourmet en alitas</p>
   </div>
 
   <div class="filters-container">
     <!-- Buscador -->
     <div class="search-bar">
       <nz-input-group [nzPrefix]="prefixIconSearch">
-        <input type="text" nz-input placeholder="Buscar productos..." [ngModel]="productoService.filtroBusqueda()"
+        <input type="text" nz-input placeholder="Buscar products..." [ngModel]="productService.searchFilter()"
           (ngModelChange)="onSearchChange($event)" />
       </nz-input-group>
       <ng-template #prefixIconSearch>
@@ -21,29 +21,29 @@
 
     <!-- Chips de Categorías -->
     <div class="categories-scroll">
-      <button class="cat-chip" [class.active]="productoService.filtroCategoria() === 'todas'"
-        (click)="setCategoria('todas')">
+      <button class="cat-chip" [class.active]="productService.categoryFilter() === 'all'"
+        (click)="setCategoria('all')">
         🍽️ Todas
       </button>
-      @for (cat of categorias; track cat.id) {
-      <button class="cat-chip" [class.active]="productoService.filtroCategoria() === cat.id"
+      @for (cat of categories; track cat.id) {
+      <button class="cat-chip" [class.active]="productService.categoryFilter() === cat.id"
         (click)="setCategoria(cat.id)">
-        {{ cat.nombre }}
+        {{ cat.name }}
       </button>
       }
     </div>
   </div>
 
   <!-- Productos Grid -->
-  <div class="productos-section">
-    @if (productoService.menuFiltrado().length > 0) {
-    <div class="productos-grid">
-      @for (prod of productoService.menuFiltrado(); track prod.id) {
+  <div class="products-section">
+    @if (productService.filteredMenu().length > 0) {
+    <div class="products-grid">
+      @for (prod of productService.filteredMenu(); track prod.id) {
       <app-producto-card [producto]="prod"></app-producto-card>
       }
     </div>
     } @else {
-    <app-empty-state mensaje="No encontramos productos" subtitulo="Intenta con otra búsqueda o categoría">
+    <app-empty-state mensaje="No encontramos products" subtitulo="Intenta con otra búsqueda o categoría">
     </app-empty-state>
     }
   </div>

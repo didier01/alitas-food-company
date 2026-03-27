@@ -1,13 +1,14 @@
 export interface Combo {
   id: string;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  imagenUrl: string;
-  productosIncluidos: {
-    productoId: string;
-    cantidad: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  includedProducts: {
+    id: string;
+    quantity: number;
   }[];
-  sedeIds: string[]; // ['ALL'] o específicos
-  activo: boolean;
+  venueIds: string[]; // ['ALL'] o específicos
+  active: boolean;
+  showSavings: boolean;
 }

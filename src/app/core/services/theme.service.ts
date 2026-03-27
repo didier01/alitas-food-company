@@ -8,7 +8,7 @@ export class ThemeService {
   loadingGlobal = signal<boolean>(false);
 
   constructor() {
-    const savedTheme = localStorage.getItem('alistas-admin-theme') as 'dark' | 'light';
+    const savedTheme = localStorage.getItem('alitas-admin-theme') as 'dark' | 'light';
     if (savedTheme) {
       this.temaAdmin.set(savedTheme);
     }
@@ -16,7 +16,7 @@ export class ThemeService {
 
     // Effect to auto-save when signal changes
     effect(() => {
-      localStorage.setItem('alistas-admin-theme', this.temaAdmin());
+      localStorage.setItem('alitas-admin-theme', this.temaAdmin());
       this.applyThemeToBody(this.temaAdmin());
     });
   }
