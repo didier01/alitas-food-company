@@ -32,6 +32,9 @@
   --admin-text-secondary: #8C8C8C;
   --admin-border: #434343;
   --admin-accent: #FFD700;
+  --alert-info: var(--alert-info);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
 }
 
 /* Tema claro Admin */
@@ -43,6 +46,8 @@
   --admin-text-secondary: #595959;
   --admin-border: #D9D9D9;
   --admin-accent: #FF6B35;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
 }
 
 body {
@@ -50,7 +55,7 @@ body {
   font-family: var(--font-body);
   background-color: var(--public-bg-primary);
   /* Default behavior for public */
-  color: var(--public-text-primary);
+  color: var(--public-text-primary) !important;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -61,12 +66,38 @@ h4,
 h5,
 h6 {
   font-family: var(--font-title);
+  color: var(--public-text-primary);
+
+}
+
+p {
+  margin: 0;
 }
 
 /* Utilities */
 .text-brand {
   color: var(--brand-primary);
 }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.1));
+  border-radius: 10px;
+
+  &:hover {
+    background: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.2));
+  }
+}
+
 
 .bg-brand {
   background-color: var(--brand-primary);
@@ -82,34 +113,81 @@ h6 {
   background: var(--admin-accent) !important;
   border-radius: var(--border-radius-button);
   color: #000 !important;
+  // box-shadow: 0 8px 16px rgba(255, 107, 53, 0.25);
 }
 
 .ant-btn {
   border-radius: var(--border-radius-button);
+  border: none;
+  padding-block: 6px;
+  height: 100%;
+}
+
+.footer-drawer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  padding: 24px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--admin-bg-secondary);
+  z-index: 9;
+  overflow: auto;
 }
 
 /* Tags */
 .ant-tag-success {
   color: #52c41a;
-  background: #f6ffed;
-  border-color: #b7eb8f;
+  // background: #f6ffed;
+  border-color: #52c41a;
   border-radius: var(--border-radius-button);
+  background: var(--alert-info);
 }
 
 .ant-tag-error {
   color: #ff4d4f;
-  background: #fff1f0;
-  border-color: #ffa39e;
+  // background: #fff1f0;
+  background: var(--alert-info);
+  border-color: #ff4d4f;
   border-radius: var(--border-radius-button);
 }
 
 .ant-tag-processing {
   color: #1890ff;
-  background: #e6f7ff;
-  border-color: #91d5ff;
+  // background: #e6f7ff;
+  border-color: #1890ff;
   border-radius: var(--border-radius-button);
+  background: var(--alert-info);
 }
 
+.ant-tag-default {
+  color: var(--public-text-secondary);
+  border-color: var(--public-text-secondary);
+  border-radius: var(--border-radius-button);
+  background: var(--alert-info);
+}
+
+.card-menu-drawer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--admin-border);
+  transition: all 0.2s ease;
+
+  gap: 12px;
+}
+
+.card-menu-drawer-row {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 14px 18px;
+}
 
 /* Switch */
 .ant-switch-checked {
@@ -118,6 +196,22 @@ h6 {
 
 .ant-switch-handle::before {
   background-color: var(--admin-bg-secondary) !important;
+}
+
+/* Alerts */
+.info-alert {
+  margin-bottom: 32px;
+  padding: 16px 20px;
+  background: var(--alert-info) !important;
+  border-radius: 14px;
+  border: 1px solid var(--admin-border) !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.text-secondary {
+  color: var(--admin-text-secondary);
 }
 
 /* Global Admin Theming for NG-ZORRO Overlays */
@@ -163,8 +257,17 @@ h6 {
 
   /* Tables */
   .ant-table {
-    background: var(--admin-bg-secondary);
+    // background: var(--admin-bg-secondary);
     color: var(--admin-text-primary);
+    background: var(--alert-info) !important;
+    border-radius: 12px;
+    border: 1px solid var(--admin-border);
+    padding: 8px;
+    backdrop-filter: blur(10px);
+
+    th {
+      background: transparent !important;
+    }
   }
 
   .ant-table-thead>tr>th {
@@ -226,6 +329,10 @@ h6 {
     color: var(--admin-text-secondary);
   }
 
+  .ant-drawer-body {
+    margin-bottom: 4rem;
+  }
+
   /* Cards & Statistics */
   .ant-card {
     background: var(--admin-bg-card);
@@ -245,9 +352,10 @@ h6 {
   .ant-input,
   .ant-input-number,
   .ant-select-selector {
-    background-color: var(--admin-bg-primary) !important;
+    background-color: var(--admin-bg-secondary) !important;
     border-color: var(--admin-border) !important;
     color: var(--admin-text-primary) !important;
+    border-radius: var(--border-radius-button) !important;
   }
 
   .ant-form-item-label>label {
@@ -263,8 +371,10 @@ h6 {
     background-color: var(--admin-bg-card) !important;
     border: 1px solid var(--admin-border) !important;
 
+
     .ant-select-item {
       color: var(--admin-text-primary) !important;
+
 
       &.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
         background-color: var(--admin-bg-primary) !important;
@@ -285,6 +395,7 @@ h6 {
     background-color: var(--admin-bg-primary) !important;
     border-color: var(--admin-border) !important;
     color: var(--admin-text-primary) !important;
+    border-radius: var(--border-radius-button) !important;
 
     .ant-select-selection-item-content,
     .ant-select-selection-item-remove {
@@ -378,6 +489,61 @@ h6 {
       &.ant-pagination-disabled .ant-pagination-item-link {
         color: rgba(255, 255, 255, 0.1) !important;
         background: transparent !important;
+      }
+    }
+  }
+
+  /* Tabs Styling */
+
+  .tab-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ant-tabs {
+    color: var(--admin-text-primary);
+
+    .ant-tabs-nav {
+      &::before {
+        border-bottom: 1px solid var(--admin-border) !important;
+      }
+    }
+
+    .ant-tabs-tab {
+      color: var(--admin-text-secondary);
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: var(--admin-text-primary) !important;
+      }
+
+      &-active {
+        .ant-tabs-tab-btn {
+          color: var(--admin-text-primary) !important;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background: var(--admin-accent) !important;
+    }
+
+    /* Card Type Tabs */
+    &.ant-tabs-card {
+      .ant-tabs-nav .ant-tabs-tab {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid var(--admin-border) !important;
+        border-bottom: none !important;
+        border-radius: 12px 12px 0 0 !important;
+        margin-right: 4px !important;
+
+        &-active {
+          background: var(--admin-bg-secondary) !important;
+          border-bottom: 1px solid var(--admin-bg-secondary) !important;
+          transform: translateY(1px);
+        }
       }
     }
   }

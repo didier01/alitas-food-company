@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Category } from '../models/category.model';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class CategoryService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageKey = 'alitas_mock_categories';
 
   getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/categories`);

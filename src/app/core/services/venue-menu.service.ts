@@ -40,4 +40,8 @@ export class VenueMenuService {
   update(menu: VenueMenu): Observable<VenueMenu> {
     return this.http.put<VenueMenu>(`${this.apiUrl}/venue-menu/${menu.id}`, menu);
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/venue-menu/${id}`);
+  }
 }

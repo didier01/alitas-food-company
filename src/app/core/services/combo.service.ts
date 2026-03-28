@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Combo } from '../models/combo.model';
 import { environment } from '../../../environments/environment';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable, map } from 'rxjs';
 export class ComboService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageKey = 'alitas_mock_combos';
 
   getAll(): Observable<Combo[]> {
     return this.http.get<Combo[]>(`${this.apiUrl}/combos`);
@@ -17,7 +18,7 @@ export class ComboService {
 
   getBySede(venueId: string): Observable<Combo[]> {
     return this.getAll().pipe(
-      map(combos => combos.filter(c => c.active && (c.venueIds.includes('ALL') || c.venueIds.includes(venueId))))
+      map(combos => combos.filter(c => c.active && (c.venueIds.includes('TODAS') || c.venueIds.includes(venueId))))
     );
   }
 

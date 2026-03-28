@@ -3,7 +3,7 @@ export interface VenueMenu {
   venueId: string;
   name: string;
   productIds: string[]; // lista de productos habilitados para esa sede
+  comboIds: string[]; // lista de combos habilitados para esa sede
   isShared: boolean; // si true, aplica a todas las sedes
   active: boolean;
-
 }

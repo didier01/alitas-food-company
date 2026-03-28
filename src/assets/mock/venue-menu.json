@@ -2,7 +2,7 @@
   {
     "id": "menu-1",
     "venueId": "sede-1",
-    "name": "Menú Principal El Poblado",
+    "name": "Menú Principal El Estadio",
     "productIds": [
       "prod-1",
       "prod-2",
@@ -15,13 +15,17 @@
       "prod-9",
       "prod-10"
     ],
+    "comboIds": [
+      "combo-1",
+      "combo-2"
+    ],
     "isShared": false,
     "active": true
   },
   {
     "id": "menu-2",
     "venueId": "sede-2",
-    "name": "Menú Principal Laureles",
+    "name": "Menú Principal Catay",
     "productIds": [
       "prod-1",
       "prod-5",
@@ -30,7 +34,10 @@
       "prod-9",
       "prod-10"
     ],
+    "comboIds": [
+      "combo-1"
+    ],
     "isShared": false,
-    "active": true
+    "active": false
   }
 ]

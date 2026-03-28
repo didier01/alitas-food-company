@@ -2,7 +2,7 @@
 
 @if (!loadingData()) {
 <div class="page-container">
-  <div class="page-header">
+  <div class="page-header ">
     <h2>Catálogo de Productos</h2>
     <div class="header-actions">
       <nz-select [(ngModel)]="catFilter" (ngModelChange)="loadProducts()" nzAllowClear
@@ -12,7 +12,7 @@
         <nz-option [nzValue]="cat.id" [nzLabel]="cat.name"></nz-option>
         }
       </nz-select>
-      <button nz-button nzType="primary" (click)="openDrawer()">
+      <button nz-button nzType="primary" (click)="openModal()">
         <span nz-icon nzType="plus"></span> Nuevo Producto
       </button>
     </div>
@@ -64,11 +64,11 @@
   </nz-table>
 </div>
 
-<!-- Drawer para Crear/Editar Product -->
-<nz-drawer [nzClosable]="true" [nzVisible]="drawerVisible()" [nzPlacement]="'right'" [nzWidth]="600"
-  [nzTitle]="editingId ? 'Editar Producto' : 'Nuevo Producto'" (nzOnClose)="closeDrawer()">
-  <ng-container *nzDrawerContent>
-    <form nz-form [formGroup]="prodForm" (ngSubmit)="saveProduct()" nzLayout="vertical">
+<!-- Modal para Crear/Editar Product -->
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Producto' : 'Nuevo Producto'" (nzOnCancel)="closeModal()"
+  (nzOnOk)="saveProduct()" [nzOkLoading]="loadingAction()" [nzOkDisabled]="prodForm.invalid" [nzWidth]="650">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="prodForm" nzLayout="vertical">
 
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="16">
@@ -114,6 +114,7 @@
           <input nz-input formControlName="imageUrl" placeholder="https://..." />
         </nz-form-control>
         <img *ngIf="prodForm.get('imageUrl')?.value" [src]="prodForm.get('imageUrl')?.value" class="preview-img"
+          style="margin-top: 10px; max-height: 120px; border-radius: 8px;"
           onerror="this.src='https://placehold.co/400x200?text=Error';this.style.width='100%';" />
       </nz-form-item>
 
@@ -150,14 +151,7 @@
           </nz-form-item>
         </div>
       </div>
-
-      <div class="drawer-footer">
-        <button nz-button type="button" (click)="closeDrawer()">Cancelar</button>
-        <button nz-button nzType="primary" [nzLoading]="loadingAction()" [disabled]="prodForm.invalid">
-          Guardar Producto
-        </button>
-      </div>
     </form>
   </ng-container>
-</nz-drawer>
+</nz-modal>
 }

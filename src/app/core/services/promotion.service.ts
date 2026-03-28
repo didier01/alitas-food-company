@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Promotion } from '../models/promotion.model';
 import { environment } from '../../../environments/environment';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable, map } from 'rxjs';
 export class PromotionService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageKey = 'alitas_mock_promotions';
 
   getAll(): Observable<Promotion[]> {
     return this.http.get<Promotion[]>(`${this.apiUrl}/promociones`);

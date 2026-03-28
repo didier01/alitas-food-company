@@ -34,7 +34,7 @@
           </div>
         </td>
         <td>
-          <span class="muted-text">{{ data.includedProducts?.length || 0 }} products seleccionados</span>
+          <div class="product-count">{{ data.includedProducts.length }} productos seleccionados</div>
         </td>
         <td>
           <nz-tag *ngIf="!data.venueIds || data.venueIds.length === 0 || data.venueIds.includes('TODAS')"

@@ -2,7 +2,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Venue } from '../models/venue.model';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class VenueService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private storageKey = 'alitas_mock_venues';
 
   // Global signal for the selected venue in the public site
   selectedVenue = signal<Venue | null>(null);

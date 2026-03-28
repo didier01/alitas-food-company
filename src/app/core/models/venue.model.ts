@@ -4,10 +4,7 @@ export interface Venue {
   address: string;
   phone: string;
   whatsapp: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
+  googleMapsUrl: string;
   schedule: {
     opening: string;
     closing: string;

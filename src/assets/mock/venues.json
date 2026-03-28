@@ -1,14 +1,11 @@
 [
   {
     "id": "sede-1",
-    "name": "alitas - El Poblado",
-    "address": "Medellin, El Poblado",
+    "name": "Alitas - Estadio",
+    "address": "Popayan, Ciudad Jardin",
     "phone": "+57 300 000 0001",
     "whatsapp": "+57 300 000 0000",
-    "coordinates": {
-      "lat": 6.2091,
-      "lng": -75.5684
-    },
+    "googleMapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15949.7716174154!2d-76.6023!3d2.4419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMjYnMDUuNCJOIDc2wrAzNicwOC4zIlc!5e0!3m2!1ses!2sco!4v1620000000000!5m2!1ses!2sco",
     "schedule": {
       "opening": "11:00",
       "closing": "22:00",
@@ -27,14 +24,11 @@
   },
   {
     "id": "sede-2",
-    "name": "alitas - Laureles",
-    "address": "Medellin, Laureles",
+    "name": "Alitas - Catay",
+    "address": "Popayan, Catay",
     "phone": "+57 300 000 0002",
     "whatsapp": "+57 300 000 0000",
-    "coordinates": {
-      "lat": 6.2442,
-      "lng": -75.5985
-    },
+    "googleMapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15949.7716174154!2d-76.6111!3d2.4485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMjYnNTQuNiJOIDc2wrAzNic0MC4wIlc!5e0!3m2!1ses!2sco!4v1620000000000!5m2!1ses!2sco",
     "schedule": {
       "opening": "11:00",
       "closing": "22:00",

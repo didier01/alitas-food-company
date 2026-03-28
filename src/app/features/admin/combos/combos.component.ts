@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -27,7 +27,7 @@ import { forkJoin } from 'rxjs';
   selector: 'app-combos',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, NzTableModule, NzButtonModule,
+    CommonModule, FormsModule, ReactiveFormsModule, NzTableModule, NzButtonModule,
     NzIconModule, NzModalModule, NzFormModule, NzInputModule, NzInputNumberModule,
     NzSwitchModule, NzSelectModule, NzPopconfirmModule, NzTagModule, NzAlertModule,
     LoadingSpinnerComponent

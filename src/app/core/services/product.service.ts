@@ -4,7 +4,7 @@ import { Product } from '../models/product.model';
 import { Combo } from '../models/combo.model';
 import { environment } from '../../../environments/environment';
 import { ComboService } from './combo.service';
-import { Observable, map, forkJoin } from 'rxjs';
+import { Observable, map, forkJoin, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,8 @@ export class ProductService {
   private http = inject(HttpClient);
   private comboService = inject(ComboService);
   private apiUrl = environment.apiUrl;
+  private storageKey = 'alitas_mock_products';
+  private comboStorageKey = 'alitas_mock_combos';
 
   // Signals for the public site
   categoryFilter = signal<string>('all');
@@ -73,12 +75,6 @@ export class ProductService {
 
   getById(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
-  }
-
-  getByCategory(categoryId: string): Observable<Product[]> {
-    return this.getAll().pipe(
-      map(prods => prods.filter(p => p.categoryId === categoryId))
-    );
   }
 
   // Load data into local signals

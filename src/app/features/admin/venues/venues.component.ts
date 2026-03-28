@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
@@ -20,7 +20,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, NzTableModule, NzButtonModule,
-    NzIconModule, NzDrawerModule, NzFormModule, NzInputModule,
+    NzIconModule, NzModalModule, NzFormModule, NzInputModule,
     NzSwitchModule, NzPopconfirmModule, NzTagModule,
     LoadingSpinnerComponent
   ],
@@ -35,7 +35,7 @@ export class VenuesComponent implements OnInit {
   venues: Venue[] = [];
   loadingData = signal(true);
   loadingAction = false;
-  drawerVisible = false;
+  modalVisible = false;
   editingId: string | null = null;
   venueForm: FormGroup;
 
@@ -43,8 +43,7 @@ export class VenuesComponent implements OnInit {
     this.venueForm = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      lat: [null, Validators.required],
-      lng: [null, Validators.required],
+      googleMapsUrl: ['', Validators.required],
       phone: ['', Validators.required],
       whatsapp: ['', Validators.required],
       opening: ['11:00', Validators.required],
@@ -66,16 +65,16 @@ export class VenuesComponent implements OnInit {
         this.loadingData.set(false);
       },
       error: () => {
-        this.message.error('Error al cargar venues');
+        this.message.error('Error al cargar sedes');
         this.loadingData.set(false);
       }
     });
   }
 
-  openDrawer() {
+  openModal() {
     this.editingId = null;
     this.venueForm.reset({ active: true, opening: '11:00', closing: '22:00' });
-    this.drawerVisible = true;
+    this.modalVisible = true;
   }
 
   editSede(sede: Venue) {
@@ -83,8 +82,7 @@ export class VenuesComponent implements OnInit {
     this.venueForm.patchValue({
       name: sede.name,
       address: sede.address,
-      lat: sede.coordinates.lat,
-      lng: sede.coordinates.lng,
+      googleMapsUrl: sede.googleMapsUrl,
       phone: sede.phone,
       whatsapp: sede.whatsapp,
       opening: sede.schedule.opening,
@@ -92,11 +90,11 @@ export class VenuesComponent implements OnInit {
       imageUrl: sede.imageUrl,
       active: sede.active
     });
-    this.drawerVisible = true;
+    this.modalVisible = true;
   }
 
-  closeDrawer() {
-    this.drawerVisible = false;
+  closeModal() {
+    this.modalVisible = false;
     this.venueForm.reset();
   }
 
@@ -109,7 +107,7 @@ export class VenuesComponent implements OnInit {
       id: this.editingId || `sede-${Date.now()}`,
       name: formVal.name,
       address: formVal.address,
-      coordinates: { lat: formVal.lat, lng: formVal.lng },
+      googleMapsUrl: formVal.googleMapsUrl,
       phone: formVal.phone,
       whatsapp: formVal.whatsapp,
       schedule: { opening: formVal.opening, closing: formVal.closing, activeDays: ['Todos'] },
@@ -125,7 +123,7 @@ export class VenuesComponent implements OnInit {
       next: () => {
         this.message.success(`Venue ${this.editingId ? 'actualizada' : 'creada'} con éxito`);
         this.loadSedes();
-        this.closeDrawer();
+        this.closeModal();
         this.loadingAction = false;
       },
       error: () => {

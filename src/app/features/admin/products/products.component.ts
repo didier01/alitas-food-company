@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, For
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -25,7 +25,7 @@ import { forkJoin } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, NzTableModule, NzButtonModule,
-    NzIconModule, NzDrawerModule, NzFormModule, NzInputModule, NzInputNumberModule,
+    NzIconModule, NzModalModule, NzFormModule, NzInputModule, NzInputNumberModule,
     NzSelectModule, NzSwitchModule, NzPopconfirmModule, NzTagModule,
     LoadingSpinnerComponent
   ],
@@ -45,7 +45,7 @@ export class ProductsComponent implements OnInit {
   catFilter: string | null = null;
   loadingData = signal(true);
   loadingAction = signal(false);
-  drawerVisible = signal(false);
+  modalVisible = signal(false);
   editingId: string | null = null;
   prodForm: FormGroup;
 
@@ -112,10 +112,10 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  openDrawer() {
+  openModal() {
     this.editingId = null;
     this.prodForm.reset({ available: true, featured: false, price: 0, allergens: [], customizations: [] });
-    this.drawerVisible.set(true);
+    this.modalVisible.set(true);
   }
 
   editProduct(prod: Product) {
@@ -131,11 +131,11 @@ export class ProductsComponent implements OnInit {
       allergens: prod.allergens || [],
       customizations: prod.customizations || []
     });
-    this.drawerVisible.set(true);
+    this.modalVisible.set(true);
   }
 
-  closeDrawer() {
-    this.drawerVisible.set(false);
+  closeModal() {
+    this.modalVisible.set(false);
     this.prodForm.reset();
   }
 
@@ -172,7 +172,7 @@ export class ProductsComponent implements OnInit {
           this.products.unshift(saveObj);
         }
         this.loadProducts();
-        this.closeDrawer();
+        this.closeModal();
         this.loadingAction.set(false);
       },
       error: () => {

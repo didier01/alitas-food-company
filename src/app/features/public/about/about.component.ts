@@ -36,8 +36,6 @@ export class AboutComponent implements OnInit {
   }
 
   getMapUrl(sede: Venue): SafeResourceUrl {
-    // Generar url segura usando coordinates simples para OSM o google as mock
-    const url = `https://maps.google.com/maps?q=${sede.coordinates.lat},${sede.coordinates.lng}&z=15&output=embed`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(sede.googleMapsUrl);
   }
 }
