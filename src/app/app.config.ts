@@ -14,63 +14,70 @@ import { FormsModule } from '@angular/forms';
 registerLocaleData(es);
 
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { 
+import {
   // Outlines
-  PlusOutline, EditOutline, DeleteOutline, SearchOutline, 
-  EnvironmentOutline, PhoneOutline, ClockCircleOutline, 
-  InstagramOutline, FacebookOutline, WhatsAppOutline, 
-  AppstoreOutline, DashboardOutline, ShopOutline, 
-  UnorderedListOutline, ShoppingOutline, TagOutline, 
-  GiftOutline, TeamOutline, LogoutOutline, 
-  InfoCircleOutline, SettingOutline, GlobalOutline, 
-  StarOutline, DragOutline, SafetyCertificateOutline, 
-  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline, 
-  HeartOutline, FireOutline, RocketOutline, 
-  ThunderboltOutline, CrownOutline, RestOutline, 
-  HddOutline, HomeOutline, MessageOutline, 
-  MailOutline, UserOutline, LockOutline, 
-  EyeOutline, EyeInvisibleOutline, FilterOutline, 
-  ReloadOutline, ArrowLeftOutline, ArrowRightOutline, 
-  CloseOutline, CheckOutline, PlusCircleOutline,
-  
+  PlusOutline, EditOutline, DeleteOutline, SearchOutline,
+  EnvironmentOutline, PhoneOutline, ClockCircleOutline,
+  InstagramOutline, FacebookOutline, WhatsAppOutline,
+  AppstoreOutline, DashboardOutline, ShopOutline,
+  UnorderedListOutline, ShoppingOutline, TagOutline,
+  GiftOutline, TeamOutline, LogoutOutline,
+  InfoCircleOutline, SettingOutline, GlobalOutline,
+  StarOutline, DragOutline, SafetyCertificateOutline,
+  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline,
+  HeartOutline, FireOutline, RocketOutline,
+  ThunderboltOutline, CrownOutline, RestOutline,
+  HddOutline, HomeOutline, MessageOutline,
+  MailOutline, UserOutline, LockOutline,
+  EyeOutline, EyeInvisibleOutline, FilterOutline,
+  ReloadOutline, ArrowLeftOutline, ArrowRightOutline,
+  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline,
+
   // Fills
-  InfoCircleFill, StarFill, SafetyCertificateFill, 
-  HeartFill, FireFill, CheckCircleFill, 
+  InfoCircleFill, StarFill, SafetyCertificateFill,
+  HeartFill, FireFill, CheckCircleFill,
   CloseCircleFill, ExclamationCircleFill,
-  
+
   // TwoTones
-  EditTwoTone, DeleteTwoTone, SettingTwoTone, 
-  CheckCircleTwoTone, CloseCircleTwoTone, 
-  ExclamationCircleTwoTone, InfoCircleTwoTone, 
-  HeartTwoTone, StarTwoTone
+  EditTwoTone, DeleteTwoTone, SettingTwoTone,
+  CheckCircleTwoTone, CloseCircleTwoTone,
+  ExclamationCircleTwoTone, InfoCircleTwoTone,
+  HeartTwoTone, StarTwoTone,
+  AppstoreAddOutline,
+  ShoppingCartOutline,
+  DatabaseOutline,
+  MedicineBoxOutline,
+  LineChartOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
-  PlusOutline, EditOutline, DeleteOutline, SearchOutline, 
-  EnvironmentOutline, PhoneOutline, ClockCircleOutline, 
-  InstagramOutline, FacebookOutline, WhatsAppOutline, 
-  AppstoreOutline, DashboardOutline, ShopOutline, 
-  UnorderedListOutline, ShoppingOutline, TagOutline, 
-  GiftOutline, TeamOutline, LogoutOutline, 
-  InfoCircleOutline, SettingOutline, GlobalOutline, 
-  StarOutline, DragOutline, SafetyCertificateOutline, 
-  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline, 
-  HeartOutline, FireOutline, RocketOutline, 
-  ThunderboltOutline, CrownOutline, RestOutline, 
-  HddOutline, HomeOutline, MessageOutline, 
-  MailOutline, UserOutline, LockOutline, 
-  EyeOutline, EyeInvisibleOutline, FilterOutline, 
-  ReloadOutline, ArrowLeftOutline, ArrowRightOutline, 
-  CloseOutline, CheckOutline, PlusCircleOutline,
-  
-  InfoCircleFill, StarFill, SafetyCertificateFill, 
-  HeartFill, FireFill, CheckCircleFill, 
+  TeamOutline, DatabaseOutline, MedicineBoxOutline, LineChartOutline,
+  PlusOutline, EditOutline, DeleteOutline, SearchOutline,
+  EnvironmentOutline, PhoneOutline, ClockCircleOutline,
+  InstagramOutline, FacebookOutline, WhatsAppOutline,
+  AppstoreOutline, AppstoreAddOutline, DashboardOutline, ShopOutline,
+  UnorderedListOutline, ShoppingOutline, TagOutline,
+  GiftOutline, TeamOutline, LogoutOutline,
+  InfoCircleOutline, SettingOutline, GlobalOutline,
+  StarOutline, DragOutline, SafetyCertificateOutline,
+  MenuUnfoldOutline, MenuFoldOutline, CoffeeOutline,
+  HeartOutline, FireOutline, RocketOutline,
+  ThunderboltOutline, CrownOutline, RestOutline,
+  HddOutline, HomeOutline, MessageOutline, ShoppingCartOutline,
+  MailOutline, UserOutline, LockOutline,
+  EyeOutline, EyeInvisibleOutline, FilterOutline,
+  ReloadOutline, ArrowLeftOutline, ArrowRightOutline,
+  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline,
+
+  InfoCircleFill, StarFill, SafetyCertificateFill,
+  HeartFill, FireFill, CheckCircleFill,
   CloseCircleFill, ExclamationCircleFill,
-  
-  EditTwoTone, DeleteTwoTone, SettingTwoTone, 
-  CheckCircleTwoTone, CloseCircleTwoTone, 
-  ExclamationCircleTwoTone, InfoCircleTwoTone, 
-  HeartTwoTone, StarTwoTone
+
+  EditTwoTone, DeleteTwoTone, SettingTwoTone,
+  CheckCircleTwoTone, CloseCircleTwoTone,
+  ExclamationCircleTwoTone, InfoCircleTwoTone,
+  HeartTwoTone, StarTwoTone,
+
 ];
 
 export const appConfig: ApplicationConfig = {

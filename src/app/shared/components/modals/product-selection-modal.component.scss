@@ -1,0 +1,135 @@
+.product-selection-container {
+    padding: 8px;
+}
+
+.product-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--public-border);
+}
+
+.modal-product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.product-info h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--public-text-primary);
+}
+
+.description {
+    color: var(--public-text-secondary);
+}
+
+
+.group-card {
+    background: var(--public-bg-card);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--public-border);
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.group-header h4 {
+    margin: 0;
+    color: var(--public-text-primary);
+}
+
+.selection-rule {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--public-bg-secondary);
+    color: var(--public-text-primary);
+    border: 1px solid var(--public-border);
+}
+
+.free-badge {
+    color: var(--public-text-primary);
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 !important;
+    color: var(--public-text-primary);
+
+    label {
+        color: var(--public-text-primary) !important;
+    }
+}
+
+.opt-price {
+    color: var(--public-text-primary);
+    font-weight: 600;
+    margin-left: auto;
+}
+
+.modal-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--public-border);
+}
+
+.total-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.total-label {
+    font-size: 1.1rem;
+    color: var(--public-text-primary);
+}
+
+.total-amount {
+    font-size: 1.4rem;
+    color: var(--brand-secondary);
+    font-weight: 700;
+}
+
+.allergen-list {
+    margin: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.allergen-label {
+    font-size: 0.75rem;
+    color: var(--public-text-secondary);
+    margin-right: 4px;
+}
+
+.allergen-tag {
+    font-size: 0.7rem;
+    background: var(--public-bg-secondary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--public-text-primary);
+    border: 1px solid var(--public-border);
+}

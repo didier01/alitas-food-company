@@ -23,7 +23,7 @@
         @for (sede of venues; track sede.id) {
         <div class="sede-card">
           <div class="sede-img">
-            <img [src]="sede.imageUrl" [alt]="sede.name" loading="lazy">
+            <img [src]="sede.image_url" [alt]="sede.name" loading="lazy">
           </div>
           <div class="sede-info">
             <h3>{{ sede.name }}</h3>
@@ -37,7 +37,7 @@
             </div>
             <div class="info-row">
               <span nz-icon nzType="clock-circle"></span>
-              <span>{{ sede.schedule.opening }} - {{ sede.schedule.closing }}</span>
+              <span>{{ sede.schedule_opening }} - {{ sede.schedule_closing }}</span>
             </div>
 
             <div class="map-container">

@@ -2,43 +2,37 @@
   {
     "id": "cat-1",
     "name": "Hamburguesas",
-    "icon": "fire",
-    "order": 1,
+    "sort_order": 1,
     "active": true
   },
   {
     "id": "cat-2",
     "name": "Perros Calientes",
-    "icon": "star",
-    "order": 2,
+    "sort_order": 2,
     "active": true
   },
   {
     "id": "cat-3",
     "name": "Papas & Acompañantes",
-    "icon": "appstore",
-    "order": 3,
+    "sort_order": 3,
     "active": false
   },
   {
     "id": "cat-4",
     "name": "Bebidas",
-    "icon": "coffee",
-    "order": 4,
+    "sort_order": 4,
     "active": true
   },
   {
     "id": "cat-5",
     "name": "Combos",
-    "icon": "gift",
-    "order": 5,
+    "sort_order": 5,
     "active": true
   },
   {
     "id": "cat-6",
     "name": "Postres",
-    "icon": "heart",
-    "order": 6,
+    "sort_order": 6,
     "active": true
   }
 ]

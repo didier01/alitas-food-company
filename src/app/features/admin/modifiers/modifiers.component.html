@@ -1,0 +1,85 @@
+<div class="page-header">
+  <h2>Grupos de Opciones / Modificadores</h2>
+  <button nz-button nzType="primary" (click)="showCreateGroupModal()" style="border-radius: 8px;">
+    <span nz-icon nzType="plus"></span> Nuevo Grupo de Opciones
+  </button>
+</div>
+
+<app-loading-spinner *ngIf="loadingData()"></app-loading-spinner>
+
+<nz-table *ngIf="!loadingData()" #basicTable [nzData]="groups" [nzPageSize]="10">
+  <thead>
+    <tr>
+      <th nzWidth="30%">Nombre del Grupo</th>
+      <th>Opciones Vinculadas (Productos de tu carta)</th>
+      <th nzWidth="120px" nzAlign="right">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td><strong>{{ data.name }}</strong></td>
+      <td>
+        <div style="margin-bottom: 8px; font-weight: 600; color: var(--admin-text-secondary);">
+          {{ data.options?.length || 0 }} productos vinculados
+        </div>
+        <nz-tag *ngFor="let opt of data.options" nzColor="processing" style="margin-bottom: 4px; border-radius: 4px;">
+          {{ opt.name }} (+{{ opt.extra_price | currency:'COP':'symbol-narrow':'1.0-0' }})
+        </nz-tag>
+        <span *ngIf="!data.options?.length" style="color: #999; font-style: italic;">Sin opciones</span>
+      </td>
+      <td>
+        <div class="action-buttons" style="display: flex; justify-content: flex-end; gap: 4px;">
+          <button nz-button nzType="text" nzSize="small" (click)="openOptionsModal(data)" title="Configurar Opciones">
+            <span nz-icon nzType="setting" nz-tooltip nzTooltipTitle="Asignar Productos" style="color: #1890ff;"></span>
+          </button>
+
+          <button nz-button nzType="text" nzDanger nzSize="small" nz-popconfirm
+            nzPopconfirmTitle="¿Eliminar este grupo definitivamente?" (nzOnConfirm)="deleteGroup(data.id)"
+            title="Eliminar">
+            <span nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Eliminar"></span>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<!-- Create Group Modal -->
+<nz-modal [(nzVisible)]="isGroupModalVisible" nzTitle="Crear Grupo Global" (nzOnCancel)="isGroupModalVisible = false">
+  <ng-container *nzModalContent>
+    <form [formGroup]="groupForm">
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre del Grupo</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="name" placeholder="Ej: Elige tus Salsas Favoritas" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="isGroupModalVisible = false">Cancelar</button>
+    <button nz-button nzType="primary" (click)="saveGroup()" [nzLoading]="loadingAction()">
+      Guardar Grupo
+    </button>
+  </div>
+</nz-modal>
+
+<!-- Map Options Modal -->
+<nz-modal [(nzVisible)]="isOptionsModalVisible" [nzTitle]="'Sincronizar Opciones de: ' + activeGroup?.name"
+  (nzOnCancel)="isOptionsModalVisible = false">
+  <ng-container *nzModalContent>
+    <p>Selecciona los <strong>productos</strong> de tu carta que fungirán como opciones para este grupo. Su precio extra
+      será igual a su precio en el menú.</p>
+
+    <nz-select [nzMaxTagCount]="5" style="width: 100%" nzMode="multiple"
+      nzPlaceHolder="Busca y selecciona los Extras/Salsas" [(ngModel)]="selectedProductIds">
+      <nz-option *ngFor="let p of products" [nzLabel]="p.name + ' ($' + p.price + ')'" [nzValue]="p.id"></nz-option>
+    </nz-select>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="isOptionsModalVisible = false">Cancelar</button>
+    <button nz-button nzType="primary" (click)="saveOptionsToGroup()" [nzLoading]="loadingAction()">
+      Guardar Opciones
+    </button>
+  </div>
+</nz-modal>

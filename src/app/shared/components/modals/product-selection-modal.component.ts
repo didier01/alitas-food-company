@@ -1,0 +1,175 @@
+import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { Product } from '../../../core/models/product.model';
+import { AssignedModifierGroup, ModifierOption } from '../../../core/models/modifier-group.model';
+import { CartService } from '../../../core/services/cart.service';
+import { AllergenService } from '../../../core/services/allergen.service';
+import { Allergen } from '../../../core/models/allergen.model';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
+@Component({
+  selector: 'app-product-selection-modal',
+  standalone: true,
+  imports: [
+    CommonModule, FormsModule, NzModalModule, NzButtonModule,
+    NzRadioModule, NzCheckboxModule, NzInputNumberModule, NzIconModule
+  ],
+  templateUrl: './product-selection-modal.component.html',
+  styleUrl: './product-selection-modal.component.scss'
+})
+export class ProductSelectionModalComponent implements OnInit {
+  @Input() product!: Product;
+
+  modal = inject(NzModalRef);
+  allergenService = inject(AllergenService);
+  cartService = inject(CartService);
+  message = inject(NzMessageService);
+
+  selections: any = {};
+  totalPrice = 0;
+  allergens: Allergen[] = [];
+
+  ngOnInit() {
+    this.totalPrice = this.product.price;
+    this.initializeSelections();
+    this.loadAllergens();
+  }
+
+  loadAllergens() {
+    this.allergenService.getAll().subscribe(data => {
+      this.allergens = data;
+    });
+  }
+
+  getAllergenName(id: string): string {
+    const allergen = this.allergens.find(a => a.id === id);
+    return allergen ? allergen.name : 'Cargando...';
+  }
+
+  initializeSelections() {
+    if (!this.product.modifier_groups) return;
+
+    this.product.modifier_groups.forEach((group: AssignedModifierGroup) => {
+      if (group.max_selection === 1) {
+        // Radio: single value
+        this.selections[group.group_id] = null;
+      } else {
+        // Checkbox: object of option IDs
+        this.selections[group.group_id] = {};
+        group.options?.forEach((opt: ModifierOption) => {
+          this.selections[group.group_id][opt.id] = false;
+        });
+      }
+    });
+  }
+
+  getSelectedOptions(group: AssignedModifierGroup): ModifierOption[] {
+    let selectedOpts: ModifierOption[] = [];
+    if (group.max_selection === 1) {
+      const selectedId = this.selections[group.group_id];
+      const opt = group.options?.find((o: ModifierOption) => o.id === selectedId);
+      if (opt) selectedOpts.push(opt);
+    } else {
+      group.options?.forEach((opt: ModifierOption) => {
+        if (this.selections[group.group_id] && this.selections[group.group_id][opt.id]) {
+          selectedOpts.push(opt);
+        }
+      });
+    }
+    return selectedOpts;
+  }
+
+  getSelectedCount(group: AssignedModifierGroup): number {
+    if (group.max_selection === 1) {
+      return this.selections[group.group_id] ? 1 : 0;
+    } else {
+      return Object.values(this.selections[group.group_id] || {}).filter(v => v === true).length;
+    }
+  }
+
+  shouldShowPrice(group: AssignedModifierGroup, opt: ModifierOption): boolean {
+    if (opt.extra_price <= 0) return false;
+    if (!group.free_selections || group.free_selections <= 0) return true;
+
+    const selectedCount = this.getSelectedCount(group);
+    const isSelected = group.max_selection === 1
+      ? this.selections[group.group_id] === opt.id
+      : (this.selections[group.group_id] && this.selections[group.group_id][opt.id]);
+
+    // Si NO está seleccionada: mostrar precio si ya se agotaron las gratis
+    if (!isSelected) {
+      return selectedCount >= group.free_selections;
+    }
+
+    // Si ESTÁ seleccionada: mostrar precio solo si se está cobrando por ella
+    const selectedOpts = this.getSelectedOptions(group);
+    selectedOpts.sort((a, b) => a.extra_price - b.extra_price);
+
+    const index = selectedOpts.findIndex(o => o.id === opt.id);
+    return index >= group.free_selections;
+  }
+
+  updateTotal() {
+    let extra = 0;
+    this.product.modifier_groups?.forEach((group: AssignedModifierGroup) => {
+      const selectedOpts = this.getSelectedOptions(group);
+
+      if (selectedOpts.length > 0) {
+        const freeCount = group.free_selections || 0;
+        selectedOpts.sort((a, b) => a.extra_price - b.extra_price);
+
+        selectedOpts.forEach((opt, index) => {
+          if (index >= freeCount) {
+            extra += opt.extra_price;
+          }
+        });
+      }
+    });
+    this.totalPrice = this.product.price + extra;
+  }
+
+  isValid(): boolean {
+    if (!this.product.modifier_groups) return true;
+
+    for (const group of this.product.modifier_groups) {
+      let count = 0;
+      if (group.max_selection === 1) {
+        count = this.selections[group.group_id] ? 1 : 0;
+      } else {
+        count = Object.values(this.selections[group.group_id]).filter(v => v === true).length;
+      }
+
+      if (count < group.min_selection || count > group.max_selection) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  confirmSelection() {
+    const chosenOptions: ModifierOption[] = [];
+    this.product.modifier_groups?.forEach((group: AssignedModifierGroup) => {
+      if (group.max_selection === 1) {
+        const opt = group.options?.find((o: ModifierOption) => o.id === this.selections[group.group_id]);
+        if (opt) chosenOptions.push(opt);
+      } else {
+        group.options?.forEach((opt: ModifierOption) => {
+          if (this.selections[group.group_id][opt.id]) {
+            chosenOptions.push(opt);
+          }
+        });
+      }
+    });
+
+    this.cartService.addItem(this.product, chosenOptions, 1, this.totalPrice);
+    this.message.success(`${this.product.name} añadido al carrito`);
+    this.modal.close(true);
+  }
+}

@@ -37,14 +37,13 @@ export class CategoriesComponent implements OnInit {
   categories: Category[] = [];
   loadingData = signal(true);
   loadingAction = false;
-  modalVisible = false;
+  modalVisible = signal(false);
   editingId: string | null = null;
   catForm: FormGroup;
 
   constructor() {
     this.catForm = this.fb.group({
       name: ['', Validators.required],
-      icon: ['appstore'],
       active: [true]
     });
   }
@@ -57,7 +56,7 @@ export class CategoriesComponent implements OnInit {
     this.loadingData.set(true);
     this.categoryService.getAll().subscribe({
       next: (data) => {
-        this.categories = data.sort((a, b) => a.order - b.order);
+        this.categories = data.sort((a, b) => a.sort_order - b.sort_order);
         this.loadingData.set(false);
       },
       error: () => {
@@ -68,31 +67,49 @@ export class CategoriesComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    const previousCategories = [...this.categories];
     moveItemInArray(this.categories, event.previousIndex, event.currentIndex);
-    // En un escenario real aquí actualizaríamos masivamente el reordenamiento
-    // Mock simulación: no realizamos llamada a backend, el visual basta para la demo.
-    this.categories.forEach((cat, idx) => cat.order = idx + 1);
-    this.message.success('Orden actualizado');
+
+    // Si la posición no cambió, no hacemos nada
+    if (event.previousIndex === event.currentIndex) return;
+
+    // Actualizar sort_order localmente basado en el nuevo índice
+    this.categories = this.categories.map((cat, idx) => ({
+      ...cat,
+      sort_order: idx + 1
+    }));
+
+    this.loadingAction = true;
+    this.categoryService.bulkUpdate(this.categories).subscribe({
+      next: () => {
+        this.message.success('Orden actualizado en base de datos');
+        this.loadingAction = false;
+      },
+      error: () => {
+        this.message.error('Error al guardar el nuevo orden');
+        this.categories = previousCategories; // Revertir si falla
+        this.loadingAction = false;
+      }
+    });
   }
 
   openModal() {
     this.editingId = null;
-    this.catForm.reset({ active: true, icon: 'appstore' });
-    this.modalVisible = true;
+    this.catForm.reset({ active: true });
+    this.modalVisible.set(true);
   }
 
   editCat(cat: Category) {
     this.editingId = cat.id;
     this.catForm.patchValue({
       name: cat.name,
-      icon: cat.icon,
       active: cat.active
     });
-    this.modalVisible = true;
+    this.modalVisible.set(true);
   }
 
   closeModal() {
-    this.modalVisible = false;
+    this.modalVisible.set(false);
   }
 
   saveCat() {
@@ -103,8 +120,7 @@ export class CategoriesComponent implements OnInit {
     const saveObj: Category = {
       id: this.editingId || `cat-${Date.now()}`,
       name: formVal.name,
-      icon: formVal.icon,
-      order: this.editingId ? this.categories.find(c => c.id === this.editingId)!.order : this.categories.length + 1,
+      sort_order: this.editingId ? this.categories.find(c => c.id === this.editingId)!.sort_order : this.categories.length + 1,
       active: formVal.active
     };
 

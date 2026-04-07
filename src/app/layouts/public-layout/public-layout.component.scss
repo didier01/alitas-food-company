@@ -1,136 +1,160 @@
+.public-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--public-bg-primary);
+}
 
-    .public-container {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      background-color: var(--public-bg-primary);
-    }
-    .navbar {
-      background-color: rgba(13, 13, 13, 0.95);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid var(--public-border);
-      padding: 10px 20px;
-    }
-    .nav-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 60px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-title);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--brand-primary);
-    }
-    .desktop-menu {
-      display: flex;
-      gap: 20px;
-    }
-    .desktop-menu a {
-      color: var(--public-text-primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .desktop-menu a:hover, .desktop-menu a.active {
-      color: var(--brand-primary);
-    }
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .hamburger span {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      transition: 0.3s;
-    }
-    .mobile-sede-select {
-      display: none;
-      padding: 10px 0;
-      border-top: 1px solid var(--public-border);
-    }
-    .main-content {
-      flex: 1;
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-    .footer {
-      background-color: var(--public-bg-card);
-      border-top: 1px solid var(--public-border);
-      text-align: center;
-      padding: 20px;
-      color: var(--public-text-secondary);
-      font-size: 0.9rem;
-    }
-    .fab-whatsapp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25D366;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 1000;
-      transition: transform 0.2s;
-      text-decoration: none;
-    }
-    .fab-whatsapp:hover {
-      transform: scale(1.1);
-    }
+.navbar {
+  background-color: rgba(13, 13, 13, 0.95);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--public-border);
+  padding: 10px 20px;
+}
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .desktop-menu {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 80px;
-        left: 0;
-        right: 0;
-        background-color: var(--public-bg-secondary);
-        padding: 20px;
-        border-bottom: 1px solid var(--public-border);
-      }
-      .desktop-menu.show {
-        display: flex;
-      }
-      .sede-select-desktop {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .mobile-sede-select {
-        display: block;
-      }
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+}
+
+.desktop-menu {
+  display: flex;
+  gap: 20px;
+}
+
+.desktop-menu a {
+  color: var(--public-text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.desktop-menu a:hover,
+.desktop-menu a.active {
+  color: var(--brand-primary);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  transition: 0.3s;
+}
+
+.mobile-sede-select {
+  display: none;
+  padding: 10px 0;
+  border-top: 1px solid var(--public-border);
+}
+
+.main-content {
+  flex: 1;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.footer {
+  background-color: var(--public-bg-card);
+  border-top: 1px solid var(--public-border);
+  text-align: center;
+  padding: 20px;
+  color: var(--public-text-secondary);
+  font-size: 0.9rem;
+}
+
+.fab-whatsapp {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #25D366;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+
+.fab-whatsapp:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: var(--public-bg-secondary);
+    padding: 20px;
+    border-bottom: 1px solid var(--public-border);
+  }
+
+  .desktop-menu.show {
+    display: flex;
+  }
+
+  .sede-select-desktop {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-sede-select {
+    display: block;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

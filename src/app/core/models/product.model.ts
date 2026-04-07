@@ -1,15 +1,16 @@
+import { Allergen } from './allergen.model';
+import { AssignedModifierGroup } from './modifier-group.model';
+
 export interface Product {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  imageUrl: string;
-  categoryId: string;
-  available: boolean;
-  featured: boolean;
-  allergens?: string[];
-  customizations?: string[];
-  // Optional price analytics
-  realPrice?: number;
-  showSavings?: boolean;
+  image_url: string;
+  category_id?: string;
+  available?: boolean;
+  featured?: boolean;
+  allergen_ids?: string[];
+  ingredient_ids?: string[];
+  modifier_groups?: AssignedModifierGroup[];
 }

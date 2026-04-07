@@ -1,14 +1,18 @@
+import { AssignedModifierGroup } from './modifier-group.model';
+
 export interface Combo {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  imageUrl: string;
-  includedProducts: {
+  image_url: string;
+  active?: boolean;
+  show_savings?: boolean;
+  included_products?: {
     id: string;
     quantity: number;
   }[];
-  venueIds: string[]; // ['ALL'] o específicos
-  active: boolean;
-  showSavings: boolean;
+  venue_ids?: string[];
+  allergen_ids?: string[];
+  modifier_groups?: AssignedModifierGroup[];
 }

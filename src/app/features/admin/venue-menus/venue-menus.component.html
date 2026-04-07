@@ -40,20 +40,20 @@
         <tr style="transition: all 0.3s ease;">
           <td>{{item.menu.name }}</td>
           <td>
-            @if (item.menu.isShared) {
+            @if (item.menu.is_shared) {
             <nz-tag nzColor="processing">GLOBAL</nz-tag>
             } @else {
             <nz-tag nzColor="processing">{{
-              getSedeName(item.menu.venueId) }}</nz-tag>
+              getSedeName(item.menu.venue_id) }}</nz-tag>
             }
           </td>
           <td>
             <div (click)="openConfigProducts(item.menu)"
               style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
-              <!-- <nz-tag nzColor="default"> {{ (item.menu.productIds || []).length }} PRODS - {{ (item.menu.comboIds ||
+              <!-- <nz-tag nzColor="default"> {{ (item.menu.product_ids || []).length }} PRODS - {{ (item.menu.combo_ids ||
                 []).length }} COMBOS
               </nz-tag> -->
-              <p>{{ (item.menu.productIds || []).length }} Productos - {{ (item.menu.comboIds ||
+              <p>{{ (item.menu.product_ids || []).length }} Productos - {{ (item.menu.combo_ids ||
                 []).length }} Combos</p>
             </div>
           </td>
@@ -104,13 +104,13 @@
             <div style="font-weight: 600; color: #fff; font-size: 15px;">Menú Global</div>
             <p class="text-secondary"> Habilitar este menú para todas las sedes actuales.</p>
           </div>
-          <nz-switch formControlName="isShared"></nz-switch>
+          <nz-switch formControlName="is_shared"></nz-switch>
         </div>
 
-        <nz-form-item *ngIf="!menuForm.value.isShared" style="margin-bottom: 0; width: 100%;">
+        <nz-form-item *ngIf="!menuForm.value.is_shared" style="margin-bottom: 0; width: 100%;">
           <nz-form-label nzRequired>Sede Destino</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="venueId" nzPlaceHolder="Seleccionar Sede" style="width: 100%;">
+            <nz-select formControlName="venue_id" nzPlaceHolder="Seleccionar Sede" style="width: 100%;">
               <nz-option *ngFor="let s of venues" [nzValue]="s.id" [nzLabel]="s.name"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -134,7 +134,7 @@
     <div>
       <div *ngIf="selectedMenu">
         <h2 style="color: var(--admin-text-primary)">{{ selectedMenu.name }}</h2>
-        <nz-tag nzColor="processing">{{ selectedMenu.isShared ? 'Sede Global' : getSedeName(selectedMenu.venueId) }}</nz-tag>
+        <nz-tag nzColor="processing">{{ selectedMenu.is_shared ? 'Sede Global' : getSedeName(selectedMenu.venue_id) }}</nz-tag>
       </div>
 
       <nz-tabs nzType="card" nzSize="small" style="margin-top: 24px;">
@@ -150,7 +150,7 @@
             @for(prod of allProducts; track prod.id){
             <div nz-col [nzSpan]="24" class="card-menu-drawer">
               <div style="display: flex; align-items: center; gap: 16px;">
-                <img [src]="prod.imageUrl"
+                <img [src]="prod.image_url"
                   style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);" />
                 <div>
                   <p>{{ prod.name }}</p>
@@ -176,7 +176,7 @@
             @for(combo of allCombos; track combo.id){
             <div nz-col [nzSpan]="24" class="card-menu-drawer">
               <div style="display: flex; align-items: center; gap: 16px;">
-                <img [src]="combo.imageUrl"
+                <img [src]="combo.image_url"
                   style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);" />
                 <div>
                   <p>{{ combo.name }}</p>

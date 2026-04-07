@@ -23,7 +23,11 @@
       <tr>
         <td><strong>{{ data.name }}</strong></td>
         <td>{{ data.address }}</td>
-        <td>📞 {{ data.phone }} <br> 💬 {{ data.whatsapp }}</td>
+        <td> @if(data.phone){
+          <span nz-icon nzType="phone" nzTheme="outline"></span> {{ data.phone }} <br>
+          }
+          <span nz-icon nzType="whatsapp" nzTheme="outline"></span> {{ data.whatsapp }}
+        </td>
         <td>
           <nz-tag [nzColor]="data.active ? 'success' : 'default'">
             {{ data.active ? 'Activa' : 'Inactiva' }}
@@ -70,7 +74,7 @@
       <nz-form-item>
         <nz-form-label nzRequired>Google Maps URL</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="googleMapsUrl" placeholder="https://maps.app.goo.gl/..." />
+          <input nz-input formControlName="google_maps_url" placeholder="https://maps.app.goo.gl/..." />
         </nz-form-control>
       </nz-form-item>
 
@@ -98,7 +102,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Hora Apertura</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <input nz-input formControlName="opening" type="time" />
+              <input nz-input formControlName="schedule_opening" type="time" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -106,19 +110,20 @@
           <nz-form-item>
             <nz-form-label nzRequired>Hora Cierre</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <input nz-input formControlName="closing" type="time" />
+              <input nz-input formControlName="schedule_closing" type="time" />
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
 
       <nz-form-item>
-        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
+        <nz-form-label nzRequired>Imagen de la Sede</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="imageUrl" placeholder="https://..." />
+          <input type="file" nz-input (change)="onFileSelected($event)" accept="image/*" />
+          <input type="hidden" formControlName="image_url" />
         </nz-form-control>
         <!-- Preview miniatura -->
-        <img *ngIf="venueForm.get('imageUrl')?.value" [src]="venueForm.get('imageUrl')?.value" class="preview-img"
+        <img *ngIf="imagePreview" [src]="imagePreview" class="preview-img"
           style="margin-top: 10px; max-height: 100px; border-radius: 8px;"
           onerror="this.src='https://placehold.co/400x200?text=Error+de+URL';" />
       </nz-form-item>

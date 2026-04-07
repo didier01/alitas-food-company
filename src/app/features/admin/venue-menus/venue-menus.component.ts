@@ -93,8 +93,8 @@ export class VenueMenusComponent implements OnInit {
   private initForm() {
     this.menuForm = this.fb.group({
       name: ['', [Validators.required]],
-      venueId: [null],
-      isShared: [false],
+      venue_id: [null],
+      is_shared: [false],
       active: [true]
     });
   }
@@ -111,8 +111,8 @@ export class VenueMenusComponent implements OnInit {
         // Normalizar datos para evitar errores de undefined si el JSON no los tiene
         this.menus = (data.menus || []).map(m => ({
           ...m,
-          productIds: m.productIds || [],
-          comboIds: m.comboIds || []
+          product_ids: m.product_ids || [],
+          combo_ids: m.combo_ids || []
         }));
         this.venues = data.venues || [];
         this.allProducts = data.products || [];
@@ -127,8 +127,8 @@ export class VenueMenusComponent implements OnInit {
     });
   }
 
-  getSedeName(venueId: string): string {
-    const sede = this.venues.find(s => s.id === venueId);
+  getSedeName(venue_id: string): string {
+    const sede = this.venues.find(s => s.id === venue_id);
     return sede ? sede.name : 'Sede Desconocida';
   }
 
@@ -137,12 +137,12 @@ export class VenueMenusComponent implements OnInit {
     if (menu) {
       this.menuForm.patchValue({
         name: menu.name,
-        venueId: menu.venueId === 'ALL' ? null : menu.venueId,
-        isShared: menu.isShared,
+        venue_id: menu.venue_id === 'ALL' ? null : menu.venue_id,
+        is_shared: menu.is_shared,
         active: menu.active
       });
     } else {
-      this.menuForm.reset({ active: true, isShared: false });
+      this.menuForm.reset({ active: true, is_shared: false });
     }
     this.modalVisible.set(true);
   }
@@ -163,14 +163,14 @@ export class VenueMenusComponent implements OnInit {
     const payload: VenueMenu = {
       ...formVal,
       id: this.editingId || `menu-${Date.now()}`,
-      venueId: formVal.isShared ? 'ALL' : (formVal.venueId || 'ALL'),
-      productIds: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.productIds || []) : [],
-      comboIds: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.comboIds || []) : []
+      venue_id: formVal.is_shared ? 'ALL' : (formVal.venue_id || 'ALL'),
+      product_ids: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.product_ids || []) : [],
+      combo_ids: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.combo_ids || []) : []
     };
 
     const action = this.editingId
       ? this.venueMenuService.update(payload)
-      : this.venueMenuService.createVenueMenu(payload);
+      : this.venueMenuService.create(payload);
 
     action.subscribe({
       next: () => {
@@ -195,36 +195,36 @@ export class VenueMenusComponent implements OnInit {
 
   openConfigProducts(menu: VenueMenu) {
     this.selectedMenu = JSON.parse(JSON.stringify(menu)); // Deep copy
-    if (!this.selectedMenu!.productIds) this.selectedMenu!.productIds = [];
-    if (!this.selectedMenu!.comboIds) this.selectedMenu!.comboIds = [];
+    if (!this.selectedMenu!.product_ids) this.selectedMenu!.product_ids = [];
+    if (!this.selectedMenu!.combo_ids) this.selectedMenu!.combo_ids = [];
     this.configModalVisible.set(true);
   }
 
   isProductInMenu(productId: string): boolean {
-    return this.selectedMenu?.productIds?.includes(productId) || false;
+    return this.selectedMenu?.product_ids?.includes(productId) || false;
   }
 
   isComboInMenu(comboId: string): boolean {
-    return this.selectedMenu?.comboIds?.includes(comboId) || false;
+    return this.selectedMenu?.combo_ids?.includes(comboId) || false;
   }
 
   toggleProductInMenu(productId: string) {
     if (!this.selectedMenu) return;
-    const index = this.selectedMenu.productIds.indexOf(productId);
+    const index = this.selectedMenu.product_ids.indexOf(productId);
     if (index > -1) {
-      this.selectedMenu.productIds.splice(index, 1);
+      this.selectedMenu.product_ids.splice(index, 1);
     } else {
-      this.selectedMenu.productIds.push(productId);
+      this.selectedMenu.product_ids.push(productId);
     }
   }
 
   toggleComboInMenu(comboId: string) {
     if (!this.selectedMenu) return;
-    const index = this.selectedMenu.comboIds.indexOf(comboId);
+    const index = this.selectedMenu.combo_ids.indexOf(comboId);
     if (index > -1) {
-      this.selectedMenu.comboIds.splice(index, 1);
+      this.selectedMenu.combo_ids.splice(index, 1);
     } else {
-      this.selectedMenu.comboIds.push(comboId);
+      this.selectedMenu.combo_ids.push(comboId);
     }
   }
 

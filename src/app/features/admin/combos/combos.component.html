@@ -34,13 +34,13 @@
           </div>
         </td>
         <td>
-          <div class="product-count">{{ data.includedProducts.length }} productos seleccionados</div>
+          <div class="product-count">{{ data.included_products?.length || 0 }} productos seleccionados</div>
         </td>
         <td>
-          <nz-tag *ngIf="!data.venueIds || data.venueIds.length === 0 || data.venueIds.includes('TODAS')"
+          <nz-tag *ngIf="!data.venue_ids || data.venue_ids.length === 0 || data.venue_ids.includes('TODAS')"
             nzColor="processing">Todas</nz-tag>
-          <ng-container *ngIf="data.venueIds && data.venueIds.length > 0 && !data.venueIds.includes('TODAS')">
-            <nz-tag *ngFor="let s of data.venueIds">{{ getSedeName(s) }}</nz-tag>
+          <ng-container *ngIf="data.venue_ids && data.venue_ids.length > 0 && !data.venue_ids.includes('TODAS')">
+            <nz-tag *ngFor="let s of data.venue_ids">{{ getSedeName(s) }}</nz-tag>
           </ng-container>
         </td>
         <td>
@@ -50,12 +50,18 @@
         </td>
         <td>
           <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="duplicateCombo(data)" title="Duplicar">
+              <span nz-icon nzType="copy" nz-tooltip nzTooltipTitle="Duplicar" nzTheme="outline"
+                style="color: #52c41a;"></span>
+            </button>
             <button nz-button nzType="text" nzSize="small" (click)="editCombo(data)">
-              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+              <span nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Editar" nzTheme="outline"
+                style="color: #1890ff;"></span>
             </button>
             <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
               nzPopconfirmTitle="¿Eliminar este combo?" (nzOnConfirm)="deleteCombo(data)">
-              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+              <span nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Eliminar" nzTheme="outline"
+                style="color: #ff4d4f;"></span>
             </button>
           </div>
         </td>
@@ -100,7 +106,8 @@
       <nz-form-item>
         <nz-form-label nzRequired>Productos que conforman el Combo</nz-form-label>
         <nz-form-control nzErrorTip="Se requieren products">
-          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Productos" formControlName="includedProducts">
+          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Productos" formControlName="included_products"
+            (ngModelChange)="onProductsSelectionChange($event)">
             @for (p of products; track p.id) {
             <nz-option [nzValue]="p.id" [nzLabel]="p.name + ' (' + p.price + ' COP)' "></nz-option>
             }
@@ -108,21 +115,136 @@
         </nz-form-control>
       </nz-form-item>
 
+      <div *ngIf="selectedProductsDetails.length > 0"
+        style="margin-bottom: 24px; padding: 16px; background: var(--admin-bg-primary); border: 1px solid var(--admin-border); border-radius: 8px;">
+        <h4 style="margin-top: 0; margin-bottom: 12px; font-size: 14px; color: var(--admin-text-primary);">Cantidades
+          por Producto</h4>
+        <div *ngFor="let p of selectedProductsDetails"
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 13px; color: var(--admin-text-primary);">{{ p.name }} <small
+              style="color: var(--admin-text-secondary);">({{ p.price | currency:'COP':'symbol-narrow':'1.0-0' }}
+              c/u)</small></span>
+          <nz-input-number [(ngModel)]="p.quantity" [ngModelOptions]="{standalone: true}" [nzMin]="1" [nzStep]="1"
+            style="width: 80px;"></nz-input-number>
+        </div>
+      </div>
+
       <nz-form-item>
-        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
+        <nz-form-label nzRequired>Imagen del Combo</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="imageUrl" />
+          <input type="file" nz-input (change)="onFileSelected($event)" accept="image/*" />
+          <input type="hidden" formControlName="image_url" />
         </nz-form-control>
+        <img *ngIf="imagePreview" [src]="imagePreview" class="preview-img"
+          style="margin-top: 10px; max-height: 120px; border-radius: 8px;"
+          onerror="this.src='https://placehold.co/400x200?text=Error';this.style.width='100%';" />
       </nz-form-item>
 
-      <nz-alert *ngIf="comboForm.get('includedProducts')?.value?.length > 0" nzType="info" nzShowIcon
-        [nzMessage]="'Análisis de Precio'" [nzDescription]="priceAnalysisTpl" style="margin-bottom: 24px;"></nz-alert>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Alérgenos (Opcional)</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Alérgenos" formControlName="allergen_ids">
+                @for (alg of allergensList; track alg.id) {
+                <nz-option [nzValue]="alg.id" [nzLabel]="alg.name"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <!-- Modifier Groups (Variantes) -->
+      <div class="modifier-groups-section"
+        style="margin-top: 24px; margin-bottom: 24px; padding-top: 16px; border-top: 1px solid var(--admin-border);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
+          <h3 style="margin: 0; font-size: 16px;">Grupos de Extras o Modificadores (Global)</h3>
+          
+          <div style="display: flex; gap: 8px;">
+            <nz-select [(ngModel)]="newGroupToAddId" [ngModelOptions]="{standalone: true}" nzPlaceHolder="Seleccionar un Grupo..." style="width: 250px;">
+              <nz-option *ngFor="let g of globalModifiersList" [nzValue]="g.id" [nzLabel]="g.name"></nz-option>
+            </nz-select>
+            <button nz-button nzType="primary" (click)="addModifierGroup()" type="button" style="border-radius: 6px;">
+              <span nz-icon nzType="plus"></span> Asignar
+            </button>
+          </div>
+        </div>
+
+        <div formArrayName="modifier_groups">
+          <div *ngFor="let group of modifier_groups_array.controls; let gIdx = index" [formGroupName]="gIdx"
+            class="modifier-group-card" style="padding: 16px; border: 1px solid var(--admin-border); border-radius: 8px; margin-bottom: 16px;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h4 style="margin: 0;">{{ group.get('name')?.value }}</h4>
+              <button nz-button nzType="text" nzDanger (click)="removeModifierGroup(gIdx)" type="button">
+                <span nz-icon nzType="delete"></span>
+              </button>
+            </div>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired nzTooltipTitle="Obligatorio para que sea válido">Selección Mínima</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="min_selection" [nzMin]="0" style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>Selección Máxima permitida</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="max_selection" [nzMin]="1" style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzTooltipTitle="Estas primeras 'X' no se le sumarán al precio final del combo.">Inclusiones Gratis</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="free_selections" [nzMin]="0" style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+
+            <!-- Options Preview -->
+            <div style="margin-top: 8px;">
+              <div style="margin-bottom: 12px;">
+                <nz-form-label>Opciones vinculadas globalmente:</nz-form-label>
+              </div>
+              <div>
+                <nz-tag *ngFor="let opt of group.get('options')?.value" nzColor="gold" style="margin-bottom: 4px; border-radius: 4px;">
+                  {{ opt.name }} <span style="font-weight: 600; margin-left: 4px;">(+{{ opt.extra_price | currency:'COP':'symbol-narrow':'1.0-0' }})</span>
+                </nz-tag>
+                <span *ngIf="!group.get('options')?.value?.length" style="color: #999;">No tiene opciones configuradas.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="comboForm.get('included_products')?.value?.length > 0"
+        style="margin-bottom: 24px; padding: 16px; background: rgba(24, 144, 255, 0.1); border: 1px solid rgba(24, 144, 255, 0.3); border-radius: 8px; display: flex; gap: 12px; align-items: flex-start;">
+        <span nz-icon nzType="info-circle" nzTheme="fill"
+          style="color: #1890ff; font-size: 18px; margin-top: 2px;"></span>
+        <div style="flex: 1;">
+          <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: var(--admin-text-primary);">Análisis
+            de Precio</h4>
+          <ng-container *ngTemplateOutlet="priceAnalysisTpl"></ng-container>
+        </div>
+      </div>
+
       <ng-template #priceAnalysisTpl>
-        <div style="font-size: 13px;">
-          Precio real por todos los productos: <strong>{{ getFormRealPrice() | currency:'COP':'symbol-narrow':'1.0-0'
+        <div style="font-size: 13px; color: var(--admin-text-secondary);">
+          Precio real por todos los productos: <strong style="color: var(--admin-text-primary);">{{ getFormRealPrice() |
+            currency:'COP':'symbol-narrow':'1.0-0'
             }}</strong>
           <br />
-          Precio especial (tu venta): <strong>{{ comboForm.get('price')?.value | currency:'COP':'symbol-narrow':'1.0-0'
+          Precio especial (tu venta): <strong style="color: var(--admin-text-primary);">{{ comboForm.get('price')?.value
+            | currency:'COP':'symbol-narrow':'1.0-0'
             }}</strong>
           <br />
           <span *ngIf="getFormSavings() > 0" style="color: #52c41a; display: block; margin-top: 4px;">
@@ -140,7 +262,7 @@
           <nz-form-item>
             <nz-form-label>Sedes Aplicables</nz-form-label>
             <nz-form-control>
-              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="venueIds">
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="venue_ids">
                 <nz-option nzValue="TODAS" nzLabel="TODAS LAS SEDES"></nz-option>
                 @for (sede of venues; track sede.id) {
                 <nz-option [nzValue]="sede.id" [nzLabel]="sede.name"></nz-option>
@@ -161,7 +283,7 @@
           <nz-form-item>
             <nz-form-label>Mostrar Ahorro Publico</nz-form-label>
             <nz-form-control>
-              <nz-switch formControlName="showSavings"></nz-switch>
+              <nz-switch formControlName="show_savings"></nz-switch>
             </nz-form-control>
           </nz-form-item>
         </div>

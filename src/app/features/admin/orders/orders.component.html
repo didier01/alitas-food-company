@@ -1,0 +1,54 @@
+<div class="orders-container">
+  <div class="header">
+    <h2>Gestión de Pedidos</h2>
+    <button nz-button nzType="default" (click)="loadOrders()">
+      <span nz-icon nzType="reload"></span> Actualizar
+    </button>
+  </div>
+
+  <nz-table #basicTable [nzData]="orders()" [nzLoading]="loading()" [nzFrontPagination]="true">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Mesa / Dirección</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.created_at | date:'short' }}</td>
+        <td>{{ data.customer_name }}</td>
+        <td>{{ data.delivery_address }}</td>
+        <td>{{ data.total_amount | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+        <td>
+          <nz-tag [nzColor]="statusColors[data.status]">
+            {{ data.status }}
+          </nz-tag>
+        </td>
+        <td>
+          <div class="actions">
+            <button nz-button nzType="primary" nzSize="small" (click)="viewDetails(data)">
+              Detalles
+            </button>
+            <button nz-button nz-dropdown [nzDropdownMenu]="statusMenu" nzSize="small" class="btn-status">
+              Estado <span nz-icon nzType="down"></span>
+            </button>
+
+            <nz-dropdown-menu #statusMenu="nzDropdownMenu" nzOverlayClassName="admin-menu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="updateStatus(data, 'PREPARANDO')">Preparando</li>
+                <li nz-menu-item (click)="updateStatus(data, 'ENVIADO')">Enviado</li>
+                <li nz-menu-item (click)="updateStatus(data, 'COMPLETADO')">Completado</li>
+                <li nz-menu-divider></li>
+                <li nz-menu-item nzDanger (click)="updateStatus(data, 'CANCELADO')">Cancelar</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

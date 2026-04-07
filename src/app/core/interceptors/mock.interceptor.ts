@@ -15,15 +15,12 @@ export const mockInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  // Ejemplo: el servicio llama a getAll() -> GET /api/products
-  // Interceptamos y leemos /assets/mock/products.json
   if (req.url.startsWith('/api/')) {
-    const endpoint = req.url.replace('/api/', ''); // ej: 'products'
-    // Soporte básico para GET (lectura de JSONs locales proxy)
-    // Para POST/PUT/DELETE simplemente se simula un success respondiendo con los datos del body o vacío
+    const endpointPath = req.url.replace('/api/', '').split('?')[0]; // Remove query params for check
     
     if (req.method === 'GET') {
-      const jsonStr = `/assets/mock/${endpoint}.json`; // Asume que el endpoint es el name exacto, ej 'products' -> products.json
+      const jsonStr = `/assets/mock/${endpointPath}.json`; // Asume que el endpoint es el name exacto, ej 'products' -> products.json
+
       
       // Para simular el proxy, Angular usará the native fetch() o next(req) pero a un JSON
       const mockReq = req.clone({ url: jsonStr });
@@ -34,7 +31,7 @@ export const mockInterceptor: HttpInterceptorFn = (req, next) => {
     
     if (req.method === 'POST') {
       const bodyPayload = req.body as any;
-      return of(new HttpResponse({ status: 201, body: { ...bodyPayload, id: `${endpoint}-new` } })).pipe(
+      return of(new HttpResponse({ status: 201, body: { ...bodyPayload, id: `${endpointPath}-new` } })).pipe(
         delay(simulateNetworkDelay())
       );
     }

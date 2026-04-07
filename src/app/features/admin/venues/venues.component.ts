@@ -12,6 +12,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { VenueService } from '../../../core/services/venue.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 import { Venue } from '../../../core/models/venue.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 
@@ -29,12 +30,15 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 })
 export class VenuesComponent implements OnInit {
   venueService = inject(VenueService);
+  supabaseService = inject(SupabaseService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
 
   venues: Venue[] = [];
   loadingData = signal(true);
   loadingAction = false;
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
   modalVisible = false;
   editingId: string | null = null;
   venueForm: FormGroup;
@@ -43,12 +47,12 @@ export class VenuesComponent implements OnInit {
     this.venueForm = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      googleMapsUrl: ['', Validators.required],
-      phone: ['', Validators.required],
+      google_maps_url: ['', Validators.required],
+      phone: [''],
       whatsapp: ['', Validators.required],
-      opening: ['11:00', Validators.required],
-      closing: ['22:00', Validators.required],
-      imageUrl: ['', Validators.required],
+      schedule_opening: ['11:00', Validators.required],
+      schedule_closing: ['22:00', Validators.required],
+      image_url: ['', Validators.required],
       active: [true]
     });
   }
@@ -73,21 +77,25 @@ export class VenuesComponent implements OnInit {
 
   openModal() {
     this.editingId = null;
-    this.venueForm.reset({ active: true, opening: '11:00', closing: '22:00' });
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.venueForm.reset({ active: true, schedule_opening: '11:00', schedule_closing: '22:00' });
     this.modalVisible = true;
   }
 
   editSede(sede: Venue) {
     this.editingId = sede.id;
+    this.selectedFile = null;
+    this.imagePreview = sede.image_url;
     this.venueForm.patchValue({
       name: sede.name,
       address: sede.address,
-      googleMapsUrl: sede.googleMapsUrl,
+      google_maps_url: sede.google_maps_url,
       phone: sede.phone,
       whatsapp: sede.whatsapp,
-      opening: sede.schedule.opening,
-      closing: sede.schedule.closing,
-      imageUrl: sede.imageUrl,
+      schedule_opening: sede.schedule_opening,
+      schedule_closing: sede.schedule_closing,
+      image_url: sede.image_url,
       active: sede.active
     });
     this.modalVisible = true;
@@ -95,50 +103,79 @@ export class VenuesComponent implements OnInit {
 
   closeModal() {
     this.modalVisible = false;
+    this.selectedFile = null;
+    this.imagePreview = null;
     this.venueForm.reset();
   }
 
-  saveSede() {
+  async saveSede() {
     if (this.venueForm.invalid) return;
     this.loadingAction = true;
 
-    const formVal = this.venueForm.value;
-    const saveObj: Venue = {
-      id: this.editingId || `sede-${Date.now()}`,
-      name: formVal.name,
-      address: formVal.address,
-      googleMapsUrl: formVal.googleMapsUrl,
-      phone: formVal.phone,
-      whatsapp: formVal.whatsapp,
-      schedule: { opening: formVal.opening, closing: formVal.closing, activeDays: ['Todos'] },
-      imageUrl: formVal.imageUrl,
-      active: formVal.active
-    };
+    try {
+      let finalImageUrl = this.venueForm.get('image_url')?.value;
 
-    const targetSub = this.editingId
-      ? this.venueService.update(saveObj)
-      : this.venueService.create(saveObj);
-
-    targetSub.subscribe({
-      next: () => {
-        this.message.success(`Venue ${this.editingId ? 'actualizada' : 'creada'} con éxito`);
-        this.loadSedes();
-        this.closeModal();
-        this.loadingAction = false;
-      },
-      error: () => {
-        this.message.error('Error al guardar la sede');
-        this.loadingAction = false;
+      if (this.selectedFile) {
+        finalImageUrl = await this.supabaseService.uploadImage(this.selectedFile, 'info/sedes');
       }
-    });
+
+      const formVal = this.venueForm.value;
+      const saveObj: Venue = {
+        id: this.editingId || `sede-${Date.now()}`,
+        name: formVal.name,
+        address: formVal.address,
+        google_maps_url: formVal.google_maps_url,
+        phone: formVal.phone,
+        whatsapp: formVal.whatsapp,
+        schedule_opening: formVal.schedule_opening,
+        schedule_closing: formVal.schedule_closing,
+        schedule_active_days: ['Todos'],
+        image_url: finalImageUrl,
+        active: formVal.active
+      };
+
+      const targetSub = this.editingId
+        ? this.venueService.update(saveObj)
+        : this.venueService.create(saveObj);
+
+      targetSub.subscribe({
+        next: () => {
+          this.message.success(`Sede ${this.editingId ? 'actualizada' : 'creada'} con éxito`);
+          this.loadSedes();
+          this.closeModal();
+          this.loadingAction = false;
+        },
+        error: () => {
+          this.message.error('Error al guardar la sede');
+          this.loadingAction = false;
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.message.error('Error al subir la imagen. Verifica la configuración de Supabase.');
+      this.loadingAction = false;
+    }
   }
 
   deleteSede(sede: Venue) {
     // Para simplificar desactivamos en lugar de borrar permanente
     sede.active = false;
     this.venueService.update(sede).subscribe(() => {
-      this.message.success('Venue desactivada correctamente');
+      this.message.success('Sede desactivada correctamente');
       this.loadSedes();
     });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+      this.venueForm.patchValue({ image_url: 'pending-upload' });
+    };
+    reader.readAsDataURL(file);
   }
 }

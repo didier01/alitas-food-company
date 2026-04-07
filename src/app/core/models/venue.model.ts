@@ -4,12 +4,11 @@ export interface Venue {
   address: string;
   phone: string;
   whatsapp: string;
-  googleMapsUrl: string;
-  schedule: {
-    opening: string;
-    closing: string;
-    activeDays: string[]; // Ej: ['Lunes', 'Martes', ...]
-  };
+  google_maps_url: string;
+  schedule_opening: string;
+  schedule_closing: string;
+  schedule_active_days: string[];
   active: boolean;
-  imageUrl: string;
+  image_url: string;
+  created_at?: string;
 }

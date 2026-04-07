@@ -16,6 +16,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { PromotionService } from '../../../core/services/promotion.service';
 import { VenueService } from '../../../core/services/venue.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 import { Promotion } from '../../../core/models/promotion.model';
 import { Venue } from '../../../core/models/venue.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
@@ -36,6 +37,7 @@ import { forkJoin } from 'rxjs';
 export class PromotionsComponent implements OnInit {
   promotionService = inject(PromotionService);
   venueService = inject(VenueService);
+  supabaseService = inject(SupabaseService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
 
@@ -43,6 +45,8 @@ export class PromotionsComponent implements OnInit {
   venues: Venue[] = [];
   loadingData = signal<boolean>(true);
   loadingAction = false;
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
   modalVisible = false;
   editingId: string | null = null;
   promoForm: FormGroup;
@@ -51,11 +55,11 @@ export class PromotionsComponent implements OnInit {
     this.promoForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      discountPercentage: [10, [Validators.required, Validators.min(1), Validators.max(100)]],
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      venueIds: [['TODAS']],
-      imageUrl: ['', Validators.required],
+      discount_percentage: [10, [Validators.required, Validators.min(1), Validators.max(100)]],
+      start_date: [null, Validators.required],
+      end_date: [null, Validators.required],
+      venue_ids: [['TODAS']],
+      image_url: ['', Validators.required],
       active: [true]
     });
   }
@@ -85,20 +89,24 @@ export class PromotionsComponent implements OnInit {
 
   openModal() {
     this.editingId = null;
-    this.promoForm.reset({ active: true, discountPercentage: 10, venueIds: ['TODAS'] });
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.promoForm.reset({ active: true, discount_percentage: 10, venue_ids: ['TODAS'] });
     this.modalVisible = true;
   }
 
   editPromo(promo: Promotion) {
     this.editingId = promo.id;
+    this.selectedFile = null;
+    this.imagePreview = promo.image_url;
     this.promoForm.patchValue({
       title: promo.title,
       description: promo.description,
-      discountPercentage: promo.discountPercentage,
-      startDate: promo.startDate,
-      endDate: promo.endDate,
-      venueIds: promo.venueIds,
-      imageUrl: promo.imageUrl,
+      discount_percentage: promo.discount_percentage,
+      start_date: promo.start_date,
+      end_date: promo.end_date,
+      venue_ids: promo.venue_ids,
+      image_url: promo.image_url,
       active: promo.active
     });
     this.modalVisible = true;
@@ -106,48 +114,70 @@ export class PromotionsComponent implements OnInit {
 
   closeModal() {
     this.modalVisible = false;
+    this.selectedFile = null;
+    this.imagePreview = null;
   }
 
-  savePromo() {
+  async savePromo() {
     if (this.promoForm.invalid) return;
     this.loadingAction = true;
 
-    const formVal = this.promoForm.value;
-    const saveObj: Promotion = {
-      id: this.editingId || `promo-${Date.now()}`,
-      title: formVal.title,
-      description: formVal.description,
-      discountPercentage: formVal.discountPercentage,
-      startDate: formVal.startDate,
-      endDate: formVal.endDate,
-      venueIds: formVal.venueIds,
-      imageUrl: formVal.imageUrl,
-      applicableDays: ['Todos'],
-      active: formVal.active
-    };
+    try {
+      let finalImageUrl = this.promoForm.get('image_url')?.value;
 
-    const targetSub = this.editingId
-      ? this.promotionService.update(saveObj)
-      : this.promotionService.create(saveObj);
-
-    targetSub.subscribe({
-      next: () => {
-        this.message.success(`Promoción guardada`);
-        // Actualizamos local array simulando
-        if (this.editingId) {
-          const idx = this.promotions.findIndex(p => p.id === this.editingId);
-          if (idx !== -1) this.promotions[idx] = saveObj;
-        } else {
-          this.promotions.unshift(saveObj);
-        }
-        this.closeModal();
-        this.loadingAction = false;
-      },
-      error: () => {
-        this.message.error('Error al guardar');
-        this.loadingAction = false;
+      if (this.selectedFile) {
+        finalImageUrl = await this.supabaseService.uploadImage(this.selectedFile, 'uploadImage/promotions');
       }
-    });
+
+      const formVal = this.promoForm.value;
+      
+      let finalVenueIds = formVal.venue_ids || [];
+      if (finalVenueIds.includes('TODAS')) {
+        finalVenueIds = this.venues.map(v => v.id);
+      }
+
+      const saveObj: any = {
+        title: formVal.title,
+        description: formVal.description,
+        discount_percentage: formVal.discount_percentage,
+        start_date: formVal.start_date,
+        end_date: formVal.end_date,
+        venue_ids: finalVenueIds,
+        image_url: finalImageUrl,
+        applicable_days: ['Todos'],
+        active: formVal.active
+      };
+
+      if (this.editingId) {
+        saveObj.id = this.editingId;
+      }
+
+      const targetSub = this.editingId
+        ? this.promotionService.update(saveObj)
+        : this.promotionService.create(saveObj);
+
+      targetSub.subscribe({
+        next: () => {
+          this.message.success(`Promoción guardada`);
+          if (this.editingId) {
+            const idx = this.promotions.findIndex(p => p.id === this.editingId);
+            if (idx !== -1) this.promotions[idx] = saveObj;
+          } else {
+            this.promotions.unshift(saveObj);
+          }
+          this.closeModal();
+          this.loadingAction = false;
+        },
+        error: () => {
+          this.message.error('Error al guardar');
+          this.loadingAction = false;
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.message.error('Error al subir la imagen.');
+      this.loadingAction = false;
+    }
   }
 
   deletePromo(promo: Promotion) {
@@ -155,5 +185,18 @@ export class PromotionsComponent implements OnInit {
       this.message.success('Promoción eliminada');
       this.promotions = this.promotions.filter(p => p.id !== promo.id);
     });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+      this.promoForm.patchValue({ image_url: 'pending-upload' });
+    };
+    reader.readAsDataURL(file);
   }
 }

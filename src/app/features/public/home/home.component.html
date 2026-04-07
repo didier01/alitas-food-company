@@ -19,11 +19,11 @@
       <div class="promos-grid">
         @for (promo of promotions(); track promo.id) {
         <div class="promo-card">
-          <img [src]="promo.imageUrl" [alt]="promo.title" loading="lazy">
+          <img [src]="promo.image_url" [alt]="promo.title" loading="lazy">
           <div class="promo-info">
             <h3>{{ promo.title }}</h3>
             <p>{{ promo.description }}</p>
-            <p class="promo-dias">Aplica los: {{ promo.applicableDays.join(', ') }}</p>
+            <p class="promo-dias">Aplica los: {{ promo.applicable_days.join(', ') }}</p>
           </div>
         </div>
         }
@@ -51,8 +51,8 @@
         @for (combo of combos(); track combo.id) {
         <div class="combo-card">
           <div class="combo-img">
-            <img [src]="combo.imageUrl" [alt]="combo.name" loading="lazy">
-            <div class="combo-badge" *ngIf="combo.showSavings && getComboSavings(combo) > 0">
+            <img [src]="combo.image_url" [alt]="combo.name" loading="lazy">
+            <div class="combo-badge" *ngIf="combo.show_savings && getComboSavings(combo) > 0">
               Ahorra {{ getComboSavings(combo) | currency:'COP':'symbol-narrow':'1.0-0' }}
             </div>
           </div>
@@ -62,7 +62,7 @@
             <div class="combo-footer">
               <div class="price-container" style="display: flex; flex-direction: column;">
                 <span class="price">{{ combo.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-                <span class="old-price" *ngIf="combo.showSavings && getComboRealPrice(combo) > combo.price" 
+                <span class="old-price" *ngIf="combo.show_savings && getComboRealPrice(combo) > combo.price" 
                       style="text-decoration: line-through; font-size: 0.85rem; color: var(--public-text-secondary); opacity: 0.7;">
                   {{ getComboRealPrice(combo) | currency:'COP':'symbol-narrow':'1.0-0' }}
                 </span>

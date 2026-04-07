@@ -43,6 +43,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/dashboard/dashboard.component').then(c => c.DashboardComponent)
       },
       {
+        path: 'orders',
+        loadComponent: () => import('./features/admin/orders/orders.component').then(c => c.OrdersComponent)
+      },
+      {
         path: 'venues',
         loadComponent: () => import('./features/admin/venues/venues.component').then(c => c.VenuesComponent)
       },
@@ -65,6 +69,18 @@ export const routes: Routes = [
       {
         path: 'combos',
         loadComponent: () => import('./features/admin/combos/combos.component').then(c => c.CombosComponent)
+      },
+      {
+        path: 'complements/allergens',
+        loadComponent: () => import('./features/admin/complements/allergens/allergens.component').then(c => c.AllergensComponent)
+      },
+      {
+        path: 'complements/modifiers',
+        loadComponent: () => import('./features/admin/modifiers/modifiers.component').then(c => c.ModifiersComponent)
+      },
+      {
+        path: 'inventory',
+        loadComponent: () => import('./features/admin/ingredients/ingredients.component').then(c => c.IngredientsComponent)
       },
       {
         path: 'users',

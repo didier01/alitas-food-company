@@ -1,0 +1,62 @@
+<div class="product-selection-container">
+    <div class="product-header" *ngIf="product">
+        <img [src]="product.image_url" [alt]="product.name" class="modal-product-img">
+        <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p class="description">{{ product.description }}</p>
+            <div class="allergen-list" *ngIf="product.allergen_ids?.length">
+                <span class="allergen-label">Alérgenos:</span>
+                <span class="allergen-tag" *ngFor="let id of product.allergen_ids">{{ getAllergenName(id) }}</span>
+            </div>
+            <span class="base-price">Precio Base: {{ product.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        </div>
+    </div>
+
+    <div class="modifier-groups">
+        <div *ngFor="let group of product.modifier_groups" class="group-card">
+            <div class="group-header">
+                <h4>{{ group.name }}</h4>
+                <span class="selection-rule" [ngClass]="{'required': group.min_selection > 0}">
+                    {{ group.min_selection > 0 ? 'Obligatorio' : 'Opcional' }} (Mín {{group.min_selection}} - Máx
+                    {{group.max_selection}})
+                    <span *ngIf="group.free_selections && group.free_selections > 0" class="free-badge">
+                        (Primeras {{ group.free_selections }} Gratis)
+                    </span>
+                </span>
+            </div>
+
+            <!-- Radio List (Exclusive selection) -->
+            <div *ngIf="group.max_selection === 1" class="options-list">
+                <nz-radio-group [(ngModel)]="selections[group.group_id]" (ngModelChange)="updateTotal()">
+                    <label nz-radio *ngFor="let opt of group.options" [nzValue]="opt.id" class="option-item">
+                        <span class="opt-name">{{ opt.name }}</span>
+                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.extra_price |
+                            currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                    </label>
+                </nz-radio-group>
+            </div>
+
+            <!-- Checkbox List (Multiple selection) -->
+            <div *ngIf="group.max_selection > 1" class="options-list">
+                <div *ngFor="let opt of group.options" class="option-item checkbox-item">
+                    <label nz-checkbox [(ngModel)]="selections[group.group_id][opt.id]" (ngModelChange)="updateTotal()">
+                        <span class="opt-name">{{ opt.name }}</span>
+                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.extra_price |
+                            currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="total-bar">
+            <span class="total-label">Total:</span>
+            <span class="total-amount">{{ totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        </div>
+        <button nz-button nzType="primary" nzBlock (click)="confirmSelection()" [disabled]="!isValid()" nzSize="large"
+            style="height: 50px; font-size: 1.1rem; border-radius: 8px;">
+            Añadir al Carrito
+        </button>
+    </div>
+</div>

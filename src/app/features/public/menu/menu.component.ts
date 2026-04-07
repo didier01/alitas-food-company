@@ -48,7 +48,7 @@ export class MenuComponent implements OnInit {
     // Al iniciar, cargamos todo o filtramos lo que la app permita para Mocks
     this.categoriaService.getAll().subscribe(cats => {
       console.log(cats);
-      this.categories = cats.filter(c => c.active).sort((a, b) => a.order - b.order);
+      this.categories = cats.filter(c => c.active).sort((a, b) => a.sort_order - b.sort_order);
       this.productService.loadProductsInSignal(); // Carga real la data a la signal
       this.loading.set(false);
     });

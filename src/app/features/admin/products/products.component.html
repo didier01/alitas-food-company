@@ -33,7 +33,7 @@
       @for (data of basicTable.data; track data.id) {
       <tr>
         <td>
-          <img [src]="data.imageUrl" [alt]="data.name" class="table-img"
+          <img [src]="data.image_url" [alt]="data.name" class="table-img"
             onerror="this.src='https://placehold.co/100x100?text=--';" />
         </td>
         <td>
@@ -41,20 +41,26 @@
           <span nz-icon nzType="star" nzTheme="fill" style="color: #FFD700; margin-left: 5px;" *ngIf="data.featured"
             title="Destacado"></span>
         </td>
-        <td>{{ getCategoryName(data.categoryId) }}</td>
+        <td>{{ getCategoryName(data.category_id || '') }}</td>
         <td>{{ data.price | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
         <td>
           <nz-switch [ngModel]="data.available" (ngModelChange)="quickToggle(data)"></nz-switch>
         </td>
         <td>
           <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="duplicateProduct(data)" title="Duplicar">
+              <span nz-icon nz-tooltip nzTooltipTitle="Duplicar" nzType="copy" nzTheme="outline"
+                style="color: #52c41a;"></span>
+            </button>
             <button nz-button nzType="text" nzSize="small" (click)="editProduct(data)" title="Editar">
-              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+              <span nz-icon nz-tooltip nzTooltipTitle="Editar" nzType="edit" nzTheme="outline"
+                style="color: #1890ff;"></span>
             </button>
             <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
               nzPopconfirmTitle="¿Seguro de eliminar este producto?" (nzOnConfirm)="deleteProduct(data)"
               title="Eliminar">
-              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+              <span nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Eliminar" nzTheme="outline"
+                style="color: #ff4d4f;"></span>
             </button>
           </div>
         </td>
@@ -65,8 +71,9 @@
 </div>
 
 <!-- Modal para Crear/Editar Product -->
-<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Producto' : 'Nuevo Producto'" (nzOnCancel)="closeModal()"
-  (nzOnOk)="saveProduct()" [nzOkLoading]="loadingAction()" [nzOkDisabled]="prodForm.invalid" [nzWidth]="650">
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Producto' : 'Nuevo Producto'"
+  (nzOnCancel)="closeModal()" (nzOnOk)="saveProduct()" [nzOkLoading]="loadingAction()" [nzOkDisabled]="prodForm.invalid"
+  [nzWidth]="650">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="prodForm" nzLayout="vertical">
 
@@ -93,7 +100,7 @@
       <nz-form-item>
         <nz-form-label nzRequired>Categoría Principal</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <nz-select formControlName="categoryId" nzPlaceHolder="Seleccionar categoría">
+          <nz-select formControlName="category_id" nzPlaceHolder="Seleccionar categoría">
             @for (cat of categories; track cat.id) {
             <nz-option [nzValue]="cat.id" [nzLabel]="cat.name"></nz-option>
             }
@@ -109,29 +116,121 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
-        <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="imageUrl" placeholder="https://..." />
+        <nz-form-label>Imagen del Producto (Opcional)</nz-form-label>
+        <nz-form-control>
+          <input type="file" nz-input (change)="onFileSelected($event)" accept="image/*" />
+          <input type="hidden" formControlName="image_url" />
         </nz-form-control>
-        <img *ngIf="prodForm.get('imageUrl')?.value" [src]="prodForm.get('imageUrl')?.value" class="preview-img"
-          style="margin-top: 10px; max-height: 120px; border-radius: 8px;"
+        <img
+          [src]="imagePreview || 'https://ldxmibnpfapyeqizgyao.supabase.co/storage/v1/object/public/alitas-food-company/info/default-image.webp'"
+          class="preview-img" style="margin-top: 10px; max-height: 120px; border-radius: 8px; object-fit: cover;"
           onerror="this.src='https://placehold.co/400x200?text=Error';this.style.width='100%';" />
       </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label>Alérgenos (Presiona Enter)</nz-form-label>
-        <nz-form-control>
-          <nz-select nzMode="tags" nzPlaceHolder="Ej: Gluten, Lacteos" formControlName="allergens"></nz-select>
-        </nz-form-control>
-      </nz-form-item>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Alérgenos (Opcional)</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Alérgenos" formControlName="allergen_ids">
+                @for (alg of allergensList; track alg.id) {
+                <nz-option [nzValue]="alg.id" [nzLabel]="alg.name"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Ingredientes Base (Opcional)</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Ingredientes" formControlName="ingredient_ids">
+                @for (i of ingredientsList; track i.id) {
+                <nz-option [nzValue]="i.id" [nzLabel]="i.name"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
 
-      <nz-form-item>
-        <nz-form-label>Opciones de Personalización</nz-form-label>
-        <nz-form-control>
-          <nz-select nzMode="tags" nzPlaceHolder="Ej: Sin Cebolla, Extra Queso"
-            formControlName="customizations"></nz-select>
-        </nz-form-control>
-      </nz-form-item>
+      <!-- Modifier Groups (Variantes) -->
+      <div class="modifier-groups-section"
+        style="margin-top: 24px; margin-bottom: 24px; padding-top: 16px; border-top: 1px solid var(--admin-border);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
+          <h3 style="margin: 0; font-size: 16px;">Grupos de Variantes (Opciones Requeridas)</h3>
+
+          <div style="display: flex; gap: 8px;">
+            <nz-select [(ngModel)]="newGroupToAddId" [ngModelOptions]="{standalone: true}"
+              nzPlaceHolder="Seleccionar un Grupo..." style="width: 250px;">
+              <nz-option *ngFor="let g of globalModifiersList" [nzValue]="g.id" [nzLabel]="g.name"></nz-option>
+            </nz-select>
+            <button nz-button nzType="primary" (click)="addModifierGroup()" type="button" style="border-radius: 6px;">
+              <span nz-icon nzType="plus"></span> Asignar Grupo
+            </button>
+          </div>
+        </div>
+
+        <div formArrayName="modifier_groups">
+          <div *ngFor="let group of modifier_groups_array.controls; let gIdx = index" [formGroupName]="gIdx"
+            class="modifier-group-card"
+            style="padding: 16px; border: 1px solid var(--admin-border); border-radius: 8px; margin-bottom: 16px;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h4 style="margin: 0;">{{ group.get('name')?.value }}</h4>
+              <button nz-button nzType="text" nzDanger (click)="removeModifierGroup(gIdx)" type="button">
+                <span nz-icon nzType="delete"></span>
+              </button>
+            </div>
+
+            <div nz-row [nzGutter]="16">
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>Selección Mínima</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="min_selection" [nzMin]="0" style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>Selección Máxima permitida</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="max_selection" [nzMin]="1" style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nzTooltipTitle="Estas primeras 'X' no sumarán al precio del producto.">Inclusiones
+                    Gratis</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="free_selections" [nzMin]="0"
+                      style="width: 100%;"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+
+            <!-- Options Preview -->
+            <div style="margin-top: 8px;">
+              <div style="margin-bottom: 12px;">
+                <nz-form-label>Opciones vinculadas globalmente:</nz-form-label>
+              </div>
+              <div>
+                <nz-tag *ngFor="let opt of group.get('options')?.value" nzColor="gold"
+                  style="margin-bottom: 4px; border-radius: 4px;">
+                  {{ opt.name }} <span style="font-weight: 600; margin-left: 4px;">(+{{ opt.extra_price |
+                    currency:'COP':'symbol-narrow':'1.0-0' }})</span>
+                </nz-tag>
+                <span *ngIf="!group.get('options')?.value?.length" style="color: #999;">No tiene opciones
+                  configuradas.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="12">

@@ -1,0 +1,74 @@
+.orders-container {
+  padding: 24px;
+  background: var(--admin-bg-primary);
+  min-height: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+
+    .btn-status {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #444;
+      color: var(--primary-color);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--primary-color);
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .order-details-modal {
+    color: rgba(255, 255, 255, 0.85);
+
+    hr {
+      border: 0;
+      border-top: 1px solid #444;
+      margin: 15px 0;
+    }
+
+    .items-list {
+      margin: 15px 0;
+    }
+
+    .detail-item {
+      margin-bottom: 12px;
+
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+      }
+
+      .item-opts {
+        font-size: 0.85rem;
+        color: #8c8c8c;
+        margin-top: 2px;
+        padding-left: 20px;
+      }
+    }
+
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin-top: 10px;
+    }
+  }
+}

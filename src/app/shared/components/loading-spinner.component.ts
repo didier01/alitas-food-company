@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-loading-spinner',
   standalone: true,
   imports: [CommonModule],
-    templateUrl: './loading-spinner.component.html',
-    styleUrl: './loading-spinner.component.scss'
+  templateUrl: './loading-spinner.component.html',
+  styleUrl: './loading-spinner.component.scss'
 })
 export class LoadingSpinnerComponent {
   @Input() show = false;

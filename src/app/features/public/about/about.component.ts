@@ -36,6 +36,6 @@ export class AboutComponent implements OnInit {
   }
 
   getMapUrl(sede: Venue): SafeResourceUrl {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(sede.googleMapsUrl);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(sede.google_maps_url);
   }
 }

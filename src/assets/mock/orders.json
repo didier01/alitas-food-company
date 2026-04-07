@@ -1,0 +1,71 @@
+[
+  {
+    "id": "ord-001",
+    "venue_id": "sede-1",
+    "customer_name": "Didier Pérez",
+    "delivery_address": "Mesa 4",
+    "total_amount": 42000,
+    "status": "PENDIENTE",
+    "created_at": "2026-03-31T15:30:00Z",
+    "items": [
+      {
+        "product_name": "Alitas x6",
+        "quantity": 1,
+        "unit_price": 22000,
+        "subtotal": 22000,
+        "options_json": [
+          { "name": "BBQ" },
+          { "name": "Buffalo" }
+        ]
+      },
+      {
+        "product_name": "Hamburguesa Clásica",
+        "quantity": 1,
+        "unit_price": 20000,
+        "subtotal": 20.000,
+        "options_json": [
+          { "name": "Con Tocineta" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ord-002",
+    "venue_id": "sede-1",
+    "customer_name": "Andrea G.",
+    "delivery_address": "Calle 5 #10-20",
+    "total_amount": 15000,
+    "status": "PREPARANDO",
+    "created_at": "2026-03-31T16:00:00Z",
+    "items": [
+      {
+        "product_name": "Jugo Natural",
+        "quantity": 2,
+        "unit_price": 7500,
+        "subtotal": 15000,
+        "options_json": [
+          { "name": "Mango" },
+          { "name": "En Leche" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ord-003",
+    "venue_id": "sede-2",
+    "customer_name": "Carlos Ruiz",
+    "delivery_address": "Mesa 1",
+    "total_amount": 28000,
+    "status": "COMPLETADO",
+    "created_at": "2026-03-31T14:45:00Z",
+    "items": [
+      {
+        "product_name": "Combo Amigos",
+        "quantity": 1,
+        "unit_price": 28000,
+        "subtotal": 28000,
+        "options_json": []
+      }
+    ]
+  }
+]

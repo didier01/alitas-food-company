@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-empty-state',
   standalone: true,
   imports: [CommonModule],
-    templateUrl: './empty-state.component.html',
-    styleUrl: './empty-state.component.scss'
+  templateUrl: './empty-state.component.html',
+  styleUrl: './empty-state.component.scss'
 })
 export class EmptyStateComponent {
   @Input() mensaje = 'No hay datos para mostrar';

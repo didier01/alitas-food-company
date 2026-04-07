@@ -1,0 +1,27 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    margin: 0;
+    color: var(--admin-text-primary);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.muted-text {
+    color: var(--admin-text-secondary);
+    font-size: 0.9rem;
+}
+
+
+// .modifier-group-name {
+//     font-size: 1.1rem;
+//     color: var(--admin-text-primary);
+// }

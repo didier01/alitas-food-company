@@ -1,15 +1,13 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { environment } from '../../../environments/environment';
-import { delay, map, Observable, of, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private userService = inject(UserService);
 
   // Signal global del usuario
   currentUser = signal<User | null>(null);
@@ -26,18 +24,17 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<User> {
-    // Simulamos la verificación
-    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+    return this.userService.getAll().pipe(
       map(usuarios => {
         const user = usuarios.find(u => u.email === email && u.active);
-        if (user && password !== '') { // En un escenario real validamos el hash de la contraseña
+        if (user && password !== '') { 
           return user;
         }
         throw new Error('Credenciales inválidas');
       }),
       tap(user => {
         this.currentUser.set(user);
-        localStorage.setItem('alitas_token', 'mock_jwt_token_123'); // Token mock
+        localStorage.setItem('alitas_token', 'mock_jwt_token_123'); 
         localStorage.setItem('alitas_user', JSON.stringify(user));
       })
     );

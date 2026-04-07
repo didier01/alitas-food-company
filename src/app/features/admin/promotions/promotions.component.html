@@ -23,13 +23,13 @@
       @for (data of basicTable.data; track data.id) {
       <tr>
         <td><strong>{{ data.title }}</strong></td>
-        <td>{{ data.discountPercentage }}%</td>
-        <td><small>{{ data.startDate | date:'shortDate' }} - {{ data.endDate | date:'shortDate' }}</small></td>
+        <td>{{ data.discount_percentage }}%</td>
+        <td><small>{{ data.start_date | date:'shortDate' }} - {{ data.end_date | date:'shortDate' }}</small></td>
         <td>
-          <nz-tag *ngIf="!data.venueIds || data.venueIds.length === 0 || data.venueIds.includes('TODAS')"
+          <nz-tag *ngIf="!data.venue_ids || data.venue_ids.length === 0 || data.venue_ids.includes('TODAS')"
             nzColor="processing">Todas</nz-tag>
-          <ng-container *ngIf="data.venueIds && data.venueIds.length > 0 && !data.venueIds.includes('TODAS')">
-            <nz-tag *ngFor="let s of data.venueIds">{{ getSedeName(s) }}</nz-tag>
+          <ng-container *ngIf="data.venue_ids && data.venue_ids.length > 0 && !data.venue_ids.includes('TODAS')">
+            <nz-tag *ngFor="let s of data.venue_ids">{{ getSedeName(s) }}</nz-tag>
           </ng-container>
         </td>
         <td>
@@ -78,7 +78,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Porcentaje Descuento (%)</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <nz-input-number formControlName="discountPercentage" [nzMin]="1" [nzMax]="100"
+              <nz-input-number formControlName="discount_percentage" [nzMin]="1" [nzMax]="100"
                 style="width: 100%"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -90,7 +90,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Válida Desde</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
+              <nz-date-picker formControlName="start_date" style="width: 100%"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -98,23 +98,27 @@
           <nz-form-item>
             <nz-form-label nzRequired>Válida Hasta</nz-form-label>
             <nz-form-control nzErrorTip="Requerido">
-              <nz-date-picker formControlName="endDate" style="width: 100%"></nz-date-picker>
+              <nz-date-picker formControlName="end_date" style="width: 100%"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
 
       <nz-form-item>
-        <nz-form-label nzRequired>URL de Imagen</nz-form-label>
+        <nz-form-label nzRequired>Imagen de la Promoción</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="imageUrl" placeholder="https://..." />
+          <input type="file" nz-input (change)="onFileSelected($event)" accept="image/*" />
+          <input type="hidden" formControlName="image_url" />
         </nz-form-control>
+        <img *ngIf="imagePreview" [src]="imagePreview" class="preview-img"
+          style="margin-top: 10px; max-height: 100px; border-radius: 8px;"
+          onerror="this.src='https://placehold.co/400x200?text=Error+de+URL';" />
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label>Sedes Aplicables (Vacío o 'TODAS' = Toda la cadena)</nz-form-label>
         <nz-form-control>
-          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="venueIds">
+          <nz-select nzMode="multiple" nzPlaceHolder="Seleccionar Sedes" formControlName="venue_ids">
             <nz-option nzValue="TODAS" nzLabel="TODAS LAS SEDES"></nz-option>
             @for (sede of venues; track sede.id) {
             <nz-option [nzValue]="sede.id" [nzLabel]="sede.name"></nz-option>

@@ -18,16 +18,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { User } from '../../../core/models/user.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 
-// Simulamos un UserService básico directamente aquí para no crear más services si no es vital,
-// pero siguiendo la arquitectura podríamos moverlo a core/services. Por rapidez, lo integramos.
-class MockUserService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
-
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
-  }
-}
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-users',
@@ -38,12 +29,11 @@ class MockUserService {
     NzSelectModule, NzPopconfirmModule, NzTagModule,
     NzSwitchModule, LoadingSpinnerComponent
   ],
-  providers: [MockUserService],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit {
-  userService = inject(MockUserService);
+  userService = inject(UserService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
 
@@ -65,6 +55,10 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
     this.loadingData = true;
     this.userService.getAll().subscribe({
       next: (data) => {
@@ -116,23 +110,29 @@ export class UsersComponent implements OnInit {
       active: formVal.active
     };
 
-    // Simulamos guardado local, el MockInterceptor podría manejar POST si lo tuvieramos registrado para users.
-    // Lo manejamos en mock array:
-    setTimeout(() => {
-      this.message.success(`User guardado con éxito. (Simulación)`);
-      if (this.editingId) {
-        const idx = this.users.findIndex(p => p.id === this.editingId);
-        if (idx !== -1) this.users[idx] = saveObj;
-      } else {
-        this.users.push(saveObj);
+    const action = this.editingId
+      ? this.userService.update(saveObj)
+      : this.userService.create(saveObj);
+
+    action.subscribe({
+      next: () => {
+        this.message.success(`Usuario guardado con éxito.`);
+        this.loadUsers();
+        this.closeModal();
+        this.loadingAction = false;
+      },
+      error: () => {
+        this.message.error('Error al guardar usuario');
+        this.loadingAction = false;
       }
-      this.closeModal();
-      this.loadingAction = false;
-    }, 500);
+    });
   }
 
   deleteUser(user: User) {
     user.active = false;
-    this.message.success('User suspendido. (Simulación)');
+    this.userService.update(user).subscribe(() => {
+       this.message.success('Usuario suspendido.');
+       this.loadUsers();
+    });
   }
 }

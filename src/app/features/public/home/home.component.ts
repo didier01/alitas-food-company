@@ -57,10 +57,10 @@ export class HomeComponent implements OnInit {
   }
 
   getComboRealPrice(combo: Combo): number {
-    if (!combo.includedProducts) return 0;
+    if (!combo.included_products) return 0;
     // We need products data to calculate. In home we have them in data.products
     // but the subscription above just filters featured. Let's make sure we have all products or pass them
-    return combo.includedProducts.reduce((acc, curr) => {
+    return combo.included_products.reduce((acc, curr) => {
       const p = this.productService.filteredMenu().find(x => x.id === curr.id) || 
                 this.destacados().find(x => x.id === curr.id); 
       // This is a bit tricky if products aren't all loaded. 

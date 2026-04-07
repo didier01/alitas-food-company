@@ -1,0 +1,10 @@
+[
+  { "id": "ing-mango", "name": "Mango", "available": true },
+  { "id": "ing-fresa", "name": "Fresa", "available": true },
+  { "id": "ing-mora", "name": "Mora", "available": true },
+  { "id": "ing-lulo", "name": "Lulo", "available": true },
+  { "id": "ing-leche", "name": "Leche", "available": true },
+  { "id": "ing-tocineta", "name": "Tocineta", "available": true },
+  { "id": "ing-huevo", "name": "Huevo", "available": true },
+  { "id": "ing-queso", "name": "Queso Cheddar", "available": true }
+]

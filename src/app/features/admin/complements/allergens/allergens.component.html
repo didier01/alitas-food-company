@@ -1,0 +1,50 @@
+<div class="page-container" style="padding: 24px;">
+  <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h2>Gestión de Alérgenos</h2>
+    <button nz-button nzType="primary" (click)="openModal()">
+      <span nz-icon nzType="plus"></span> Nuevo Alérgeno
+    </button>
+  </div>
+
+  <nz-table #basicTable [nzData]="allergens" [nzLoading]="loadingData()" [nzFrontPagination]="true" [nzPageSize]="10">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th nzWidth="120px">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of basicTable.data; track data.id) {
+      <tr>
+        <td>{{ data.name }}</td>
+        <td>
+          <div style="display: flex; gap: 8px;">
+            <button nz-button nzType="text" nzSize="small" (click)="editItem(data)" title="Editar">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm
+              nzPopconfirmTitle="¿Seguro de eliminar este alérgeno?" (nzOnConfirm)="deleteItem(data)" title="Eliminar">
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Modal -->
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Alérgeno' : 'Nuevo Alérgeno'" (nzOnCancel)="closeModal()"
+  (nzOnOk)="saveItem()" [nzOkLoading]="loadingAction" [nzOkDisabled]="form.invalid">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre del Alérgeno</nz-form-label>
+        <nz-form-control nzErrorTip="Este campo es requerido">
+          <input nz-input formControlName="name" placeholder="Ej: Gluten, Frutos secos" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

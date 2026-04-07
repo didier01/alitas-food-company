@@ -1,49 +1,34 @@
-import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
 import { Venue } from '../models/venue.model';
-import { environment } from '../../../environments/environment';
-import { Observable, of, map } from 'rxjs';
+import { BaseSupabaseService } from './base-supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VenueService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
-  private storageKey = 'alitas_mock_venues';
+export class VenueService extends BaseSupabaseService<Venue> {
+  protected override table = 'venues';
 
   // Global signal for the selected venue in the public site
   selectedVenue = signal<Venue | null>(null);
 
   constructor() {
+    super();
     this.initSelectedVenue();
   }
 
   private initSelectedVenue() {
     const saved = localStorage.getItem('alitas_selected_venue');
     if (saved) {
-      this.selectedVenue.set(JSON.parse(saved));
+      try {
+        this.selectedVenue.set(JSON.parse(saved));
+      } catch (e) {
+        console.error('Error parsing saved venue', e);
+      }
     }
   }
 
   setVenue(venue: Venue) {
     this.selectedVenue.set(venue);
     localStorage.setItem('alitas_selected_venue', JSON.stringify(venue));
-  }
-
-  getAll(): Observable<Venue[]> {
-    return this.http.get<Venue[]>(`${this.apiUrl}/venues`);
-  }
-
-  getById(id: string): Observable<Venue> {
-    return this.http.get<Venue>(`${this.apiUrl}/venues/${id}`);
-  }
-
-  create(venue: Venue): Observable<Venue> {
-    return this.http.post<Venue>(`${this.apiUrl}/venues`, venue);
-  }
-
-  update(venue: Venue): Observable<Venue> {
-    return this.http.put<Venue>(`${this.apiUrl}/venues/${venue.id}`, venue);
   }
 }

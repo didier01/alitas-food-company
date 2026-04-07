@@ -83,3 +83,12 @@
 ::ng-deep .ant-drawer-close {
     color: var(--admin-text-primary);
 }
+
+.modifier-group-card {
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: var(--admin-bg-secondary);
+    transition: all 0.3s;
+}

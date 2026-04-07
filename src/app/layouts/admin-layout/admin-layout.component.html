@@ -8,53 +8,102 @@
         }}</h2>
     </div>
     <ul nz-menu [nzTheme]="themeService.temaAdmin()" nzMode="inline" class="menu-sider">
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/dashboard">
-          <span nz-icon nzType="dashboard"></span>
-          <span>Dashboard</span>
-        </a>
+
+      <!-- Grupo: Ventas -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="Ventas y Monitoreo" nzTitle="Ventas y Monitoreo" nzIcon="line-chart">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/dashboard">
+              <span nz-icon nzType="dashboard"></span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/orders">
+              <span nz-icon nzType="shopping-cart"></span>
+              <span>Pedidos</span>
+            </a>
+          </li>
+        </ul>
       </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/venues">
-          <span nz-icon nzType="shop"></span>
-          <span>Sedes</span>
-        </a>
+
+      <!-- Grupo: Catálogo -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="Configuración del Menú" nzTitle="Configuración del Menú"
+        nzIcon="appstore" [nzOpen]="true">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/categories">
+              <span nz-icon nzType="unordered-list"></span>
+              <span>Categorías</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/products">
+              <span nz-icon nzType="shopping"></span>
+              <span>Productos</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/combos">
+              <span nz-icon nzType="gift"></span>
+              <span>Combos</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/menus">
+              <span nz-icon nzType="appstore"></span>
+              <span>Menús</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/promotions">
+              <span nz-icon nzType="tag"></span>
+              <span>Promociones</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/complements/allergens">
+              <span nz-icon nzType="medicine-box"></span>
+              <span>Alérgenos</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/complements/modifiers">
+              <span nz-icon nzType="plus-square"></span>
+              <span>Salsas y Extras</span>
+            </a>
+          </li>
+        </ul>
       </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/menus">
-          <span nz-icon nzType="appstore"></span>
-          <span>Menús</span>
-        </a>
+
+      <!-- Grupo: Logística -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/venues">
+              <span nz-icon nzType="shop"></span>
+              <span>Sedes</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/inventory">
+              <span nz-icon nzType="database"></span>
+              <span>Inventario (Stock)</span>
+            </a>
+          </li>
+        </ul>
       </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/categories">
-          <span nz-icon nzType="unordered-list"></span>
-          <span>Categorías</span>
-        </a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/products">
-          <span nz-icon nzType="shopping"></span>
-          <span>Productos</span>
-        </a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/promotions">
-          <span nz-icon nzType="tag"></span>
-          <span>Promociones</span>
-        </a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/admin/combos">
-          <span nz-icon nzType="gift"></span>
-          <span>Combos</span>
-        </a>
-      </li>
-      <li nz-menu-item nzMatchRouter *ngIf="isSuperAdmin()">
-        <a routerLink="/admin/users">
-          <span nz-icon nzType="team"></span>
-          <span>Usuarios</span>
-        </a>
+
+      <!-- Grupo: Sistema -->
+      <li nz-submenu nzTitle="Sistema" nzIcon="setting" *ngIf="isSuperAdmin()">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/users">
+              <span nz-icon nzType="team"></span>
+              <span>Usuarios</span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nz-sider>
