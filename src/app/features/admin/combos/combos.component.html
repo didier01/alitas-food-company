@@ -216,7 +216,7 @@
               </div>
               <div>
                 <nz-tag *ngFor="let opt of group.get('options')?.value" nzColor="gold" style="margin-bottom: 4px; border-radius: 4px;">
-                  {{ opt.name }} <span style="font-weight: 600; margin-left: 4px;">(+{{ opt.extra_price | currency:'COP':'symbol-narrow':'1.0-0' }})</span>
+                  {{ opt.name }} <span style="font-weight: 600; margin-left: 4px;">(+{{ opt.price | currency:'COP':'symbol-narrow':'1.0-0' }})</span>
                 </nz-tag>
                 <span *ngIf="!group.get('options')?.value?.length" style="color: #999;">No tiene opciones configuradas.</span>
               </div>

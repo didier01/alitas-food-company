@@ -30,7 +30,7 @@
                 <nz-radio-group [(ngModel)]="selections[group.group_id]" (ngModelChange)="updateTotal()">
                     <label nz-radio *ngFor="let opt of group.options" [nzValue]="opt.id" class="option-item">
                         <span class="opt-name">{{ opt.name }}</span>
-                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.extra_price |
+                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.price |
                             currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                     </label>
                 </nz-radio-group>
@@ -41,7 +41,7 @@
                 <div *ngFor="let opt of group.options" class="option-item checkbox-item">
                     <label nz-checkbox [(ngModel)]="selections[group.group_id][opt.id]" (ngModelChange)="updateTotal()">
                         <span class="opt-name">{{ opt.name }}</span>
-                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.extra_price |
+                        <span class="opt-price" *ngIf="shouldShowPrice(group, opt)">+ {{ opt.price |
                             currency:'COP':'symbol-narrow':'1.0-0' }}</span>
                     </label>
                 </div>

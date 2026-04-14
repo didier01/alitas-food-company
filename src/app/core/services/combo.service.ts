@@ -26,9 +26,9 @@ export class ComboService extends BaseSupabaseService<Combo> {
           group_id, min_selection, max_selection, free_selections,
           modifier_groups(
             id, name,
-            modifier_options(
-              id, product_id,
-              products ( name, price )
+            modifier_group_options(
+              option_id,
+              modifier_options(*)
             )
           )
         )
@@ -51,11 +51,11 @@ export class ComboService extends BaseSupabaseService<Combo> {
             min_selection: cmg.min_selection,
             max_selection: cmg.max_selection,
             free_selections: cmg.free_selections,
-            options: cmg.modifier_groups?.modifier_options?.map((opt: any) => ({
-              id: opt.id,
-              product_id: opt.product_id,
-              name: opt.products?.name,
-              extra_price: opt.products?.price
+            options: cmg.modifier_groups?.modifier_group_options?.map((mgo: any) => ({
+              id: mgo.modifier_options?.id,
+              name: mgo.modifier_options?.name,
+              price: mgo.modifier_options?.price || 0,
+              active: mgo.modifier_options?.active
             })) || []
           })) || []
         })) as Combo[];
@@ -197,9 +197,9 @@ export class ComboService extends BaseSupabaseService<Combo> {
           group_id, min_selection, max_selection, free_selections,
           modifier_groups(
             id, name,
-            modifier_options(
-              id, product_id,
-              products ( name, price )
+            modifier_group_options(
+              option_id,
+              modifier_options(*)
             )
           )
         )`;
@@ -214,9 +214,9 @@ export class ComboService extends BaseSupabaseService<Combo> {
           group_id, min_selection, max_selection, free_selections,
           modifier_groups(
             id, name,
-            modifier_options(
-              id, product_id,
-              products ( name, price )
+            modifier_group_options(
+              option_id,
+              modifier_options(*)
             )
           )
         )`;
@@ -248,11 +248,11 @@ export class ComboService extends BaseSupabaseService<Combo> {
             min_selection: cmg.min_selection,
             max_selection: cmg.max_selection,
             free_selections: cmg.free_selections,
-            options: cmg.modifier_groups?.modifier_options?.map((opt: any) => ({
-              id: opt.id,
-              product_id: opt.product_id,
-              name: opt.products?.name,
-              extra_price: opt.products?.price
+            options: cmg.modifier_groups?.modifier_group_options?.map((mgo: any) => ({
+              id: mgo.modifier_options?.id,
+              name: mgo.modifier_options?.name,
+              price: mgo.modifier_options?.price || 0,
+              active: mgo.modifier_options?.active
             })) || []
           })) || []
         })) as Combo[];

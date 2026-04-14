@@ -52,7 +52,7 @@ export class CombosComponent implements OnInit {
   message = inject(NzMessageService);
 
   modifierGroupService = inject(ModifierGroupService);
-  
+
   combos: Combo[] = [];
   products: Product[] = [];
   venues: Venue[] = [];
@@ -66,7 +66,7 @@ export class CombosComponent implements OnInit {
   editingId: string | null = null;
   comboForm: FormGroup;
   selectedProductsDetails: { id: string, name: string, price: number, quantity: number }[] = [];
-  
+
   newGroupToAddId: string | null = null;
 
   constructor() {
@@ -97,7 +97,7 @@ export class CombosComponent implements OnInit {
       this.message.warning('Por favor selecciona un grupo de la lista.');
       return;
     }
-    
+
     // Evitar duplicados
     const existing = this.modifier_groups_array.controls.find(c => c.value.group_id === this.newGroupToAddId);
     if (existing) {
@@ -116,7 +116,7 @@ export class CombosComponent implements OnInit {
       free_selections: [0], // Modificadores del Combo tienen gratis
       options: [group.options] // Read-only array of options for preview
     });
-    
+
     this.modifier_groups_array.push(groupForm);
     this.newGroupToAddId = null;
   }
@@ -141,6 +141,8 @@ export class CombosComponent implements OnInit {
         this.allergensList = data.allergens;
         this.globalModifiersList = data.modifiers;
         this.loadingData.set(false);
+
+        console.log('modifiers: ', this.globalModifiersList)
       },
       error: () => {
         this.message.error('Error cargando combos y catálogo');
@@ -201,6 +203,7 @@ export class CombosComponent implements OnInit {
 
   editCombo(combo: Combo) {
     this.editingId = combo.id;
+    this.modifier_groups_array.clear();
     this.selectedFile = null;
     this.imagePreview = combo.image_url;
 

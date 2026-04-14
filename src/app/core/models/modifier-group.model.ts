@@ -1,8 +1,9 @@
 export interface ModifierOption {
   id: string;             // Record UUID in modifier_options table
-  product_id: string;     // The referenced global Product UUID
-  name: string;           // Derived from the relational product
-  extra_price: number;    // Derived from the relational product price
+  name: string;           // Direct name of the modifier
+  price: number;          // Direct extra price of the modifier
+  category?: string;
+  active?: boolean;
 }
 
 export interface ModifierGroup {

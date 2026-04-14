@@ -13,10 +13,9 @@ export class ModifierGroupService {
     return from(
       this.supabase.from('modifier_groups').select(`
         *,
-        options:modifier_options(
-          id,
-          product_id,
-          products ( name, price )
+        modifier_group_options(
+          option_id,
+          modifier_options(*)
         )
       `)
     ).pipe(
@@ -24,12 +23,12 @@ export class ModifierGroupService {
         if (res.error) throw res.error;
         return res.data.map((mg: any) => ({
           ...mg,
-          options: mg.options?.map((opt: any) => ({
-            id: opt.id,
-            product_id: opt.product_id,
-            name: opt.products?.name,
-            extra_price: opt.products?.price || 0
-          }))
+          options: mg.modifier_group_options?.map((mgo: any) => ({
+            id: mgo.modifier_options?.id,
+            name: mgo.modifier_options?.name,
+            price: mgo.modifier_options?.price || 0,
+            active: mgo.modifier_options?.active
+          })) || []
         })) as ModifierGroup[];
       })
     );
@@ -49,6 +48,18 @@ export class ModifierGroupService {
     );
   }
 
+  update(id: string, data: Partial<ModifierGroup>): Observable<void> {
+    return from(
+      this.supabase.from('modifier_groups')
+        .update({ name: data.name })
+        .eq('id', id)
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+      })
+    );
+  }
+
   delete(id: string): Observable<void> {
     return from(
       this.supabase.from('modifier_groups').delete().eq('id', id)
@@ -59,31 +70,97 @@ export class ModifierGroupService {
     );
   }
 
-  addOption(groupId: string, productId: string): Observable<ModifierOption> {
+  // --- MÉTODOS DE OPCIONES (NUEVO MODELO) ---
+
+  /** Crea una opción global en el catálogo */
+  createGlobalOption(name: string, price: number, category?: string): Observable<ModifierOption> {
     return from(
       this.supabase.from('modifier_options')
-        .insert([{ group_id: groupId, product_id: productId }])
-        .select('*, products(name, price)')
+        .insert([{ name, price, category }])
+        .select()
         .single()
     ).pipe(
       map((res: any) => {
         if (res.error) throw res.error;
-        return {
-          id: res.data.id,
-          product_id: res.data.product_id,
-          name: res.data.products?.name,
-          extra_price: res.data.products?.price || 0
-        } as ModifierOption;
+        return res.data as ModifierOption;
       })
     );
   }
 
-  removeOption(optionId: string): Observable<void> {
+  /** Crea múltiples opciones globales con el mismo precio y categoría */
+  createBulkGlobalOptions(names: string[], price: number, category?: string): Observable<ModifierOption[]> {
+    const records = names.map(name => ({ name: name.trim(), price, category }));
     return from(
-      this.supabase.from('modifier_options').delete().eq('id', optionId)
+      this.supabase.from('modifier_options')
+        .insert(records)
+        .select()
     ).pipe(
       map((res: any) => {
         if (res.error) throw res.error;
+        return res.data as ModifierOption[];
+      })
+    );
+  }
+
+  /** Actualiza una opción global */
+  updateGlobalOption(id: string, data: Partial<ModifierOption>): Observable<void> {
+    return from(
+      this.supabase.from('modifier_options')
+        .update(data)
+        .eq('id', id)
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+      })
+    );
+  }
+
+  /** Vincula una opción existente a un grupo */
+  linkOptionToGroup(groupId: string, optionId: string): Observable<void> {
+    return from(
+      this.supabase.from('modifier_group_options')
+        .insert([{ group_id: groupId, option_id: optionId }])
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+      })
+    );
+  }
+
+  /** Desvincula una opción de un grupo */
+  unlinkOptionFromGroup(groupId: string, optionId: string): Observable<void> {
+    return from(
+      this.supabase.from('modifier_group_options')
+        .delete()
+        .eq('group_id', groupId)
+        .eq('option_id', optionId)
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+      })
+    );
+  }
+
+  /** Elimina una opción del catálogo global */
+  deleteGlobalOption(optionId: string): Observable<void> {
+    return from(
+      this.supabase.from('modifier_options')
+        .delete()
+        .eq('id', optionId)
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+      })
+    );
+  }
+
+  getAllGlobalOptions(): Observable<ModifierOption[]> {
+    return from(
+      this.supabase.from('modifier_options').select('*').order('name')
+    ).pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+        return res.data as ModifierOption[];
       })
     );
   }

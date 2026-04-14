@@ -9,21 +9,35 @@
   <nz-card-meta [nzTitle]="producto.name" [nzDescription]="producto.description || ''" (click)="openSelectionModal()"
     style="cursor: pointer;">
   </nz-card-meta>
+  <!-- <ng-template #extraTemplate>
+    <div class="price-container" (click)="openSelectionModal()">
+      <span class="title">{{ producto.name }}</span>
+      <div class="prices-wrapper">
+        <span class="price">{{ producto.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        <span *ngIf="$any(producto).show_savings && $any(producto).realPrice > producto.price" class="old-price">
+          {{ $any(producto).realPrice | currency:'COP':'symbol-narrow':'1.0-0' }}
+        </span>
+      </div>
+    </div>
+  </ng-template> -->
+
   <div class="card-footer">
-    <div class="price-container" style="display: flex; flex-direction: column;" (click)="openSelectionModal()"
-      style="cursor: pointer;">
+
+
+    <div class="prices-wrapper" (click)="openSelectionModal()">
       <span class="price">{{ producto.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-      <span *ngIf="$any(producto).show_savings && $any(producto).realPrice > producto.price" class="old-price"
-        style="text-decoration: line-through; font-size: 0.8rem; color: #8c8c8c;">
+      <span *ngIf="$any(producto).show_savings && $any(producto).realPrice > producto.price" class="old-price">
         {{ $any(producto).realPrice | currency:'COP':'symbol-narrow':'1.0-0' }}
       </span>
     </div>
-    <div style="display: flex; gap: 8px;">
-      <button nz-button nzType="default" nzShape="round" (click)="$event.stopPropagation(); openSelectionModal()" style="display: flex; align-items: center; gap: 4px;">
-        <span nz-icon nzType="eye"></span> Ver
+
+
+    <div class="card-footer-buttons">
+      <button nz-button nzType="default" nzShape="round" (click)="$event.stopPropagation(); openSelectionModal()">
+        <span nz-icon nzType="eye"></span>
       </button>
       <button nz-button nzType="primary" nzShape="round" (click)="$event.stopPropagation(); addToCartDirectly()">
-        + Agregar
+        <span nz-icon nzType="plus"></span>
       </button>
     </div>
   </div>

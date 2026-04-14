@@ -13,6 +13,7 @@
 .action-buttons {
     display: flex;
     gap: 8px;
+    justify-content: center;
 }
 
 .muted-text {
@@ -20,8 +21,9 @@
     font-size: 0.9rem;
 }
 
-
-// .modifier-group-name {
-//     font-size: 1.1rem;
-//     color: var(--admin-text-primary);
-// }
+.options-grid {
+    display: grid;
+    // grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}

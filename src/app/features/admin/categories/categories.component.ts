@@ -16,6 +16,8 @@ import { CategoryService } from '../../../core/services/category.service';
 import { Category } from '../../../core/models/category.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { TagsManagementComponent } from './tags-management.component';
 
 @Component({
   selector: 'app-categories',
@@ -24,7 +26,8 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
     CommonModule, ReactiveFormsModule, DragDropModule, NzTableModule,
     NzButtonModule, NzIconModule, NzModalModule, NzFormModule,
     NzInputModule, NzSwitchModule, NzTagModule,
-    NzPopconfirmModule, LoadingSpinnerComponent, NzTooltipModule
+    NzPopconfirmModule, LoadingSpinnerComponent, NzTooltipModule,
+    NzTabsModule, TagsManagementComponent
   ],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'

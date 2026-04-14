@@ -13,6 +13,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -26,6 +27,7 @@ import { IngredientService } from '../../../core/services/ingredient.service';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 import { forkJoin } from 'rxjs';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 
 @Component({
@@ -35,7 +37,7 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
     CommonModule, ReactiveFormsModule, FormsModule, NzTableModule, NzButtonModule,
     NzIconModule, NzModalModule, NzFormModule, NzInputModule, NzInputNumberModule,
     NzTooltipModule, NzSelectModule, NzSwitchModule, NzPopconfirmModule, NzTagModule,
-    LoadingSpinnerComponent
+    NzTabsModule, LoadingSpinnerComponent, NzDrawerModule
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -57,6 +59,8 @@ export class ProductsComponent implements OnInit {
   allergensList: Allergen[] = [];
   ingredientsList: any[] = [];
   globalModifiersList: ModifierGroup[] = [];
+  availableTags: string[] = [];
+
   catFilter: string | null = null;
   loadingData = signal(true);
   loadingAction = signal(false);
@@ -79,7 +83,8 @@ export class ProductsComponent implements OnInit {
       featured: [false],
       allergen_ids: [[]],
       ingredient_ids: [[]],
-      modifier_groups: this.fb.array([])
+      modifier_groups: this.fb.array([]),
+      tags: [[]]
     });
   }
 
@@ -128,8 +133,20 @@ export class ProductsComponent implements OnInit {
     this.modifier_groups_array.removeAt(index);
   }
 
+  async loadTags() {
+    try {
+      const { data } = await this.supabaseService.getClient().from('tag_groups').select('tag');
+      if (data) {
+        this.availableTags = data.map((d: any) => d.tag);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   loadAllData() {
     this.loadingData.set(true);
+    this.loadTags();
     forkJoin({
       prods: this.productService.getAll(),
       cats: this.categoryService.getAll(),
@@ -208,7 +225,8 @@ export class ProductsComponent implements OnInit {
         featured: formVal.featured,
         allergen_ids: formVal.allergen_ids,
         ingredient_ids: formVal.ingredient_ids,
-        modifier_groups: formVal.modifier_groups
+        modifier_groups: formVal.modifier_groups,
+        tags: formVal.tags
       };
 
       if (this.editingId) {
@@ -268,7 +286,8 @@ export class ProductsComponent implements OnInit {
       featured: false,
       allergen_ids: prod.allergen_ids || [],
       ingredient_ids: prod.ingredient_ids || [],
-      modifier_groups: prod.modifier_groups ? prod.modifier_groups.map(g => ({ ...g })) : []
+      modifier_groups: prod.modifier_groups ? prod.modifier_groups.map(g => ({ ...g })) : [],
+      tags: prod.tags || []
     };
 
     this.productService.create(duplicateObj).subscribe({
@@ -309,13 +328,18 @@ export class ProductsComponent implements OnInit {
 
   openModal() {
     this.editingId = null;
-    this.prodForm.reset({ available: true, featured: false, price: 0, allergens: [], customizations: [] });
+    this.modifier_groups_array.clear(); // Limpiar el FormArray
+    this.prodForm.reset({ available: true, featured: false, price: 0, allergens: [], tags: [], modifier_groups: [] });
     this.modalVisible.set(true);
   }
 
 
   editProduct(prod: Product) {
     this.editingId = prod.id;
+
+    // Limpiar el FormArray antes de cargar nuevos datos
+    this.modifier_groups_array.clear();
+
     this.prodForm.patchValue({
       name: prod.name,
       description: prod.description,
@@ -326,10 +350,24 @@ export class ProductsComponent implements OnInit {
       featured: prod.featured,
       allergen_ids: prod.allergen_ids || [],
       ingredient_ids: prod.ingredient_ids || [],
-      modifier_groups: prod.modifier_groups || []
+      tags: prod.tags || []
     });
+
+    // Cargar los grupos de modificadores al FormArray
+    if (prod.modifier_groups && prod.modifier_groups.length > 0) {
+      prod.modifier_groups.forEach(group => {
+        const groupForm = this.fb.group({
+          group_id: [group.group_id],
+          name: [group.name, Validators.required],
+          min_selection: [group.min_selection, Validators.required],
+          max_selection: [group.max_selection, Validators.required],
+          free_selections: [group.free_selections || 0],
+          options: [group.options] // Solo para previsualización
+        });
+        this.modifier_groups_array.push(groupForm);
+      });
+    }
+
     this.modalVisible.set(true);
   }
-
-
 }

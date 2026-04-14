@@ -23,6 +23,7 @@ export class ProductService extends BaseSupabaseService<Product> {
   // Signals for the public site
   categoryFilter = signal<string>('all');
   searchFilter = signal<string>('');
+  selectedTags = signal<string[]>([]);
 
   // Raw lists
   allProducts = signal<Product[]>([]);
@@ -91,6 +92,17 @@ export class ProductService extends BaseSupabaseService<Product> {
       );
     }
 
+    // Filter by tags (AND logic)
+    const activeTags = this.selectedTags();
+    if (activeTags.length > 0) {
+      combined = combined.filter(p => {
+        // En los combos no hay tags por ahora, por lo que a menos que implementemos
+        // un campo tags en el combo.model, devolverán falso al intentar filtrar.
+        const pTags = p.tags || [];
+        return activeTags.every(tag => pTags.includes(tag));
+      });
+    }
+
     return combined;
   });
 
@@ -105,13 +117,14 @@ export class ProductService extends BaseSupabaseService<Product> {
         *,
         product_allergens(allergen_id),
         product_ingredients(ingredient_id),
+        product_tags(tag),
         product_modifier_groups(
           group_id, min_selection, max_selection, free_selections,
           modifier_groups(
             id, name,
-            modifier_options(
-              id, product_id,
-              products ( name, price )
+            modifier_group_options(
+              option_id,
+              modifier_options(*)
             )
           )
         )
@@ -124,17 +137,18 @@ export class ProductService extends BaseSupabaseService<Product> {
           ...p,
           allergen_ids: p.product_allergens?.map((pa: any) => pa.allergen_id) || [],
           ingredient_ids: p.product_ingredients?.map((pi: any) => pi.ingredient_id) || [],
+          tags: p.product_tags?.map((pt: any) => pt.tag) || [],
           modifier_groups: p.product_modifier_groups?.map((pmg: any) => ({
             group_id: pmg.group_id,
             name: pmg.modifier_groups?.name,
             min_selection: pmg.min_selection,
             max_selection: pmg.max_selection,
             free_selections: pmg.free_selections,
-            options: pmg.modifier_groups?.modifier_options?.map((opt: any) => ({
-              id: opt.id,
-              product_id: opt.product_id,
-              name: opt.products?.name,
-              extra_price: opt.products?.price
+            options: pmg.modifier_groups?.modifier_group_options?.map((mgo: any) => ({
+              id: mgo.modifier_options?.id,
+              name: mgo.modifier_options?.name,
+              price: mgo.modifier_options?.price || 0,
+              active: mgo.modifier_options?.active
             })) || []
           })) || []
         })) as Product[];
@@ -147,7 +161,7 @@ export class ProductService extends BaseSupabaseService<Product> {
       return from(Promise.resolve({ ...item, id: `prod-mock-${Date.now()}` } as Product));
     }
 
-    const { id, allergen_ids, ingredient_ids, allergens, product_allergens, product_ingredients, modifier_groups, product_modifier_groups, ...dataToSave } = item as any;
+    const { id, allergen_ids, ingredient_ids, allergens, product_allergens, product_ingredients, modifier_groups, product_modifier_groups, tags, product_tags, ...dataToSave } = item as any;
 
     const promise = this.supabase.getClient()
       .from(this.table)
@@ -187,7 +201,16 @@ export class ProductService extends BaseSupabaseService<Product> {
           if (mgError) console.error('Error inserting modifier groups', mgError);
         }
 
-        return { ...newProduct, allergen_ids, ingredient_ids, modifier_groups } as Product;
+        if (tags && tags.length > 0) {
+          const ptData = tags.map((t: string) => ({
+            product_id: newProduct.id,
+            tag: t
+          }));
+          const { error: ptError } = await this.supabase.getClient().from('product_tags').insert(ptData);
+          if (ptError) console.error('Error inserting tags', ptError);
+        }
+
+        return { ...newProduct, allergen_ids, ingredient_ids, modifier_groups, tags } as Product;
       });
 
     return from(promise);
@@ -199,7 +222,7 @@ export class ProductService extends BaseSupabaseService<Product> {
     }
 
     const id = item.id;
-    const { allergen_ids, ingredient_ids, allergens, product_allergens, product_ingredients, modifier_groups, product_modifier_groups, ...dataToSave } = item as any;
+    const { allergen_ids, ingredient_ids, allergens, product_allergens, product_ingredients, modifier_groups, product_modifier_groups, tags, product_tags, ...dataToSave } = item as any;
 
     const promise = this.supabase.getClient()
       .from(this.table)
@@ -249,7 +272,19 @@ export class ProductService extends BaseSupabaseService<Product> {
           }
         }
 
-        return { ...updatedProduct, allergen_ids, ingredient_ids, modifier_groups } as Product;
+        if (tags !== undefined) {
+          await this.supabase.getClient().from('product_tags').delete().eq('product_id', id);
+          if (tags && tags.length > 0) {
+            const ptData = tags.map((t: string) => ({
+              product_id: id,
+              tag: t
+            }));
+            const { error: ptError } = await this.supabase.getClient().from('product_tags').insert(ptData);
+            if (ptError) console.error('Error inserting tags', ptError);
+          }
+        }
+
+        return { ...updatedProduct, allergen_ids, ingredient_ids, modifier_groups, tags } as Product;
       });
 
     return from(promise);

@@ -13,4 +13,5 @@ export interface Product {
   allergen_ids?: string[];
   ingredient_ids?: string[];
   modifier_groups?: AssignedModifierGroup[];
+  tags?: string[];
 }

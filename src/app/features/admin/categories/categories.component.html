@@ -1,73 +1,90 @@
 <app-loading-spinner [show]="loadingData()"></app-loading-spinner>
 
 <div class="page-container">
-  <div class="page-header">
-    <h2>Gestión de Categorías</h2>
-    <div>
-      <span class="drag-hint">Arraste las filas para reordenar</span>
-      <button nz-button nzType="primary" (click)="openModal()">
-        <span nz-icon nzType="plus"></span> Nueva Categoría
-      </button>
-    </div>
+  <div class="main-title-container">
+    <h2 class="main-title">Configuración de Estructura</h2>
+    <p class="main-subtitle">Gestiona cómo se organizan y filtran tus productos en la plataforma.</p>
   </div>
 
-  <nz-table [nzData]="categories" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
-      <tr>
-        <th nzWidth="50px"></th>
-        <th nzWidth="80px">Orden</th>
-        <th>Nombre</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody cdkDropList (cdkDropListDropped)="drop($event)">
-      @for (data of categories; track data.id) {
-      <tr cdkDrag class="drag-row">
-        <td class="drag-handle"><span nz-icon nzType="drag" nzTheme="outline"></span></td>
-        <td><nz-tag>{{ data.sort_order }}</nz-tag></td>
-        <td><strong>{{ data.name }}</strong></td>
-        <td>
-          <nz-tag [nzColor]="data.active ? 'success' : 'error'">
-            {{ data.active ? 'Activa' : 'Inactiva' }}
-          </nz-tag>
-        </td>
-        <td>
-          <div class="action-buttons">
-            <button nz-button nzType="text" nzSize="small" (click)="editCat(data)" nz-tooltip
-              nzTooltipTitle="Editar Categoría">
-              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
-            </button>
-            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm nz-tooltip
-              nzTooltipTitle="Desactivar Categoría" nzPopconfirmTitle="¿Desactivar esta categoría?"
-              (nzOnConfirm)="deleteCat(data)">
-              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
-            </button>
+  <nz-tabs class="admin-tabs">
+    <nz-tab nzTitle="Categorías de Menú">
+      <div class="tab-content-wrapper">
+        <div class="section-header">
+          <div class="header-info">
+            <h3>Categorías Principales</h3>
+            <span class="drag-hint">Arraste las filas para reordenar las categorías en el menú </span>
           </div>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </nz-table>
+          <button nz-button nzType="primary" (click)="openModal()">
+            <span nz-icon nzType="plus"></span> Nueva Categoría
+          </button>
+        </div>
+
+        <nz-table #categoriesTable [nzData]="categories" [nzFrontPagination]="true" [nzShowPagination]="true"
+          [nzPageSize]="10">
+          <thead>
+            <tr>
+              <th nzWidth="50px"></th>
+              <th nzWidth="80px">Orden</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+            @for (data of categoriesTable.data; track data.id) {
+            <tr cdkDrag class="drag-row">
+              <td class="drag-handle"><span nz-icon nzType="drag" nzTheme="outline"></span></td>
+              <td><nz-tag>{{ data.sort_order }}</nz-tag></td>
+              <td><strong>{{ data.name }}</strong></td>
+              <td>
+                <nz-tag [nzColor]="data.active ? 'success' : 'error'">
+                  {{ data.active ? 'Activa' : 'Inactiva' }}
+                </nz-tag>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button nz-button nzType="text" nzSize="small" (click)="editCat(data)" nz-tooltip
+                    nzTooltipTitle="Editar Categoría">
+                    <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+                  </button>
+                  <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm nz-tooltip
+                    nzTooltipTitle="Desactivar Categoría" nzPopconfirmTitle="¿Desactivar esta categoría?"
+                    (nzOnConfirm)="deleteCat(data)">
+                    <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+    <nz-tab nzTitle="Etiquetas (Tags / Filtros)">
+      <div class="tab-content-wrapper">
+        <app-tags-management></app-tags-management>
+      </div>
+    </nz-tab>
+  </nz-tabs>
 </div>
 
 <!-- Modal para Crear/Editar Categoría -->
-<nz-modal [nzVisible]="modalVisible()" (nzVisibleChange)="modalVisible.set($event)" [nzTitle]="editingId ? 'Editar Categoría' : 'Nueva Categoría'"
+<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Categoría' : 'Nueva Categoría'"
   (nzOnCancel)="closeModal()" (nzOnOk)="saveCat()" [nzOkLoading]="loadingAction" [nzOkDisabled]="catForm.invalid">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="catForm" nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label nzRequired>Nombre</nz-form-label>
+        <nz-form-label nzRequired>Nombre de la Categoría</nz-form-label>
         <nz-form-control nzErrorTip="Requerido">
-          <input nz-input formControlName="name" placeholder="Ej: Hamburguesas" />
+          <input nz-input formControlName="name" placeholder="Ej: Hamburguesas, Bebidas" />
         </nz-form-control>
       </nz-form-item>
 
-
       <nz-form-item>
-        <nz-form-label>Estado Activo</nz-form-label>
+        <nz-form-label>Estado de Visibilidad</nz-form-label>
         <nz-form-control>
-          <nz-switch formControlName="active"></nz-switch>
+          <nz-switch formControlName="active" nzCheckedChildren="Activa" nzUnCheckedChildren="Inactiva"></nz-switch>
         </nz-form-control>
       </nz-form-item>
     </form>

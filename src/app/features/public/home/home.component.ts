@@ -9,7 +9,7 @@ import { VenueService } from '../../../core/services/venue.service';
 import { Product } from '../../../core/models/product.model';
 import { Promotion } from '../../../core/models/promotion.model';
 import { Combo } from '../../../core/models/combo.model';
-import { ProductoCardComponent } from '../../../shared/components/producto-card.component';
+import { ProductoCardComponent } from '../../../shared/components/product-card/producto-card.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
 import { catchError } from 'rxjs/operators';
 import { of, forkJoin } from 'rxjs';
@@ -61,8 +61,8 @@ export class HomeComponent implements OnInit {
     // We need products data to calculate. In home we have them in data.products
     // but the subscription above just filters featured. Let's make sure we have all products or pass them
     return combo.included_products.reduce((acc, curr) => {
-      const p = this.productService.filteredMenu().find(x => x.id === curr.id) || 
-                this.destacados().find(x => x.id === curr.id); 
+      const p = this.productService.filteredMenu().find(x => x.id === curr.id) ||
+        this.destacados().find(x => x.id === curr.id);
       // This is a bit tricky if products aren't all loaded. 
       // Usually product service has them.
       return acc + (p ? p.price * curr.quantity : 0);

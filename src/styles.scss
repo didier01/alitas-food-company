@@ -79,6 +79,26 @@ p {
   color: var(--brand-primary);
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: var(--admin-bg-secondary);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+}
+
+.header-info h3 {
+  margin: 0;
+}
+
+.header-info .description {
+  margin: 4px 0 0;
+  color: var(--admin-text-secondary);
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
@@ -314,6 +334,7 @@ p {
   .ant-table-tbody>tr>td {
     border-bottom: 1px solid var(--admin-border);
     background: transparent;
+    padding: 8px 15px;
   }
 
   .ant-table-tbody>tr:hover>td {
@@ -656,4 +677,13 @@ p {
 
 .ant-radio-inner::after {
   background-color: #000 !important;
+}
+
+.ant-checkbox-wrapper {
+  color: var(--admin-text-primary) !important;
+}
+
+.ant-form-item-explain,
+.ant-form-item-extra {
+  color: var(--admin-text-secondary) !important;
 }

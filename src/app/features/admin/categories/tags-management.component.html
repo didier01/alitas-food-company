@@ -1,0 +1,83 @@
+<div class="tags-container">
+  <div class="section-header">
+    <div class="header-info">
+      <h3>Lista de Etiquetas Dinámicas</h3>
+      <p class="description">Agrupa y organiza los filtros para tus clientes en el menú público.</p>
+    </div>
+    <button nz-button nzType="primary" (click)="openTagModal()">
+      <span nz-icon nzType="plus"></span> Nueva Etiqueta
+    </button>
+  </div>
+
+  <nz-table #tagsTable [nzData]="tags" [nzFrontPagination]="true" [nzPageSize]="10" [nzLoading]="loadingData()">
+    <thead>
+      <tr>
+        <th nzWidth="80px">Orden</th>
+        <th>Tag (Clave Única)</th>
+        <th>Grupo UI</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of tagsTable.data; track data.tag) {
+      <tr>
+        <td><nz-tag>{{ data.display_order }}</nz-tag></td>
+        <td><strong>{{ data.tag }}</strong></td>
+        <td><nz-tag nzColor="processing">{{ data.group_name }}</nz-tag></td>
+        <td>
+          <div class="action-buttons">
+            <button nz-button nzType="text" nzSize="small" (click)="editTag(data)" nz-tooltip
+              nzTooltipTitle="Editar Etiqueta">
+              <span nz-icon nzType="edit" nzTheme="outline" style="color: #1890ff;"></span>
+            </button>
+            <button nz-button nzType="text" nzSize="small" nzDanger nz-popconfirm nz-tooltip
+              nzTooltipTitle="Eliminar Permanente" nzPopconfirmTitle="¿Eliminar esta etiqueta de forma definitiva?"
+              (nzOnConfirm)="deleteTag(data)">
+              <span nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Modal para Crear/Editar Tag -->
+<nz-modal [(nzVisible)]="tagModalVisible" [nzTitle]="editingOriginalTag ? 'Editar Etiqueta' : 'Nueva Etiqueta'"
+  (nzOnCancel)="closeTagModal()" (nzOnOk)="saveTag()" [nzOkLoading]="loadingAction" [nzOkDisabled]="tagForm.invalid">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="tagForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired
+              nzTooltipTitle="La clave única, preferiblemente todo en minúsculas y con guiones en vez de espacios">Identificador
+              (Tag)</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input formControlName="tag" placeholder="ej: sin-alcohol" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired nzTooltipTitle="Orden en el que aparece dentro de su grupo">Orden
+              Visual</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <nz-input-number formControlName="display_order" [nzMin]="1" style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzRequired
+          nzTooltipTitle="El nombre del grupo en el que se agrupará visualmente, ej: Tipo, Formato, Característica">Nombre
+          del Grupo (UI)</nz-form-label>
+        <nz-form-control nzErrorTip="Requerido">
+          <input nz-input formControlName="group_name" placeholder="Ej: Característica, Tipo de bebida" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

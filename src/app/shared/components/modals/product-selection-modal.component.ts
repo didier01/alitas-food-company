@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
@@ -31,6 +31,7 @@ export class ProductSelectionModalComponent implements OnInit {
   allergenService = inject(AllergenService);
   cartService = inject(CartService);
   message = inject(NzMessageService);
+  cdr = inject(ChangeDetectorRef);
 
   selections: any = {};
   totalPrice = 0;
@@ -45,6 +46,7 @@ export class ProductSelectionModalComponent implements OnInit {
   loadAllergens() {
     this.allergenService.getAll().subscribe(data => {
       this.allergens = data;
+      this.cdr.detectChanges();
     });
   }
 
@@ -95,7 +97,7 @@ export class ProductSelectionModalComponent implements OnInit {
   }
 
   shouldShowPrice(group: AssignedModifierGroup, opt: ModifierOption): boolean {
-    if (opt.extra_price <= 0) return false;
+    if (opt.price <= 0) return false;
     if (!group.free_selections || group.free_selections <= 0) return true;
 
     const selectedCount = this.getSelectedCount(group);
@@ -110,7 +112,7 @@ export class ProductSelectionModalComponent implements OnInit {
 
     // Si ESTÁ seleccionada: mostrar precio solo si se está cobrando por ella
     const selectedOpts = this.getSelectedOptions(group);
-    selectedOpts.sort((a, b) => a.extra_price - b.extra_price);
+    selectedOpts.sort((a, b) => a.price - b.price);
 
     const index = selectedOpts.findIndex(o => o.id === opt.id);
     return index >= group.free_selections;
@@ -123,11 +125,11 @@ export class ProductSelectionModalComponent implements OnInit {
 
       if (selectedOpts.length > 0) {
         const freeCount = group.free_selections || 0;
-        selectedOpts.sort((a, b) => a.extra_price - b.extra_price);
+        selectedOpts.sort((a, b) => a.price - b.price);
 
         selectedOpts.forEach((opt, index) => {
           if (index >= freeCount) {
-            extra += opt.extra_price;
+            extra += opt.price;
           }
         });
       }

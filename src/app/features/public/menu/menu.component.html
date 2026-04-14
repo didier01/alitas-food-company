@@ -17,6 +17,11 @@
       <ng-template #prefixIconSearch>
         <span nz-icon nzType="search"></span>
       </ng-template>
+      
+      <button nz-button nzType="text" class="filter-btn" (click)="openFilters()">
+        <span nz-icon nzType="filter" nzTheme="outline"></span>
+        <span class="filter-count" *ngIf="activeTagsCount() > 0">{{ activeTagsCount() }}</span>
+      </button>
     </div>
 
     <!-- Chips de Categorías -->
@@ -47,6 +52,37 @@
     </app-empty-state>
     }
   </div>
+
+  <!-- Filters Drawer -->
+  <nz-drawer 
+    [nzVisible]="showFilters()" 
+    nzPlacement="right" 
+    nzTitle="Filtros" 
+    (nzOnClose)="closeFilters()">
+    <ng-container *nzDrawerContent>
+      <div class="filter-drawer-content">
+        @for (group of getObjectKeys(groupedTags()); track group) {
+          <div class="filter-group">
+            <h4 class="filter-group-title">{{ group }}</h4>
+            <div class="filter-tags">
+              @for (tag of groupedTags()[group]; track tag.tag) {
+                <nz-tag 
+                  [nzColor]="isTagSelected(tag.tag) ? '#ff5722' : 'default'"
+                  class="filter-tag-chip"
+                  (click)="toggleTag(tag.tag)">
+                  {{ tag.tag }}
+                </nz-tag>
+              }
+            </div>
+          </div>
+        }
+        
+        <div class="filter-actions" *ngIf="activeTagsCount() > 0">
+          <button nz-button nzType="default" nzBlock (click)="clearFilters()">Limpiar Filtros</button>
+        </div>
+      </div>
+    </ng-container>
+  </nz-drawer>
 
 </div>
 }

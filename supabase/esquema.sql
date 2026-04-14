@@ -22,6 +22,16 @@ CREATE TABLE public.combo_allergens (
   CONSTRAINT combo_allergens_combo_id_fkey FOREIGN KEY (combo_id) REFERENCES public.combos(id),
   CONSTRAINT combo_allergens_allergen_id_fkey FOREIGN KEY (allergen_id) REFERENCES public.allergens(id)
 );
+CREATE TABLE public.combo_modifier_groups (
+  combo_id uuid NOT NULL,
+  group_id uuid NOT NULL,
+  min_selection integer DEFAULT 0,
+  max_selection integer DEFAULT 1,
+  free_selections integer DEFAULT 0,
+  CONSTRAINT combo_modifier_groups_pkey PRIMARY KEY (combo_id, group_id),
+  CONSTRAINT combo_modifier_groups_combo_id_fkey FOREIGN KEY (combo_id) REFERENCES public.combos(id),
+  CONSTRAINT combo_modifier_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.modifier_groups(id)
+);
 CREATE TABLE public.combo_products (
   combo_id uuid NOT NULL,
   product_id uuid NOT NULL,
@@ -46,7 +56,6 @@ CREATE TABLE public.combos (
   active boolean DEFAULT true,
   show_savings boolean DEFAULT true,
   created_at timestamp without time zone DEFAULT now(),
-  modifier_groups jsonb DEFAULT '[]'::jsonb,
   CONSTRAINT combos_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.ingredients (
@@ -54,6 +63,19 @@ CREATE TABLE public.ingredients (
   name text NOT NULL,
   available boolean DEFAULT true,
   CONSTRAINT ingredients_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.modifier_groups (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  CONSTRAINT modifier_groups_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.modifier_options (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  group_id uuid NOT NULL,
+  product_id uuid NOT NULL,
+  CONSTRAINT modifier_options_pkey PRIMARY KEY (id),
+  CONSTRAINT modifier_options_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.modifier_groups(id),
+  CONSTRAINT modifier_options_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id)
 );
 CREATE TABLE public.order_items (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -97,21 +119,21 @@ CREATE TABLE public.product_ingredients (
   CONSTRAINT product_ingredients_ingredient_id_fkey FOREIGN KEY (ingredient_id) REFERENCES public.ingredients(id)
 );
 CREATE TABLE public.product_modifier_groups (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  product_id uuid,
-  name text NOT NULL,
+  product_id uuid NOT NULL,
+  group_id uuid NOT NULL,
   min_selection integer DEFAULT 0,
   max_selection integer DEFAULT 1,
-  CONSTRAINT product_modifier_groups_pkey PRIMARY KEY (id),
-  CONSTRAINT product_modifier_groups_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id)
+  free_selections integer DEFAULT 0,
+  CONSTRAINT product_modifier_groups_pkey PRIMARY KEY (product_id, group_id),
+  CONSTRAINT product_modifier_groups_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id),
+  CONSTRAINT product_modifier_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.modifier_groups(id)
 );
-CREATE TABLE public.product_modifier_options (
+CREATE TABLE public.product_tags (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
-  group_id uuid,
-  name text NOT NULL,
-  extra_price numeric DEFAULT 0,
-  CONSTRAINT product_modifier_options_pkey PRIMARY KEY (id),
-  CONSTRAINT product_modifier_options_group_id_fkey FOREIGN KEY (group_id) REFERENCES public.product_modifier_groups(id)
+  product_id uuid NOT NULL,
+  tag text NOT NULL,
+  CONSTRAINT product_tags_pkey PRIMARY KEY (id),
+  CONSTRAINT product_tags_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id)
 );
 CREATE TABLE public.products (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -145,6 +167,12 @@ CREATE TABLE public.promotions (
   applicable_days ARRAY,
   active boolean DEFAULT true,
   CONSTRAINT promotions_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.tag_groups (
+  tag text NOT NULL,
+  group_name text NOT NULL,
+  display_order integer DEFAULT 0,
+  CONSTRAINT tag_groups_pkey PRIMARY KEY (tag)
 );
 CREATE TABLE public.users (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

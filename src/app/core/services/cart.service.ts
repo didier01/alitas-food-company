@@ -37,7 +37,7 @@ export class CartService {
 
     const existingIndex = items.findIndex(i => i.id === itemId);
     
-    const unitPrice = computedUnitPrice ?? (product.price + selectedOptions.reduce((acc, o) => acc + o.extra_price, 0));
+    const unitPrice = computedUnitPrice ?? (product.price + selectedOptions.reduce((acc, o) => acc + o.price, 0));
 
     if (existingIndex !== -1) {
       const updatedItems = [...items];

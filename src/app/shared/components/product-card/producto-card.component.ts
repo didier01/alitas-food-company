@@ -4,11 +4,11 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { Product } from '../../core/models/product.model';
-import { PromocionBadgeComponent } from './promocion-badge.component';
-import { VenueService } from '../../core/services/venue.service';
-import { ProductSelectionModalComponent } from './modals/product-selection-modal.component';
-import { CartService } from '../../core/services/cart.service';
+import { Product } from '../../../core/models/product.model';
+import { PromocionBadgeComponent } from './../promocion-badge.component';
+import { VenueService } from '../../../core/services/venue.service';
+import { ProductSelectionModalComponent } from './../modals/product-selection-modal.component';
+import { CartService } from '../../../core/services/cart.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
