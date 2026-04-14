@@ -1,0 +1,60 @@
+<div class="cart-container">
+    @if (cartService.items().length === 0) {
+    <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Tu carrito está vacío"></nz-empty>
+    } @else {
+    <div class="cart-items">
+        @for (item of cartService.items(); track item.id) {
+        <div class="cart-item">
+            <div class="item-info">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-options" *ngIf="item.selectedOptions.length > 0">
+                    {{ item.selectedOptions | optionsList }}
+                </span>
+                <span class="item-price">{{ item.totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+            <div class="item-actions">
+                <button nz-button nzSize="small" nzType="text" (click)="cartService.updateQuantity(item.id, -1)">
+                    <span nz-icon class="add-minus" nzType="minus"></span>
+                </button>
+                <span class="qty">{{ item.quantity }}</span>
+                <button nz-button nzSize="small" nzType="text" (click)="cartService.updateQuantity(item.id, 1)">
+                    <span nz-icon class="add-minus" nzType="plus"></span>
+                </button>
+                <button nz-button nzSize="small" nzType="text" nzDanger (click)="cartService.removeItem(item.id)"
+                    class="del-btn">
+                    <span nz-icon nzType="delete"></span>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="cart-footer">
+        <div class="customer-form">
+            <h4>Datos de Entrega</h4>
+            <div class="form-group">
+                <input nz-input placeholder="Tu Nombre" [(ngModel)]="customerName" />
+            </div>
+            <div class="form-group">
+                <input nz-input placeholder="Mesa o Dirección" [(ngModel)]="deliveryAddress" />
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-line">
+                <span>Subtotal</span>
+                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+            <div class="summary-line total">
+                <span>Total a Pagar</span>
+                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+        </div>
+
+        <button nz-button nzType="primary" nzBlock class="btn-whatsapp" [nzLoading]="isSaving" (click)="checkout()">
+            <span nz-icon nzType="whatsapp"></span>
+            Confirmar y Enviar Pedido
+        </button>
+    </div>
+    }
+</div>

@@ -1,0 +1,17 @@
+<div class="cart-pill-container" *ngIf="cartService.count() > 0" (click)="openCart()">
+    <div class="cart-pill">
+        <div class="pill-left">
+            <div class="icon-wrapper">
+                <span nz-icon nzType="shopping-cart" nzTheme="outline" class="bag-icon"></span>
+                <span class="badge-dot">{{ cartService.count() }}</span>
+            </div>
+            <div class="price-info">
+                <span class="total-label">TOTAL</span>
+                <span class="price-value">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+        </div>
+        <button nz-button class="pay-btn">
+            Pagar
+        </button>
+    </div>
+</div>

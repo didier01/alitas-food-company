@@ -16,7 +16,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { User } from '../../../core/models/user.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 import { UserService } from '../../../core/services/user.service';
 
@@ -131,8 +131,8 @@ export class UsersComponent implements OnInit {
   deleteUser(user: User) {
     user.active = false;
     this.userService.update(user).subscribe(() => {
-       this.message.success('Usuario suspendido.');
-       this.loadUsers();
+      this.message.success('Usuario suspendido.');
+      this.loadUsers();
     });
   }
 }

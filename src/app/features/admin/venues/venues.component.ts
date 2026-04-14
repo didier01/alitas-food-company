@@ -14,7 +14,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { VenueService } from '../../../core/services/venue.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { Venue } from '../../../core/models/venue.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-venues',

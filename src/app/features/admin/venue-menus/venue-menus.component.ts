@@ -10,7 +10,7 @@ import { VenueService } from '../../../core/services/venue.service';
 import { VenueMenu } from '../../../core/models/venue-menu.model';
 import { Venue } from '../../../core/models/venue.model';
 import { forkJoin } from 'rxjs';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';

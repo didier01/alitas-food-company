@@ -10,7 +10,7 @@ import { Product } from '../../../core/models/product.model';
 import { Promotion } from '../../../core/models/promotion.model';
 import { Combo } from '../../../core/models/combo.model';
 import { ProductoCardComponent } from '../../../shared/components/product-card/producto-card.component';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { catchError } from 'rxjs/operators';
 import { of, forkJoin } from 'rxjs';
 

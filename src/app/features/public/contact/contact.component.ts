@@ -8,7 +8,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { VenueService } from '../../../core/services/venue.service';
 import { SeoService } from '../../../core/services/seo.service';
 import { Venue } from '../../../core/models/venue.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-contact',

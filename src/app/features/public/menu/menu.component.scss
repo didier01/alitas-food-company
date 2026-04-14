@@ -1,174 +1,188 @@
+.menu-page {
+  padding: 40px 20px;
 
-    .menu-page {
-      padding: 40px 20px;
+  @media (max-width: 576px) {
+    padding: 20px 10px;
+  }
+}
 
-      @media (max-width: 576px) {
-        padding: 20px 10px;
-      }
-    }
-    .menu-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .page-title {
-      font-size: 2.5rem;
+.menu-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  color: var(--brand-primary);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: var(--public-text-secondary);
+  font-size: 1.1rem;
+}
+
+.filters-container {
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  max-width: 500px;
+  margin: 0 auto 30px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.filter-btn {
+  color: var(--brand-primary);
+  position: relative;
+
+  .filter-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff4d4f;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.filter-drawer-content {
+  padding: 10px;
+  color: var(--public-text-primary);
+
+  .filter-group {
+    margin-bottom: 24px;
+
+    .filter-group-title {
+      font-size: 16px;
+      margin-bottom: 12px;
       color: var(--brand-primary);
-      margin-bottom: 10px;
     }
-    .subtitle {
-      color: var(--public-text-secondary);
-      font-size: 1.1rem;
-    }
-    
-    .filters-container {
-      margin-bottom: 40px;
-    }
-    .search-bar {
-      max-width: 500px;
-      margin: 0 auto 30px;
+
+    .filter-tags {
       display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    
-    .filter-btn {
-      color: var(--brand-primary);
-      position: relative;
-      
-      .filter-count {
-        position: absolute;
-        top: -2px;
-        right: -2px;
-        background: #ff4d4f;
-        color: white;
-        border-radius: 50%;
-        width: 16px;
-        height: 16px;
-        font-size: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-    
-    .filter-drawer-content {
-      padding: 10px;
-      color: var(--public-text-primary);
-      
-      .filter-group {
-        margin-bottom: 24px;
-        
-        .filter-group-title {
-          font-size: 16px;
-          margin-bottom: 12px;
-          color: var(--brand-primary);
-        }
-        
-        .filter-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        
-        .filter-tag-chip {
-          cursor: pointer;
-          border-radius: 16px;
-          padding: 4px 12px;
-          font-size: 14px;
-          transition: all 0.3s ease;
-        }
-      }
-      
-      .filter-actions {
-        margin-top: 32px;
-        padding-top: 16px;
-        border-top: 1px solid var(--public-border);
-      }
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    ::ng-deep .search-bar .ant-input-affix-wrapper {
-      background-color: var(--public-bg-card);
-      border-color: var(--public-border);
-      color: var(--public-text-primary);
-      border-radius: 20px;
-      padding: 8px 20px;
-    }
-    ::ng-deep .search-bar .ant-input {
-      background-color: transparent;
-      color: var(--public-text-primary);
-    }
-    ::ng-deep .search-bar .ant-input::placeholder {
-      color: var(--public-text-secondary);
-    }
-    ::ng-deep .search-bar .anticon {
-      color: var(--brand-primary);
-    }
-
-    .categories-scroll {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      padding-bottom: 15px;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none;  /* IE and Edge */
-    }
-    .categories-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    .cat-chip {
-      background: var(--public-bg-card);
-      color: var(--public-text-secondary);
-      border: 1px solid var(--public-border);
-      padding: 10px 24px;
-      border-radius: 30px;
-      white-space: nowrap;
+    .filter-tag-chip {
       cursor: pointer;
-      font-weight: 500;
+      border-radius: 16px;
+      padding: 4px 12px;
+      font-size: 14px;
       transition: all 0.3s ease;
     }
-    .cat-chip:hover {
-      border-color: var(--brand-secondary);
-      color: var(--brand-secondary);
-    }
-    .cat-chip.active {
-      background: var(--brand-primary);
-      color: white;
-      border-color: var(--brand-primary);
-    }
+  }
 
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
+  .filter-actions {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--public-border);
+  }
+}
 
-    @media (max-width: 768px) {
-      .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-    }
+::ng-deep .search-bar .ant-input-affix-wrapper {
+  background-color: var(--public-bg-card);
+  border-color: var(--public-border);
+  color: var(--public-text-primary);
+  border-radius: 20px;
+  padding: 8px 20px;
+}
 
-    @media (max-width: 400px) {
-      .products-grid {
-        gap: 8px;
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+::ng-deep .search-bar .ant-input {
+  background-color: transparent;
+  color: var(--public-text-primary);
+}
 
-    /* Drawer Styles for Dark Theme */
-    ::ng-deep .ant-drawer-content-wrapper .ant-drawer-content {
-      background-color: #1f1f1f;
-      color: var(--public-text-primary);
-    }
-    ::ng-deep .ant-drawer-header {
-      background-color: #1f1f1f;
-      border-bottom: 1px solid var(--public-border);
-    }
-    ::ng-deep .ant-drawer-title {
-      color: var(--public-text-primary);
-    }
-    ::ng-deep .ant-drawer-close {
-      color: var(--public-text-secondary);
-    }
-  
+::ng-deep .search-bar .ant-input::placeholder {
+  color: var(--public-text-secondary);
+}
+
+::ng-deep .search-bar .anticon {
+  color: var(--brand-primary);
+}
+
+.categories-scroll {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-chip {
+  background: var(--public-bg-card);
+  color: var(--public-text-secondary);
+  border: 1px solid var(--public-border);
+  padding: 5px 20px;
+  border-radius: 30px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cat-chip:hover {
+  border-color: var(--brand-secondary);
+  color: var(--brand-secondary);
+}
+
+.cat-chip.active {
+  background: var(--brand-primary);
+  color: white;
+  border-color: var(--brand-primary);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .products-grid {
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Drawer Styles for Dark Theme */
+::ng-deep .ant-drawer-content-wrapper .ant-drawer-content {
+  background-color: #1f1f1f;
+  color: var(--public-text-primary);
+}
+
+::ng-deep .ant-drawer-header {
+  background-color: #1f1f1f;
+  border-bottom: 1px solid var(--public-border);
+}
+
+::ng-deep .ant-drawer-title {
+  color: var(--public-text-primary);
+}
+
+::ng-deep .ant-drawer-close {
+  color: var(--public-text-secondary);
+}

@@ -19,7 +19,7 @@ import { VenueService } from '../../../core/services/venue.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { Promotion } from '../../../core/models/promotion.model';
 import { Venue } from '../../../core/models/venue.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -130,7 +130,7 @@ export class PromotionsComponent implements OnInit {
       }
 
       const formVal = this.promoForm.value;
-      
+
       let finalVenueIds = formVal.venue_ids || [];
       if (finalVenueIds.includes('TODAS')) {
         finalVenueIds = this.venues.map(v => v.id);

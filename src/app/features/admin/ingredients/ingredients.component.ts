@@ -7,7 +7,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { IngredientService } from '../../../core/services/ingredient.service';
 import { Ingredient } from '../../../core/models/ingredient.model';
 import { ProductService } from '../../../core/services/product.service';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-ingredients',

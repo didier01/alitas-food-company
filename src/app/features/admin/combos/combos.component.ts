@@ -25,7 +25,7 @@ import { AllergenService } from '../../../core/services/allergen.service';
 import { Allergen } from '../../../core/models/allergen.model';
 import { ModifierGroupService } from '../../../core/services/modifier-group.service';
 import { ModifierGroup } from '../../../core/models/modifier-group.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
