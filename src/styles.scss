@@ -404,7 +404,7 @@ p {
 
   .ant-drawer-header {
     background-color: var(--admin-bg-secondary);
-    border-bottom: 1px solid var(--admin-border);
+    border-bottom: 0px solid var(--admin-border);
 
     .ant-drawer-title {
       color: var(--admin-text-primary);
@@ -416,7 +416,7 @@ p {
   }
 
   .ant-drawer-body {
-    margin-bottom: 4rem;
+    // margin-bottom: 4rem;
   }
 
   /* Cards & Statistics */

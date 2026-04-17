@@ -1,60 +1,108 @@
 <div class="cart-container">
+    <!-- Custom Header -->
+    <!-- <div class="cart-header">
+        <div class="header-left">
+            <span nz-icon nzType="shopping-cart-outline" class="bag-icon"></span>
+            <h3>Tu Pedido</h3>
+        </div>
+        <button class="close-btn" (click)="close()">
+            <span nz-icon nzType="close"></span>
+        </button>
+    </div> -->
+
     @if (cartService.items().length === 0) {
     <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Tu carrito está vacío"></nz-empty>
     } @else {
-    <div class="cart-items">
-        @for (item of cartService.items(); track item.id) {
-        <div class="cart-item">
-            <div class="item-info">
-                <span class="item-name">{{ item.product.name }}</span>
-                <span class="item-options" *ngIf="item.selectedOptions.length > 0">
-                    {{ item.selectedOptions | optionsList }}
-                </span>
-                <span class="item-price">{{ item.totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+    <div class="cart-scroll-area">
+        <!-- Selection Section -->
+        <div class="section-title">Tu selección</div>
+        <div class="cart-items">
+            @for (item of cartService.items(); track item.id) {
+            <div class="cart-card">
+                <div class="card-body">
+                    <img [src]="item.product.image_url" [alt]="item.product.name" class="card-img">
+
+                    <div class="card-content">
+
+
+                        <div class="item-details">
+                            <div><span class="item-name">{{ item.product.name }}</span></div>
+                            <span class="item-options" *ngIf="item.selectedOptions.length > 0">
+                                {{ item.selectedOptions | optionsList }}
+                            </span>
+                        </div>
+
+                        <div class="card-actions">
+
+                            <span class="item-price">{{ item.totalPrice | currency:'COP':'symbol-narrow':'1.0-0'
+                                }}</span>
+                            <div class="qty-control">
+                                <button (click)="cartService.updateQuantity(item.id, -1)">
+                                    <span nz-icon nzType="minus"></span>
+                                </button>
+                                <span class="qty-val">{{ item.quantity }}</span>
+                                <button (click)="cartService.updateQuantity(item.id, 1)">
+                                    <span nz-icon nzType="plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="item-actions">
-                <button nz-button nzSize="small" nzType="text" (click)="cartService.updateQuantity(item.id, -1)">
-                    <span nz-icon class="add-minus" nzType="minus"></span>
-                </button>
-                <span class="qty">{{ item.quantity }}</span>
-                <button nz-button nzSize="small" nzType="text" (click)="cartService.updateQuantity(item.id, 1)">
-                    <span nz-icon class="add-minus" nzType="plus"></span>
-                </button>
-                <button nz-button nzSize="small" nzType="text" nzDanger (click)="cartService.removeItem(item.id)"
-                    class="del-btn">
-                    <span nz-icon nzType="delete"></span>
-                </button>
-            </div>
+            }
         </div>
-        }
+
+
     </div>
 
     <div class="cart-footer">
-        <div class="customer-form">
-            <h4>Datos de Entrega</h4>
-            <div class="form-group">
-                <input nz-input placeholder="Tu Nombre" [(ngModel)]="customerName" />
+
+
+        <!-- Delivery Section -->
+        <nz-divider class="section-title" nzText="Datos de entrega" nzSize="small" />
+
+        <div class="delivery-form">
+
+            <div class="input-group">
+                <label>Nombre completo</label>
+                <div class="input-wrapper">
+                    <input type="text" [(ngModel)]="customerName" placeholder="Gourmet Explorer">
+                </div>
             </div>
-            <div class="form-group">
-                <input nz-input placeholder="Mesa o Dirección" [(ngModel)]="deliveryAddress" />
+
+            <div class="input-group">
+                <label>Teléfono</label>
+                <div class="input-wrapper">
+                    <input type="tel" [(ngModel)]="customer_phone" placeholder="+57 300 000 0000">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Dirección de envío</label>
+                <div class="input-wrapper has-icon">
+                    <input type="text" [(ngModel)]="deliveryAddress" placeholder="Calle 123 #45-67">
+                    <span nz-icon nzType="environment" class="input-icon"></span>
+                </div>
             </div>
         </div>
 
-        <div class="summary">
-            <div class="summary-line">
+        <div class="summary-lines">
+            <div class="summary-row">
                 <span>Subtotal</span>
                 <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
             </div>
-            <div class="summary-line total">
-                <span>Total a Pagar</span>
-                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            <div class="summary-row shipping">
+                <span>Envío</span>
+                <span>{{ shippingPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
             </div>
         </div>
 
-        <button nz-button nzType="primary" nzBlock class="btn-whatsapp" [nzLoading]="isSaving" (click)="checkout()">
-            <span nz-icon nzType="whatsapp"></span>
-            Confirmar y Enviar Pedido
+        <button nz-button nzType="primary" class="btn-confirm" [nzLoading]="isSaving" (click)="checkout()">
+            <span nz-icon nzType="shopping-cart"></span>
+            Confirmar Pedido
         </button>
+        <div class="estimated-time">TIEMPO ESTIMADO: 35-45 MIN</div>
     </div>
     }
 </div>

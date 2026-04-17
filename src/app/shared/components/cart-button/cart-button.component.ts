@@ -21,7 +21,7 @@ export class CartButtonComponent {
 
   openCart() {
     this.drawerService.create({
-      nzTitle: 'Tu Pedido 🍗',
+      nzTitle: 'Tu Pedido',
       nzContent: CartDrawerComponent,
       nzWidth: 400,
       nzClosable: true

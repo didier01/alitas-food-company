@@ -14,11 +14,17 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Order } from '../../../core/models/order.model';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzIconModule, NzListModule, NzEmptyModule, OptionsListPipe, NzFormModule, NzInputModule, FormsModule],
+  imports: [CommonModule,
+    NzButtonModule, NzIconModule,
+    NzListModule, NzEmptyModule,
+    OptionsListPipe, NzFormModule,
+    NzInputModule, FormsModule,
+    NzDividerModule],
   templateUrl: './cart-drawer.component.html',
   styleUrls: ['./cart-drawer.component.scss']
 })
@@ -31,10 +37,16 @@ export class CartDrawerComponent {
 
   customerName = '';
   deliveryAddress = '';
+  customer_phone = '';
+  shippingPrice = 4000;
   isSaving = false;
 
+  close() {
+    this.drawerRef.close();
+  }
+
   checkout() {
-    if (!this.customerName || !this.deliveryAddress) {
+    if (!this.customerName || !this.deliveryAddress || !this.customer_phone) {
       this.message.warning('Por favor completa tu nombre y dirección/mesa');
       return;
     }
@@ -52,6 +64,7 @@ export class CartDrawerComponent {
       venue_id: venue.id,
       customer_name: this.customerName,
       delivery_address: this.deliveryAddress,
+      customer_phone: this.customer_phone,
       total_amount: this.cartService.totalAmount(),
       status: 'PENDIENTE',
       items: this.cartService.items().map(item => ({
