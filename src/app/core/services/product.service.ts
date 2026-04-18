@@ -6,9 +6,13 @@ import { IngredientService } from './ingredient.service';
 import { CategoryService } from './category.service';
 import { Ingredient } from '../models/ingredient.model';
 import { Category } from '../models/category.model';
+import { VenueMenu } from '../models/venue-menu.model';
+import { VenueService } from './venue.service';
+import { VenueMenuService } from './venue-menu.service';
 import { Observable, forkJoin, from, map } from 'rxjs';
 import { BaseSupabaseService } from './base-supabase.service';
 import { environment } from '../../../environments/environment';
+import { effect } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +23,29 @@ export class ProductService extends BaseSupabaseService<Product> {
   private comboService = inject(ComboService);
   private ingredientService = inject(IngredientService);
   private categoryService = inject(CategoryService);
+  private venueService = inject(VenueService);
+  private venueMenuService = inject(VenueMenuService);
 
   // Signals for the public site
   categoryFilter = signal<string>('all');
   searchFilter = signal<string>('');
   selectedTags = signal<string[]>([]);
+  activeVenueMenu = signal<VenueMenu | null>(null);
+
+  constructor() {
+    super();
+    // Reactive update of the venue menu when the venue changes
+    effect(() => {
+      const venue = this.venueService.selectedVenue();
+      if (venue) {
+        this.venueMenuService.getMenuByVenue(venue.id).subscribe(menu => {
+          this.activeVenueMenu.set(menu || null);
+        });
+      } else {
+        this.activeVenueMenu.set(null);
+      }
+    });
+  }
 
   // Raw lists
   allProducts = signal<Product[]>([]);
@@ -40,19 +62,31 @@ export class ProductService extends BaseSupabaseService<Product> {
     const comboCategory = categories.find(c => c.name.toLowerCase().includes('combo'));
     const comboCatId = comboCategory ? comboCategory.id : '';
 
+    const venueMenu = this.activeVenueMenu();
+
     const products = this.allProducts()
-      .filter(p => p.available)
+      .filter(p => {
+        // First filter by availability
+        if (!p.available) return false;
+        // Then filter by venue association if a menu exists
+        if (venueMenu && !venueMenu.product_ids?.includes(p.id)) return false;
+        return true;
+      })
       .map(p => ({
         ...p,
         modifier_groups: p.modifier_groups?.map(group => ({
           ...group,
-          options: group.options // Options are linked to products now, so we can display them directly for now
+          options: group.options 
         })).filter(group => group.options && group.options.length > 0)
       }));
 
     // Mapping combos to a product-like interface for the menu display
     const combosAsProducts = this.allCombos()
-      .filter(c => c.active)
+      .filter(c => {
+        if (!c.active) return false;
+        if (venueMenu && !venueMenu.combo_ids?.includes(c.id)) return false;
+        return true;
+      })
       .map(c => ({
         id: c.id,
         name: c.name,
@@ -64,13 +98,12 @@ export class ProductService extends BaseSupabaseService<Product> {
         featured: false,
         allergen_ids: c.allergen_ids || [],
         modifier_groups: c.modifier_groups || [],
-        // Extend with optional properties to pass them to component
         realPrice: this.allProducts().reduce((acc, p) => {
           const match = c.included_products?.find(ip => ip.id === p.id);
           return acc + (match ? p.price * match.quantity : 0);
         }, 0),
         show_savings: c.show_savings
-      } as any)); // Use any here as they are synthetic objects for the UI
+      } as any)); 
 
     let combined: any[] = [];
     const filter = this.categoryFilter();

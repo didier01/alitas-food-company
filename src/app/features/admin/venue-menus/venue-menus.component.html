@@ -59,8 +59,13 @@
           </td>
           <td>
 
-            <nz-tag [nzColor]="item.menu.active ? 'success' : 'default'"> {{ item.menu.active ? 'Activo' : 'Pausado'
-              }} </nz-tag>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <nz-switch [ngModel]="item.menu.active" (ngModelChange)="toggleMenuStatus(item.menu)"
+                [nzLoading]="loadingAction()" nzSize="small"></nz-switch>
+              <span [style.color]="item.menu.active ? '#52c41a' : '#bfbfbf'">
+                {{ item.menu.active ? 'Activo' : 'Pausado' }}
+              </span>
+            </div>
 
 
           </td>

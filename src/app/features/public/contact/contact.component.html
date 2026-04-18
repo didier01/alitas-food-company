@@ -1,88 +1,131 @@
 <app-loading-spinner [show]="loading()"></app-loading-spinner>
 @if ( !loading()) {
-<div class="contact-page container">
+<div class="contact-page">
 
-  <div class="contact-header">
-    <h1 class="page-title">Ponte en Contacto</h1>
-    <p class="subtitle">¿Tienes alguna duda o sugerencia? Envíanos un mensaje o contáctanos por WhatsApp.</p>
-  </div>
-
-  <div class="contact-content">
-
-    <!-- Formulario de Contacto -->
-    <div class="contact-form-container">
-      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
-        <div class="form-group">
-          <label>Nombre Completo *</label>
-          <input nz-input formControlName="name" placeholder="Tu name" />
-          <div class="error-msg" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
-            El name es requerido.
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Correo Electrónico *</label>
-          <input nz-input formControlName="email" type="email" placeholder="tu@email.com" />
-          <div class="error-msg" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
-            Ingresa un correo válido.
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Venue Relacionada</label>
-          <nz-select formControlName="venueId" nzPlaceHolder="Selecciona una sede">
-            @for (sede of venues; track sede.id) {
-            <nz-option [nzValue]="sede.id" [nzLabel]="sede.name"></nz-option>
-            }
-          </nz-select>
-        </div>
-
-        <div class="form-group">
-          <label>Mensaje *</label>
-          <textarea nz-input formControlName="mensaje" placeholder="Escribe tu mensaje aquí..."
-            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
-          <div class="error-msg" *ngIf="contactForm.get('mensaje')?.invalid && contactForm.get('mensaje')?.touched">
-            El mensaje es requerido (mínimo 10 caracteres).
-          </div>
-        </div>
-
-        <button nz-button nzType="primary" nzSize="large" [disabled]="contactForm.invalid || enviando"
-          class="btn-submit">
-          {{ enviando ? 'Enviando...' : 'Enviar Mensaje' }}
-        </button>
-        <div class="success-msg" *ngIf="enviado">
-          ✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
-        </div>
-      </form>
+  <!-- Hero Section -->
+  <section class="contact-hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Ponte en Contacto</h1>
+      <p class="hero-subtitle">¿Dudas sobre tu pedido o quieres reservar para un grupo? <br> Nuestro equipo de parrilla
+        está
+        listo para escucharte.</p>
     </div>
+  </section>
 
-    <!-- Info Directa -->
-    <div class="contact-info">
-      <div class="info-card">
-        <h3>Atención al Cliente</h3>
-        <p>Estamos disponibles para atenderte en nuestros horarios de opening.</p>
+  <div class="contact-main-grid container">
 
-        <div class="direct-contact">
-          <button nz-button nzType="default" class="btn-whatsapp" (click)="openDirectWhatsapp()">
-            <img src="/assets/outline/whatsapp.svg" alt="WhatsApp" width="20" height="20" class="icon-outline"> Chat
-            Directo
+    <!-- Left Column: Form -->
+    <div class="contact-left">
+      <section class="form-section">
+        <h2 class="column-title">Envíanos un mensaje</h2>
+        <p class="column-subtitle">Prometemos responder más rápido de lo que se cocina una alita.</p>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="premium-form">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Nombre</label>
+              <input nz-input formControlName="name" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group flex-1">
+              <label>Email</label>
+              <input nz-input formControlName="email" type="email" placeholder="hola@ejemplo.com" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Asunto</label>
+            <nz-select formControlName="subject" nzPlaceHolder="Selecciona el motivo">
+              <nz-option nzValue="Información General" nzLabel="Información General"></nz-option>
+              <nz-option nzValue="Reservas" nzLabel="Reservas"></nz-option>
+              <nz-option nzValue="Eventos Privados" nzLabel="Eventos Privados"></nz-option>
+              <nz-option nzValue="Sugerencias" nzLabel="Sugerencias"></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="form-group">
+            <label>Tu Mensaje</label>
+            <textarea nz-input formControlName="mensaje" placeholder="Cuéntanos en qué podemos ayudarte..."
+              [nzAutosize]="{ minRows: 6, maxRows: 10 }"></textarea>
+          </div>
+
+          <button nz-button nzType="primary" class="btn-premium-send" [disabled]="contactForm.invalid || enviando">
+            {{ enviando ? 'Enviando...' : 'Enviar Mensaje' }}
+            <span nz-icon nzType="arrow-right" class="btn-icon"></span>
           </button>
-        </div>
 
-        <h4>Síguenos</h4>
-        <div class="social-links">
-          <a href="https://instagram.com/alitasfc" target="_blank">
-            <img src="/assets/outline/instagram.svg" alt="Instagram" width="20" height="20" class="icon-outline">
-            @alitasfc
-          </a>
-          <a href="https://facebook.com/alitasfc" target="_blank">
-            <img src="/assets/outline/facebook.svg" alt="Facebook" width="20" height="20" class="icon-outline">
-            /alitasfc
-          </a>
-        </div>
-      </div>
+          <div class="success-alert" *ngIf="enviado">
+            ✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
+          </div>
+        </form>
+      </section>
     </div>
 
+    <!-- Right Column: Sedes & Support -->
+    <div class="contact-right">
+
+      <!-- Nuestras Sedes -->
+      <section class="sedes-sidebar">
+        <h2 class="column-title yellow">Nuestras Sedes</h2>
+
+        <div class="sidebar-sedes-list">
+          @for (sede of venues; track sede.id) {
+          <div class="sede-horizontal-card">
+            <div class="sede-card-img">
+              <img [src]="sede.image_url" [alt]="sede.name">
+            </div>
+            <div class="sede-card-body">
+              <h3 class="name">{{ sede.name }}</h3>
+              <p class="address">{{ sede.address }}</p>
+              <div class="hour-row">
+                <span nz-icon nzType="clock-circle" class="icon-yellow"></span>
+                <span>Abierto todos los días: {{ sede.schedule_opening }} - {{ sede.schedule_closing }}</span>
+              </div>
+              <div class="links">
+                <a [href]="sede.google_maps_url" target="_blank" class="link-orange">
+                  <span nz-icon nzType="environment" nzTheme="fill"></span> Ver Mapa
+                </a>
+                <a [href]="'tel:' + sede.whatsapp" class="link-orange">
+                  <span nz-icon nzType="phone" nzTheme="fill"></span> Llamar
+                </a>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </section>
+
+      <!-- Soporte Directo -->
+      <section class="support-sidebar-card">
+        <div class="support-card-inner">
+          <h3 class="support-card-title">Soporte Directo</h3>
+          <p class="support-card-desc">¿Necesitas ayuda inmediata con un pedido en curso? Chatea con nosotros ahora
+            mismo.</p>
+
+          <div class="support-box-grid">
+            <div class="support-box" (click)="openDirectWhatsapp()">
+              <div class="icon-wrap whatsapp">
+                <span nz-icon nzType="whatsapp"></span>
+              </div>
+              <div class="details">
+                <small>WHATSAPP</small>
+                <strong>+57 300 000 0000</strong>
+              </div>
+            </div>
+
+            <div class="support-box">
+              <div class="icon-wrap email">
+                <span nz-icon nzType="mail"></span>
+              </div>
+              <div class="details">
+                <small>EMAIL</small>
+                <strong>soporte@alitas.com</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
   </div>
 </div>
 }

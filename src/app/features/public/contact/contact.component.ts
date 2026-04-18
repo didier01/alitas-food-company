@@ -9,6 +9,7 @@ import { VenueService } from '../../../core/services/venue.service';
 import { SeoService } from '../../../core/services/seo.service';
 import { Venue } from '../../../core/models/venue.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contact',
@@ -22,6 +23,8 @@ export class ContactComponent implements OnInit {
   venueService = inject(VenueService);
   seoService = inject(SeoService);
 
+  sanitizer = inject(DomSanitizer);
+
   contactForm: FormGroup;
   venues: Venue[] = [];
   loading = signal(true);
@@ -32,6 +35,7 @@ export class ContactComponent implements OnInit {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      subject: ['Información General'],
       venueId: [null],
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
@@ -68,6 +72,10 @@ export class ContactComponent implements OnInit {
         setTimeout(() => this.enviado = false, 5000);
       }, 1500);
     }
+  }
+
+  getMapUrl(sede: Venue): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(sede.google_maps_url);
   }
 
   openDirectWhatsapp() {

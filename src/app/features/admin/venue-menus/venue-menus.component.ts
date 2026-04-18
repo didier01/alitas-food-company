@@ -137,7 +137,7 @@ export class VenueMenusComponent implements OnInit {
     if (menu) {
       this.menuForm.patchValue({
         name: menu.name,
-        venue_id: menu.venue_id === 'ALL' ? null : menu.venue_id,
+        venue_id: menu.venue_id,
         is_shared: menu.is_shared,
         active: menu.active
       });
@@ -163,7 +163,7 @@ export class VenueMenusComponent implements OnInit {
     const payload: VenueMenu = {
       ...formVal,
       id: this.editingId || `menu-${Date.now()}`,
-      venue_id: formVal.is_shared ? 'ALL' : (formVal.venue_id || 'ALL'),
+      venue_id: formVal.is_shared ? null : formVal.venue_id,
       product_ids: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.product_ids || []) : [],
       combo_ids: this.editingId ? (this.menus.find(m => m.id === this.editingId)?.combo_ids || []) : []
     };
@@ -241,6 +241,22 @@ export class VenueMenusComponent implements OnInit {
       },
       error: () => {
         this.message.error('Error al guardar configuración');
+        this.loadingAction.set(false);
+      }
+    });
+  }
+
+  toggleMenuStatus(menu: VenueMenu) {
+    const updatedMenu = { ...menu, active: !menu.active };
+    this.loadingAction.set(true);
+    this.venueMenuService.update(updatedMenu).subscribe({
+      next: () => {
+        this.message.success(`Menú ${updatedMenu.active ? 'activado' : 'desactivado'}`);
+        this.loadingAction.set(false);
+        this.loadData();
+      },
+      error: () => {
+        this.message.error('Error al cambiar el estado del menú');
         this.loadingAction.set(false);
       }
     });

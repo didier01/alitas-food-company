@@ -1,11 +1,15 @@
 <app-loading-spinner [show]="loading()"></app-loading-spinner>
 @if ( !loading()) {
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="page-title">Nuestro Menú</h1>
+        <p class="subtitle">Descubre el auténtico sabor gourmet en alitas</p>
+    </div>
+</div>
+
 <div class="menu-page container">
 
-  <div class="menu-header">
-    <h1 class="page-title">Nuestro Menú</h1>
-    <p class="subtitle">Descubre el auténtico sabor gourmet en alitas</p>
-  </div>
 
   <div class="filters-container">
     <!-- Buscador -->

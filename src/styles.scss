@@ -11,7 +11,7 @@
 
   --public-bg-primary: #0D0D0D;
   --public-bg-secondary: #242424;
-  --public-bg-card: #1A1A1A;
+  --public-bg-card: #151515;
   --public-text-primary: #F5F5F5;
   --public-text-secondary: #A0A0A0;
   --public-border: #2E2E2E;
@@ -438,7 +438,7 @@ p {
   .ant-input,
   .ant-input-number,
   .ant-select-selector {
-    background-color: var(--admin-bg-secondary) !important;
+    background-color: var(--admin-bg-secondary);
     border-color: var(--admin-border) !important;
     color: var(--admin-text-primary) !important;
     border-radius: var(--border-radius-button) !important;
