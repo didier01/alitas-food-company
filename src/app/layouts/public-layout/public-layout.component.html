@@ -3,8 +3,11 @@
   <nav class="navbar">
     <div class="nav-content">
       <div class="brand">
-        <span class="logo">🔥</span>
-        <span class="brand-name">ALITAS</span>
+        <button class="hamburger" (click)="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+        <!-- <span class="logo" >🔥</span> -->
+        <span class="brand-name">Alitas Company</span>
       </div>
 
       <div class="desktop-menu" [class.show]="menuOpen">
@@ -16,15 +19,13 @@
 
       <div class="actions">
         <app-sede-select class="sede-select-desktop"></app-sede-select>
-        <button class="hamburger" (click)="toggleMenu()">
-          <span></span><span></span><span></span>
-        </button>
+
       </div>
     </div>
     <!-- Mobile menu sede select fallback -->
-    <div class="mobile-sede-select" *ngIf="menuOpen">
+    <!-- <div class="mobile-sede-select" *ngIf="menuOpen">
       <app-sede-select></app-sede-select>
-    </div>
+    </div> -->
   </nav>
 
   <!-- Main Content con Animaciones -->

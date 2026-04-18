@@ -34,6 +34,10 @@
   color: var(--brand-primary);
 }
 
+.brand-name {
+  font-size: 1.2rem;
+}
+
 .desktop-menu {
   display: flex;
   gap: 20px;
@@ -142,7 +146,7 @@
   }
 
   .sede-select-desktop {
-    display: none;
+    // display: none;
   }
 
   .hamburger {
@@ -163,5 +167,11 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: 1rem;
   }
 }
