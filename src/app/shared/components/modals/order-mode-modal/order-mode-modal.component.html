@@ -1,0 +1,33 @@
+@if(mode() === 'pending') {
+<div class="welcome-overlay" [class.fade-out]="isLeaving">
+  <div class="welcome-modal">
+    <div class="welcome-header">
+      <div class="welcome-logo-emoji">🔥</div>
+      <h2>¡Hola! 👋</h2>
+      <p>Para brindarte la mejor experiencia, cuéntanos cómo deseas ordenar hoy.</p>
+    </div>
+
+    <div class="options-container">
+      <div class="option-card" (click)="selectMode('dine-in')">
+        <div class="icon-wrapper">
+          <span nz-icon nzType="shop" nzTheme="outline"></span>
+        </div>
+        <div class="card-content">
+          <h3>Comer en el sitio</h3>
+          <p>Mira nuestro menú y pide con tu mesero</p>
+        </div>
+      </div>
+
+      <div class="option-card" (click)="selectMode('delivery')">
+        <div class="icon-wrapper">
+          <span nz-icon nzType="car" nzTheme="outline"></span>
+        </div>
+        <div class="card-content">
+          <h3>Pedir a domicilio</h3>
+          <p>Para llevar o envío a casa</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}

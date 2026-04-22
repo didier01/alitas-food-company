@@ -8,6 +8,7 @@ import { NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { CartService } from '../../../core/services/cart.service';
 import { VenueService } from '../../../core/services/venue.service';
 import { OrderService } from '../../../core/services/order.service';
+import { OrderModeService } from '../../../core/services/order-mode.service';
 import { OptionsListPipe } from '../../pipes/options-list.pipe';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -32,8 +33,10 @@ export class CartDrawerComponent {
   cartService = inject(CartService);
   venueService = inject(VenueService);
   orderService = inject(OrderService);
+  orderModeService = inject(OrderModeService);
   message = inject(NzMessageService);
   drawerRef = inject(NzDrawerRef);
+
 
   customerName = '';
   deliveryAddress = '';

@@ -5,8 +5,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer';
 import { CartService } from '../../../core/services/cart.service';
+import { OrderModeService } from '../../../core/services/order-mode.service';
 import { CartDrawerComponent } from './../cart-drawer/cart-drawer.component';
-
 
 @Component({
   selector: 'app-cart-button',
@@ -17,6 +17,7 @@ import { CartDrawerComponent } from './../cart-drawer/cart-drawer.component';
 })
 export class CartButtonComponent {
   cartService = inject(CartService);
+  orderModeService = inject(OrderModeService);
   drawerService = inject(NzDrawerService);
 
   openCart() {

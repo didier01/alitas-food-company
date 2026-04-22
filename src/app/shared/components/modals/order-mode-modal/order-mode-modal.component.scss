@@ -1,0 +1,146 @@
+.welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85); /* Dark blur backdrop */
+  backdrop-filter: blur(8px);
+  z-index: 10000; /* Very high z-index to cover everything */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease-out;
+  padding: 1rem;
+
+  &.fade-out {
+    animation: fadeOut 0.3s ease-in forwards;
+  }
+}
+
+.welcome-modal {
+  background-color: #141414;
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transform: translateY(0);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .welcome-header {
+    margin-bottom: 2rem;
+
+    .welcome-logo-emoji {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: rgba(255, 184, 0, 0.1);
+      color: #FFB800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 1.5rem auto;
+      border: 1px solid rgba(255, 184, 0, 0.2);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #888;
+      font-size: 1rem;
+      line-height: 1.4;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+  }
+
+  .options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background-color: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+
+      &:hover, &:active {
+        background-color: rgba(255, 184, 0, 0.1);
+        border-color: #FFB800;
+        transform: translateY(-2px);
+
+        .icon-wrapper {
+          background-color: #FFB800;
+          color: #141414;
+        }
+      }
+
+      .icon-wrapper {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #FFB800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .card-content {
+        h3 {
+          margin: 0 0 0.25rem 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #fff;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.85rem;
+          color: #888;
+          line-height: 1.3;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

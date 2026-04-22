@@ -31,7 +31,7 @@ import {
   MailOutline, UserOutline, LockOutline,
   EyeOutline, EyeInvisibleOutline, FilterOutline,
   ReloadOutline, ArrowLeftOutline, ArrowRightOutline,
-  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline,
+  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline, CarOutline,
 
   // Fills
   InfoCircleFill, StarFill, SafetyCertificateFill,
@@ -68,7 +68,7 @@ const icons = [
   MailOutline, UserOutline, LockOutline, MinusOutline,
   EyeOutline, EyeInvisibleOutline, FilterOutline,
   ReloadOutline, ArrowLeftOutline, ArrowRightOutline,
-  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline,
+  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline, CarOutline,
 
   InfoCircleFill, StarFill, SafetyCertificateFill,
   HeartFill, FireFill, CheckCircleFill,

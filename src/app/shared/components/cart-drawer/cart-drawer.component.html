@@ -16,6 +16,12 @@
     <div class="cart-scroll-area">
         <!-- Selection Section -->
         <div class="section-title">Tu selección</div>
+
+
+        <button class="btn-clear" nz-button nzType="text" nzDanger nzSize="small" (click)="cartService.clearCart()">
+            <span nz-icon nzType="delete"></span> Vaciar
+        </button>
+
         <div class="cart-items">
             @for (item of cartService.items(); track item.id) {
             <div class="cart-card">
@@ -59,6 +65,7 @@
     <div class="cart-footer">
 
 
+        @if (orderModeService.mode() === 'delivery') {
         <!-- Delivery Section -->
         <nz-divider class="section-title" nzText="Datos de entrega" nzSize="small" />
 
@@ -103,6 +110,19 @@
             Confirmar Pedido
         </button>
         <div class="estimated-time">TIEMPO ESTIMADO: 35-45 MIN</div>
+        } @else {
+        <div class="summary-lines">
+            <div class="summary-row">
+                <span>Total Estimado</span>
+                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+        </div>
+
+        <div class="dine-in-message">
+            <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+            <p>¡Excelente elección! Muestra esta pantalla a tu mesero para tomar el pedido.</p>
+        </div>
+        }
     </div>
     }
 </div>

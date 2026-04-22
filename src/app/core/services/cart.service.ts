@@ -10,12 +10,29 @@ export interface CartItem {
   totalPrice: number; // Price of product + extras * quantity
 }
 
+const CART_STORAGE_KEY = 'alitas_cart';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   // Signal for cart items
-  private cartItems = signal<CartItem[]>([]);
+  private cartItems = signal<CartItem[]>(this.loadCart());
+
+  private loadCart(): CartItem[] {
+    try {
+      const stored = localStorage.getItem(CART_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private saveCart() {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.cartItems()));
+    } catch {}
+  }
 
   // Computed signals
   items = computed(() => this.cartItems());
@@ -47,6 +64,7 @@ export class CartService {
         totalPrice: (updatedItems[existingIndex].quantity + quantity) * unitPrice
       };
       this.cartItems.set(updatedItems);
+      this.saveCart();
     } else {
       const newItem: CartItem = {
         id: itemId,
@@ -56,6 +74,7 @@ export class CartService {
         totalPrice: quantity * unitPrice
       };
       this.cartItems.set([...items, newItem]);
+      this.saveCart();
     }
   }
 
@@ -77,16 +96,19 @@ export class CartService {
           totalPrice: newQty * unitPrice
         };
         this.cartItems.set(updatedItems);
+        this.saveCart();
       }
     }
   }
 
   removeItem(itemId: string) {
     this.cartItems.set(this.cartItems().filter(i => i.id !== itemId));
+    this.saveCart();
   }
 
   clearCart() {
     this.cartItems.set([]);
+    this.saveCart();
   }
 
   generateWhatsAppMessage(venueName: string, customerName?: string, deliveryAddress?: string): string {
