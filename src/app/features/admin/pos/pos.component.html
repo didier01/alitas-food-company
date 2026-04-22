@@ -1,0 +1,117 @@
+<div class="pos-layout">
+  <!-- Left Side: Catalog -->
+  <div class="pos-catalog">
+    
+    <!-- Search Bar -->
+    <div class="pos-search">
+      <nz-input-group [nzPrefix]="prefixSearch" nzSize="large">
+        <input type="text" nz-input placeholder="Buscar producto..." [(ngModel)]="searchTerm" />
+      </nz-input-group>
+      <ng-template #prefixSearch>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
+
+    <!-- Category Pills -->
+    <div class="categories-container">
+      <button *ngFor="let cat of categories()" class="category-pill" [class.active]="activeCategoryId() === cat.id"
+        (click)="setCategory(cat.id!)">
+        {{ cat.name }}
+      </button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+      <div class="pos-card" *ngFor="let product of getFilteredProducts()" (click)="addProductToCart(product)">
+        <div class="card-img-wrapper">
+          <img [src]="product.image_url" [alt]="product.name">
+        </div>
+        <div class="card-info">
+          <h4>{{ product.name }}</h4>
+          <span class="price">{{ product.price | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <nz-empty *ngIf="getFilteredProducts().length === 0"
+        nzNotFoundContent="No hay productos en esta categoría"></nz-empty>
+    </div>
+  </div>
+
+  <!-- Right Side: Comanda / Cart -->
+  <div class="pos-comanda" [class.mobile-open]="showMobileComanda">
+    <div class="comanda-header">
+      <div class="header-left">
+        <h3>📋 Comanda</h3>
+        <button class="mobile-close-btn" nz-button nzType="text" (click)="showMobileComanda = false">
+          <span nz-icon nzType="close"></span>
+        </button>
+      </div>
+      <button nz-button nzType="text" nzDanger nzSize="small" (click)="cartService.clearCart()">
+        <span nz-icon nzType="delete"></span> Vaciar
+      </button>
+    </div>
+
+    <!-- Items List -->
+    <div class="comanda-items">
+      <nz-empty *ngIf="cartService.items().length === 0" nzNotFoundContent="Comanda vacía"></nz-empty>
+
+      <div class="comanda-item" *ngFor="let item of cartService.items()">
+        <div class="item-main">
+          <span class="item-qty">{{ item.quantity }}x</span>
+          <div class="item-details">
+            <span class="item-name">{{ item.product.name }}</span>
+            <span class="item-options" *ngIf="item.selectedOptions.length > 0">
+              {{ item.selectedOptions | optionsList }}
+            </span>
+          </div>
+          <span class="item-price">{{ item.totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+        </div>
+        <div class="item-actions">
+          <button (click)="cartService.updateQuantity(item.id, -1)"><span nz-icon nzType="minus"></span></button>
+          <button (click)="cartService.updateQuantity(item.id, 1)"><span nz-icon nzType="plus"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Forms -->
+    <div class="comanda-footer">
+      <nz-divider class="pos-divider"></nz-divider>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label>N° Mesa o Localizador*</label>
+          <input nz-input [(ngModel)]="mesaNumber" placeholder="Ej. 12" />
+        </div>
+        <div class="input-group">
+          <label>Cliente (Opcional)</label>
+          <input nz-input [(ngModel)]="customerName" placeholder="Juan" />
+        </div>
+      </div>
+
+      <div class="input-group notes-group">
+        <label>Notas para cocina</label>
+        <textarea nz-input [(ngModel)]="notes" rows="2" placeholder="Ej. Sin cebolla, extra crujiente..."></textarea>
+      </div>
+
+      <div class="total-row">
+        <span>Total:</span>
+        <span class="total-amount">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+      </div>
+
+      <button class="pay-btn" [disabled]="isSaving || cartService.items().length === 0" (click)="submitOrder()">
+        <span *ngIf="!isSaving"><span nz-icon nzType="cloud-upload" nzTheme="outline"></span> ENVIAR A COCINA</span>
+        <span *ngIf="isSaving"><span nz-icon nzType="loading" nzTheme="outline"></span> PROCESANDO...</span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile Floating Trigger -->
+  <div class="mobile-comanda-trigger" *ngIf="!showMobileComanda && cartService.items().length > 0" (click)="showMobileComanda = true">
+    <div class="trigger-left">
+      <span nz-icon nzType="shopping-cart" nzTheme="outline" class="cart-icon"></span>
+      <span class="badge">{{ cartService.count() }}</span>
+      <span class="trigger-text">Ver Comanda</span>
+    </div>
+    <span class="trigger-price">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+  </div>
+</div>

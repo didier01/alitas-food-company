@@ -43,6 +43,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/dashboard/dashboard.component').then(c => c.DashboardComponent)
       },
       {
+        path: 'pos',
+        loadComponent: () => import('./features/admin/pos/pos.component').then(c => c.PosComponent)
+      },
+      {
         path: 'orders',
         loadComponent: () => import('./features/admin/orders/orders.component').then(c => c.OrdersComponent)
       },

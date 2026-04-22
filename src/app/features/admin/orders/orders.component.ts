@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -77,34 +77,20 @@ export class OrdersComponent implements OnInit {
     });
   }
 
+  @ViewChild('orderDetailsTpl') orderDetailsTpl!: TemplateRef<any>;
+  selectedOrder = signal<Order | null>(null);
+
   viewDetails(order: Order) {
+    console.log('Viewing order details:', order);
+    console.log('Order items count:', order.items?.length);
+    this.selectedOrder.set(order);
     this.modal.create({
-      nzTitle: `Detalles del Pedido #${order.id?.substring(0, 8)}`,
-      nzContent: `
-        <div class="order-details-modal">
-          <p><strong>Cliente:</strong> ${order.customer_name}</p>
-          <p><strong>Entrega:</strong> ${order.delivery_address}</p>
-          <hr/>
-          <div class="items-list">
-            ${order.items?.map(item => `
-              <div class="detail-item">
-                <div class="item-header">
-                   <span>${item.quantity}x <strong>${item.product_name || 'Producto'}</strong></span>
-                   <span>$${item.subtotal.toLocaleString()}</span>
-                </div>
-                ${item.options_json.length ? `<div class="item-opts">${item.options_json.map((o: any) => o.name).join(', ')}</div>` : ''}
-              </div>
-            `).join('')}
-          </div>
-          <hr/>
-          <div class="total-line">
-            <strong>TOTAL:</strong>
-            <span>$${order.total_amount.toLocaleString()} COP</span>
-          </div>
-        </div>
-      `,
+      nzTitle: `Detalles del Pedido #${order.id?.substring(0, 8) || 'Nuevo'}`,
+      nzContent: this.orderDetailsTpl,
       nzFooter: null,
-      nzWidth: 500
+      nzWidth: 550,
+      nzCentered: true,
+      nzClassName: 'order-details-modal-wrapper'
     });
   }
 }

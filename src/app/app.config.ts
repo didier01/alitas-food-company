@@ -48,7 +48,8 @@ import {
   DatabaseOutline,
   MedicineBoxOutline,
   LineChartOutline,
-  MinusOutline
+  MinusOutline,
+  WalletOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
@@ -68,7 +69,7 @@ const icons = [
   MailOutline, UserOutline, LockOutline, MinusOutline,
   EyeOutline, EyeInvisibleOutline, FilterOutline,
   ReloadOutline, ArrowLeftOutline, ArrowRightOutline,
-  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline, CarOutline,
+  CloseOutline, CheckOutline, PlusCircleOutline, PlusSquareOutline, CarOutline, WalletOutline,
 
   InfoCircleFill, StarFill, SafetyCertificateFill,
   HeartFill, FireFill, CheckCircleFill,

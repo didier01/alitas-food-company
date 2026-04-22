@@ -19,6 +19,12 @@
             </a>
           </li>
           <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/pos">
+              <span nz-icon nzType="wallet"></span>
+              <span style="color: var(--california-500); font-weight: bold;">Punto de Venta (POS)</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/orders">
               <span nz-icon nzType="shopping-cart"></span>
               <span>Pedidos</span>
@@ -115,7 +121,7 @@
           (click)="isCollapsed = !isCollapsed"></span>
         <div class="header-actions">
           <span class="user-greeting">Hola, {{ authService.currentUser()?.name }}!</span>
-          <app-theme-toggle></app-theme-toggle>
+          <!-- <app-theme-toggle></app-theme-toggle> -->
           <button class="logout-btn" (click)="logout()">
             <span nz-icon nzType="logout"></span>
           </button>

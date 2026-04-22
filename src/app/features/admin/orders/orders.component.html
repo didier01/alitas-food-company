@@ -6,7 +6,7 @@
     </button>
   </div>
 
-  <nz-table #basicTable [nzData]="orders()" [nzLoading]="loading()" [nzFrontPagination]="true">
+  <nz-table #basicTable [nzData]="orders()" [nzLoading]="loading()" [nzFrontPagination]="true" [nzScroll]="{ x: '800px' }">
     <thead>
       <tr>
         <th>Fecha</th>
@@ -52,3 +52,53 @@
     </tbody>
   </nz-table>
 </div>
+
+<!-- Modal Template for Order Details -->
+<ng-template #orderDetailsTpl>
+  <div class="order-details-modal" style="display: block !important; visibility: visible !important; color: white !important;">
+    <div *ngIf="selectedOrder() as order; else noOrder">
+      <div class="order-info-section">
+        <p><strong>Cliente:</strong> {{ order.customer_name }}</p>
+        <p><strong>Mesa / Entrega:</strong> {{ order.delivery_address }}</p>
+        <p><strong>Fecha:</strong> {{ order.created_at | date:'medium' }}</p>
+      </div>
+      
+      <hr style="border-color: rgba(255,255,255,0.2)"/>
+      
+      <div class="items-list">
+        <h4 style="color: #FFB800; margin-bottom: 12px; font-weight: bold;">Items del Pedido:</h4>
+        
+        <div *ngIf="order.items && order.items.length > 0; else noItems">
+          <div class="detail-item" *ngFor="let item of order.items" style="border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 8px;">
+            <div class="item-header" style="display: flex; justify-content: space-between;">
+               <span>{{ item.quantity }}x <strong>{{ item.product_name || 'Producto' }}</strong></span>
+               <span style="color: #FFB800;">{{ item.subtotal | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+            </div>
+            <div class="item-opts" *ngIf="item.options_json && item.options_json.length > 0" style="color: #aaa; font-size: 0.85rem; padding-left: 15px;">
+               <span *ngFor="let opt of item.options_json; let last = last">{{ opt.name }}{{ !last ? ', ' : '' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noItems>
+          <div style="padding: 10px; background: rgba(255,0,0,0.1); border-radius: 4px;">
+            <p style="color: #ff4d4f; margin: 0;">⚠️ No se encontraron productos asociados a este pedido (items array vacío).</p>
+          </div>
+        </ng-template>
+      </div>
+      
+      <hr style="border-color: rgba(255,255,255,0.2)"/>
+      
+      <div class="total-line" style="display: flex; justify-content: space-between; font-size: 1.4rem; color: #FFB800; font-weight: bold;">
+        <span>TOTAL:</span>
+        <span>{{ order.total_amount | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noOrder>
+    <div style="padding: 20px; text-align: center; color: white;">
+      <p>⚠️ Error: selectedOrder() es null o undefined.</p>
+    </div>
+  </ng-template>
+</ng-template>

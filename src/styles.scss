@@ -457,6 +457,11 @@ p {
     color: white;
   }
 
+  .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+  .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    background-color: var(--admin-bg-secondary) !important;
+  }
+
   /* Select dropdowns (Portals) */
   .ant-select-dropdown {
     background-color: var(--admin-bg-card) !important;
@@ -498,14 +503,19 @@ p {
     border-color: var(--admin-accent) !important;
   }
 
-  /* Sidebar & Sider Menu */
-  .ant-layout-sider {
-    background: var(--admin-bg-secondary) !important;
-  }
+
 
   .ant-menu {
     background: var(--admin-bg-secondary) !important;
     color: var(--admin-text-primary);
+    height: 100%;
+  }
+
+  .ant-input-affix-wrapper {
+    background-color: var(--admin-bg-secondary) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+    border-radius: var(--border-radius-button) !important;
   }
 
   .ant-menu-item {
@@ -686,4 +696,16 @@ p {
 .ant-form-item-explain,
 .ant-form-item-extra {
   color: var(--admin-text-secondary) !important;
+}
+
+
+@media (max-width: 768px) {
+
+  /* Sidebar & Sider Menu */
+  .ant-layout-sider {
+    // background: var(--admin-bg-secondary) !important;
+    // flex: 0 0 60px;
+    // min-width: 60px;
+    // max-width: 60px;
+  }
 }

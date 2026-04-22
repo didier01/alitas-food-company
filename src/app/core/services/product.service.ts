@@ -77,7 +77,8 @@ export class ProductService extends BaseSupabaseService<Product> {
         modifier_groups: p.modifier_groups?.map(group => ({
           ...group,
           options: group.options 
-        })).filter(group => group.options && group.options.length > 0)
+        })).filter(group => group.options && group.options.length > 0),
+        isCombo: false
       }));
 
     // Mapping combos to a product-like interface for the menu display
@@ -102,7 +103,8 @@ export class ProductService extends BaseSupabaseService<Product> {
           const match = c.included_products?.find(ip => ip.id === p.id);
           return acc + (match ? p.price * match.quantity : 0);
         }, 0),
-        show_savings: c.show_savings
+        show_savings: c.show_savings,
+        isCombo: true
       } as any)); 
 
     let combined: any[] = [];

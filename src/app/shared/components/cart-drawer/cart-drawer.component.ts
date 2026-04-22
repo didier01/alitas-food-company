@@ -70,14 +70,17 @@ export class CartDrawerComponent {
       customer_phone: this.customer_phone,
       total_amount: this.cartService.totalAmount(),
       status: 'PENDIENTE',
-      items: this.cartService.items().map(item => ({
-        product_id: item.product.id,
-        product_name: item.product.name,
-        quantity: item.quantity,
-        unit_price: item.product.price, // Base price
-        subtotal: item.totalPrice,
-        options_json: item.selectedOptions
-      }))
+      items: this.cartService.items().map(item => {
+        const prod = item.product as any;
+        return {
+          product_id: prod.isCombo ? null : prod.id,
+          product_name: prod.name,
+          quantity: item.quantity,
+          unit_price: prod.price,
+          subtotal: item.totalPrice,
+          options_json: item.selectedOptions
+        };
+      })
     };
 
     // Save to Database
@@ -91,7 +94,7 @@ export class CartDrawerComponent {
           this.deliveryAddress
         );
 
-        window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
+        // window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
 
         this.cartService.clearCart();
         this.isSaving = false;

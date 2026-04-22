@@ -96,20 +96,23 @@
 
         <div class="summary-lines">
             <div class="summary-row">
-                <span>Subtotal</span>
+                <span>Total</span>
                 <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
             </div>
-            <div class="summary-row shipping">
+            <!-- <div class="summary-row shipping">
                 <span>Envío</span>
                 <span>{{ shippingPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-            </div>
+            </div> -->
         </div>
 
         <button nz-button nzType="primary" class="btn-confirm" [nzLoading]="isSaving" (click)="checkout()">
             <span nz-icon nzType="shopping-cart"></span>
             Confirmar Pedido
         </button>
-        <div class="estimated-time">TIEMPO ESTIMADO: 35-45 MIN</div>
+        <div class="estimated-time">Tiempo de entrega: 35-45 MIN
+            <br>
+            <span>Valor del domicilio no incluido en el total.</span>
+        </div>
         } @else {
         <div class="summary-lines">
             <div class="summary-row">

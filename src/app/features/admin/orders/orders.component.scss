@@ -32,13 +32,31 @@
   }
 }
 
+@media (max-width: 768px) {
+  .orders-container {
+    padding: 12px;
+    
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+  }
+}
+
 :host ::ng-deep {
   .order-details-modal {
     color: rgba(255, 255, 255, 0.85);
 
+    .order-info-section {
+      margin-bottom: 20px;
+      p { margin-bottom: 4px; }
+    }
+
     hr {
       border: 0;
-      border-top: 1px solid #444;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
       margin: 15px 0;
     }
 
@@ -47,28 +65,53 @@
     }
 
     .detail-item {
-      margin-bottom: 12px;
+      margin-bottom: 16px;
 
       .item-header {
         display: flex;
         justify-content: space-between;
         font-size: 1rem;
+        
+        strong { color: #fff; }
+        .item-price { color: #FFB800; font-weight: 500; }
       }
 
       .item-opts {
         font-size: 0.85rem;
-        color: #8c8c8c;
-        margin-top: 2px;
+        color: #aaa;
+        margin-top: 4px;
         padding-left: 20px;
+        font-style: italic;
       }
     }
 
     .total-line {
       display: flex;
       justify-content: space-between;
-      font-size: 1.2rem;
-      color: var(--primary-color);
-      margin-top: 10px;
+      font-size: 1.3rem;
+      color: #FFB800;
+      margin-top: 15px;
+      padding-top: 10px;
+      
+      .grand-total {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.order-details-modal-wrapper {
+  .ant-modal-content {
+    background-color: var(--admin-bg-card) !important;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+  }
+  .ant-modal-header {
+    background-color: var(--admin-bg-card) !important;
+    border-bottom: 1px solid var(--admin-border);
+    
+    .ant-modal-title {
+      color: #FFB800 !important;
     }
   }
 }

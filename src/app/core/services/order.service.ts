@@ -46,6 +46,10 @@ export class OrderService extends BaseSupabaseService<Order> {
         .single()
     ).pipe(
       switchMap(res => {
+          if (res.error) {
+            console.error('Error creating order header:', res.error);
+            throw res.error;
+          }
           const newOrder = res.data;
           if (!newOrder || !items || items.length === 0) return of(newOrder);
           
@@ -58,8 +62,15 @@ export class OrderService extends BaseSupabaseService<Order> {
             this.supabase.getClient()
               .from('order_items')
               .insert(itemsToSave)
+              .select()
           ).pipe(
-            map(() => ({ ...newOrder, items }))
+            map(itemsRes => {
+              if (itemsRes.error) {
+                console.error('Error saving order items:', itemsRes.error);
+                throw itemsRes.error;
+              }
+              return { ...newOrder, items };
+            })
           );
       })
     );
