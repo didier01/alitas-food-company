@@ -87,8 +87,22 @@
         <nz-form-label nzRequired>Rol de Acceso</nz-form-label>
         <nz-form-control>
           <nz-select formControlName="role">
+            <nz-option nzValue="mesero" nzLabel="Mesero (Toma pedidos)"></nz-option>
+            <nz-option nzValue="cajero" nzLabel="Cajero (Gestiona pedidos)"></nz-option>
             <nz-option nzValue="admin" nzLabel="Administrador (Sedes, Productos, etc)"></nz-option>
             <nz-option nzValue="superadmin" nzLabel="Super Administrador (Acceso Total)"></nz-option>
+            <nz-option nzValue="cocinero" nzLabel="Cocinero (Gestión de cocina)"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>Sedes Asignadas</nz-form-label>
+        <nz-form-control nzErrorTip="Selecciona al menos una sede">
+          <nz-select formControlName="venue_ids" nzMode="multiple" nzPlaceHolder="Seleccionar sedes">
+            @for (v of venues; track v.id) {
+            <nz-option [nzValue]="v.id" [nzLabel]="v.name"></nz-option>
+            }
           </nz-select>
         </nz-form-control>
       </nz-form-item>

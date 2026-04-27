@@ -6,5 +6,5 @@ import { BaseSupabaseService } from './base-supabase.service';
   providedIn: 'root'
 })
 export class UserService extends BaseSupabaseService<User> {
-  protected override table = 'users';
+  protected override table = 'profiles';
 }

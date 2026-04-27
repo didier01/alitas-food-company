@@ -24,8 +24,27 @@ export class AdminLayoutComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
+  get user() {
+    return this.authService.currentUser();
+  }
+
+  canViewConfig(): boolean {
+    const role = this.user?.role;
+    return role === 'admin' || role === 'superadmin';
+  }
+
+  canManageOrders(): boolean {
+    const role = this.user?.role;
+    return role === 'admin' || role === 'superadmin' || role === 'cajero';
+  }
+
+  canAccessPOS(): boolean {
+    const role = this.user?.role;
+    return role === 'admin' || role === 'superadmin' || role === 'mesero';
+  }
+
   isSuperAdmin(): boolean {
-    return this.authService.currentUser()?.role === 'superadmin';
+    return this.user?.role === 'superadmin';
   }
 
   logout() {

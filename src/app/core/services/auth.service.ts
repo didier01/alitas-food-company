@@ -1,56 +1,83 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { User } from '../models/user.model';
-import { map, Observable, tap } from 'rxjs';
-import { UserService } from './user.service';
+import { from, map, Observable, switchMap, tap, of } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userService = inject(UserService);
+  private supabase = inject(SupabaseService);
 
-  // Signal global del usuario
+  // Signal global del usuario (perfil completo)
   currentUser = signal<User | null>(null);
 
   constructor() {
-    this.loadUserFromStorage();
+    this.refreshSession();
   }
 
-  private loadUserFromStorage() {
-    const userStr = localStorage.getItem('alitas_user');
-    if (userStr) {
-      this.currentUser.set(JSON.parse(userStr));
+  private async refreshSession() {
+    const client = this.supabase.getClient();
+    const { data: { session } } = await client.auth.getSession();
+
+    if (session?.user) {
+      this.loadProfile(session.user.id).subscribe();
     }
   }
 
-  login(email: string, password: string): Observable<User> {
-    return this.userService.getAll().pipe(
-      map(usuarios => {
-        const user = usuarios.find(u => u.email === email && u.active);
-        if (user && password !== '') { 
-          return user;
+  loadProfile(userId: string): Observable<User | null> {
+    return from(
+      this.supabase.getClient()
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error && error.code === 'PGRST116') {
+          console.warn('Perfil no encontrado para el usuario:', userId);
+          return null;
         }
-        throw new Error('Credenciales inválidas');
+        if (error) throw error;
+        return data as User;
       }),
       tap(user => {
-        this.currentUser.set(user);
-        localStorage.setItem('alitas_token', 'mock_jwt_token_123'); 
-        localStorage.setItem('alitas_user', JSON.stringify(user));
+        if (user) {
+          this.currentUser.set(user);
+        } else {
+          // Si no hay perfil, creamos un objeto temporal básico para no romper la app
+          this.currentUser.set({
+            id: userId,
+            name: 'Usuario sin Perfil',
+            email: '',
+            role: 'mesero',
+            active: false
+          });
+        }
       })
     );
   }
 
-  logout() {
+  login(email: string, password: string): Observable<User | null> {
+    return from(
+      this.supabase.getClient().auth.signInWithPassword({ email, password })
+    ).pipe(
+      switchMap(({ data, error }) => {
+        if (error) throw error;
+        if (!data.user) throw new Error('No user found after login');
+        return this.loadProfile(data.user.id);
+      })
+    );
+  }
+
+  async logout() {
+    await this.supabase.getClient().auth.signOut();
     this.currentUser.set(null);
-    localStorage.removeItem('alitas_token');
+    localStorage.removeItem('alitas_token'); // Limpieza legacy
     localStorage.removeItem('alitas_user');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('alitas_token');
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('alitas_token');
+    return this.currentUser() !== null;
   }
 }

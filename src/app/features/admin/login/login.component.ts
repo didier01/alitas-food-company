@@ -38,7 +38,7 @@ export class LoginComponent {
 
       this.authService.login(email, password).subscribe({
         next: (user) => {
-          this.message.success(`Bienvenido, ${user.name}`);
+          this.message.success(`Bienvenido, ${user?.name}`);
           this.router.navigate(['/admin/dashboard']);
         },
         error: (err) => {

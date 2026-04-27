@@ -19,6 +19,8 @@ import { User } from '../../../core/models/user.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 import { UserService } from '../../../core/services/user.service';
+import { VenueService } from '../../../core/services/venue.service';
+import { Venue } from '../../../core/models/venue.model';
 
 @Component({
   selector: 'app-users',
@@ -34,10 +36,12 @@ import { UserService } from '../../../core/services/user.service';
 })
 export class UsersComponent implements OnInit {
   userService = inject(UserService);
+  venueService = inject(VenueService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
 
   users: User[] = [];
+  venues: Venue[] = [];
   loadingData = true;
   loadingAction = false;
   modalVisible = false;
@@ -48,14 +52,20 @@ export class UsersComponent implements OnInit {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: [''], // requerido al crear, manejado dinamicamente
-      role: ['admin', Validators.required],
+      password: [''],
+      role: ['mesero', Validators.required],
+      venue_ids: [[]],
       active: [true]
     });
   }
 
   ngOnInit() {
     this.loadUsers();
+    this.loadVenues();
+  }
+
+  loadVenues() {
+    this.venueService.getAll().subscribe(data => this.venues = data);
   }
 
   loadUsers() {
@@ -74,7 +84,7 @@ export class UsersComponent implements OnInit {
 
   openModal() {
     this.editingId = null;
-    this.userForm.reset({ active: true, role: 'admin' });
+    this.userForm.reset({ active: true, role: 'mesero', venue_ids: [] });
     this.userForm.get('password')?.setValidators(Validators.required);
     this.userForm.get('password')?.updateValueAndValidity();
     this.modalVisible = true;
@@ -86,7 +96,8 @@ export class UsersComponent implements OnInit {
       name: user.name,
       email: user.email,
       role: user.role,
-      active: user.active
+      active: user.active,
+      venue_ids: user.venue_ids || []
     });
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('password')?.updateValueAndValidity();
@@ -107,7 +118,8 @@ export class UsersComponent implements OnInit {
       name: formVal.name,
       email: formVal.email,
       role: formVal.role,
-      active: formVal.active
+      active: formVal.active,
+      venue_ids: formVal.venue_ids
     };
 
     const action = this.editingId

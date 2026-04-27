@@ -18,13 +18,13 @@
               <span>Dashboard</span>
             </a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="canAccessPOS()">
             <a routerLink="/admin/pos">
               <span nz-icon nzType="wallet"></span>
               <span style="color: var(--california-500); font-weight: bold;">Punto de Venta (POS)</span>
             </a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="canManageOrders()">
             <a routerLink="/admin/orders">
               <span nz-icon nzType="shopping-cart"></span>
               <span>Pedidos</span>
@@ -35,7 +35,7 @@
 
       <!-- Grupo: Catálogo -->
       <li nz-submenu nz-tooltip nzTooltipTitle="Configuración del Menú" nzTitle="Configuración del Menú"
-        nzIcon="appstore" [nzOpen]="true">
+        nzIcon="appstore" [nzOpen]="true" *ngIf="canViewConfig()">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/categories">
@@ -83,7 +83,7 @@
       </li>
 
       <!-- Grupo: Logística -->
-      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop">
+      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop" *ngIf="isSuperAdmin()">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/venues">

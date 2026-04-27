@@ -3,8 +3,8 @@ import { provideRouter, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { mockInterceptor } from './core/interceptors/mock.interceptor';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+
+
 
 import { NZ_I18N, es_ES } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
@@ -86,7 +86,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
-    provideHttpClient(withInterceptors([authInterceptor, mockInterceptor])),
+    provideHttpClient(withInterceptors([])),
     provideAnimationsAsync(),
     provideNzIcons(icons),
     { provide: NZ_I18N, useValue: es_ES },

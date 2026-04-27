@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -44,10 +43,14 @@ export const routes: Routes = [
       },
       {
         path: 'pos',
+        canActivate: [authGuard],
+        data: { roles: ['admin', 'superadmin', 'mesero'] },
         loadComponent: () => import('./features/admin/pos/pos.component').then(c => c.PosComponent)
       },
       {
         path: 'orders',
+        canActivate: [authGuard],
+        data: { roles: ['admin', 'superadmin', 'cajero'] },
         loadComponent: () => import('./features/admin/orders/orders.component').then(c => c.OrdersComponent)
       },
       {
@@ -84,11 +87,14 @@ export const routes: Routes = [
       },
       {
         path: 'inventory',
+        canActivate: [authGuard],
+        data: { roles: ['admin', 'superadmin'] },
         loadComponent: () => import('./features/admin/ingredients/ingredients.component').then(c => c.IngredientsComponent)
       },
       {
         path: 'users',
-        canActivate: [roleGuard],
+        canActivate: [authGuard],
+        data: { roles: ['superadmin'] },
         loadComponent: () => import('./features/admin/users/users.component').then(c => c.UsersComponent)
       }
     ]
