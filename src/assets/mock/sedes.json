@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sede-1",
+    "nombre": "Alistas - El Poblado",
+    "direccion": "Medellin, El Poblado",
+    "telefono": "+57 300 000 0001",
+    "whatsapp": "+57 300 000 0000",
+    "coordenadas": {
+      "lat": 6.2091,
+      "lng": -75.5684
+    },
+    "horario": {
+      "apertura": "11:00",
+      "cierre": "22:00",
+      "diasActivos": ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+    },
+    "activa": true,
+    "imagenUrl": "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": "sede-2",
+    "nombre": "Alistas - Laureles",
+    "direccion": "Medellin, Laureles",
+    "telefono": "+57 300 000 0002",
+    "whatsapp": "+57 300 000 0000",
+    "coordenadas": {
+      "lat": 6.2442,
+      "lng": -75.5985
+    },
+    "horario": {
+      "apertura": "11:00",
+      "cierre": "22:00",
+      "diasActivos": ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+    },
+    "activa": true,
+    "imagenUrl": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=600&auto=format&fit=crop"
+  }
+]
