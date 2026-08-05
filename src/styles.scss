@@ -6,7 +6,8 @@
 /* Reset base y Tokens Visuales */
 :root {
   /* Sitio Público: Tema oscuro fijo y Brand colors */
-  --brand-primary: #FF6B35;
+  // --brand-primary: #FF6B35;
+  --brand-primary: #FFD700;
   --brand-secondary: #FFD700;
 
   --public-bg-primary: #0D0D0D;
@@ -45,7 +46,7 @@
   --admin-text-primary: #141414;
   --admin-text-secondary: #595959;
   --admin-border: #D9D9D9;
-  --admin-accent: #FF6B35;
+  --admin-accent: #FFD700;
   --scrollbar-thumb: rgba(0, 0, 0, 0.1);
   --scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
 }

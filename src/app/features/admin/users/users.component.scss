@@ -15,25 +15,23 @@
   gap: 8px;
 }
 
-.preview-img {
-  margin-top: 10px;
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid var(--admin-border);
-}
-
-.drawer-footer {
+.info-alert {
+  background-color: rgba(114, 46, 209, 0.1);
+  border: 1px solid #722ed1;
+  color: var(--admin-text-primary);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--admin-border);
+  align-items: center;
+  gap: 10px;
 }
 
-/* Estilos tabla adaptables */
+.info-alert [nz-icon] {
+  color: #722ed1;
+  font-size: 1.2rem;
+}
+
 ::ng-deep .ant-table {
   background: transparent !important;
   color: var(--admin-text-primary);

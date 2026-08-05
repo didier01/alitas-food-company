@@ -80,4 +80,8 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.currentUser() !== null;
   }
+
+  getToken(): string | null {
+    return localStorage.getItem('alitas_token');
+  }
 }

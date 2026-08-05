@@ -85,12 +85,12 @@
       <!-- Grupo: Logística -->
       <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop" *ngIf="isSuperAdmin()">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <!-- <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/venues">
               <span nz-icon nzType="shop"></span>
               <span>Sedes</span>
             </a>
-          </li>
+          </li> -->
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/inventory">
               <span nz-icon nzType="database"></span>
@@ -121,7 +121,7 @@
           (click)="isCollapsed = !isCollapsed"></span>
         <div class="header-actions">
           <span class="user-greeting">Hola, {{ authService.currentUser()?.name }}!</span>
-          <!-- <app-theme-toggle></app-theme-toggle> -->
+          <app-theme-toggle></app-theme-toggle>
           <button class="logout-btn" (click)="logout()">
             <span nz-icon nzType="logout"></span>
           </button>
