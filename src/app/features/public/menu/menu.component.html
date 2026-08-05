@@ -71,7 +71,7 @@
             <div class="filter-tags">
               @for (tag of groupedTags()[group]; track tag.tag) {
                 <nz-tag 
-                  [nzColor]="isTagSelected(tag.tag) ? '#ff5722' : 'default'"
+                  [nzColor]="isTagSelected(tag.tag) ? 'gold' : 'default'"
                   class="filter-tag-chip"
                   (click)="toggleTag(tag.tag)">
                   {{ tag.tag }}

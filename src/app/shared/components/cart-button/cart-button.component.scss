@@ -51,8 +51,8 @@
 
     .bag-icon {
         font-size: 24px;
-        color: #FF7A00; // Primary orange
-        filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.3));
+        color: var(--brand-primary);
+        filter: drop-shadow(0 0 8px var(--brand-primary));
     }
 
     .badge-dot {
@@ -95,21 +95,22 @@
 }
 
 .pay-btn {
-    background: linear-gradient(135deg, #FF7A00 0%, #FF4D00 100%);
+    background: var(--brand-primary);
     border: none;
     border-radius: 100px;
     padding: 0 32px;
     height: 48px;
-    color: #fff;
+    color: #000;
     font-weight: 700;
     font-size: 15px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(255, 77, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
     &:hover {
-        background: linear-gradient(135deg, #FF8A20 0%, #FF5D10 100%);
-        box-shadow: 0 6px 16px rgba(255, 77, 0, 0.4);
-        color: #fff;
+        background: var(--brand-primary);
+        opacity: 0.9;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        color: #000;
     }
 }
 

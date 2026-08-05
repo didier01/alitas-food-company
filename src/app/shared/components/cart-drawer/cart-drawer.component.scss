@@ -19,7 +19,7 @@
 
         .bag-icon {
             font-size: 24px;
-            color: #FFB800; // Yellow-ish orange
+            color: var(--brand-primary);
         }
 
         h3 {
@@ -148,7 +148,7 @@
 
 .item-price {
     font-weight: 700;
-    color: #FFB800; // Yellow price correctly matching request
+    color: var(--brand-primary);
     font-size: 16px;
 }
 
@@ -248,7 +248,7 @@
             right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #FFB800;
+            color: var(--brand-primary);
             font-size: 16px;
         }
     }
@@ -272,7 +272,7 @@
 
         &.shipping {
             .price-val {
-                color: #FFB800;
+                color: var(--brand-primary);
                 font-weight: 700;
             }
         }
@@ -286,7 +286,7 @@
     .btn-confirm {
         width: 100%;
         height: auto;
-        background: #FFB800 !important; // Yellow as requested
+        background: var(--brand-primary) !important;
         border: none;
         border-radius: 10px;
         color: #000;
@@ -318,8 +318,8 @@
     }
 
     .dine-in-message {
-        background: rgba(255, 184, 0, 0.1); // Yellow-ish background
-        border: 1px solid rgba(255, 184, 0, 0.2); // Yellow-ish border
+        background: rgba(255, 215, 0, 0.1);
+        border: 1px solid var(--brand-primary);
         border-radius: 12px;
         padding: 16px;
         display: flex;
@@ -328,7 +328,7 @@
         margin-top: 12px;
 
         span {
-            color: #FFB800; // Warning yellow
+            color: var(--brand-primary);
             font-size: 20px;
             margin-top: 2px;
         }

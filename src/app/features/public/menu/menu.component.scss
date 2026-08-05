@@ -8,7 +8,7 @@
 
 .hero-section {
   position: relative;
-  height: 350px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
   overflow: hidden;
 
   @media (max-width: 768px) {
-    height: 250px;
+    height: 140px;
   }
 }
 
@@ -41,29 +41,29 @@
 }
 
 .page-title {
-  font-size: 3.5rem;
+  font-size: 2.2rem;
   font-weight: 800;
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 2px;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 768px) {
-    font-size: 2.2rem;
+    font-size: 1.5rem;
   }
 }
 
 .subtitle {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 500;
   max-width: 600px;
   margin: 0 auto;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -189,7 +189,7 @@
 
 .cat-chip.active {
   background: var(--brand-primary);
-  color: white;
+  color: var(--public-bg-card);
   border-color: var(--brand-primary);
 }
 

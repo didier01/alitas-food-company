@@ -73,7 +73,7 @@
         font-size: 1rem;
         
         strong { color: #fff; }
-        .item-price { color: #FFB800; font-weight: 500; }
+        .item-price { color: var(--admin-accent); font-weight: 500; }
       }
 
       .item-opts {
@@ -89,7 +89,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 1.3rem;
-      color: #FFB800;
+      color: var(--admin-accent);
       margin-top: 15px;
       padding-top: 10px;
       
@@ -111,7 +111,7 @@
     border-bottom: 1px solid var(--admin-border);
     
     .ant-modal-title {
-      color: #FFB800 !important;
+      color: var(--admin-accent) !important;
     }
   }
 }

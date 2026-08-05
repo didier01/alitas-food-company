@@ -65,11 +65,11 @@
   }
 
   &.active {
-    background-color: #FFB800;
+    background-color: var(--admin-accent);
     /* California 500 */
     color: #141414;
     /* Pure dark */
-    border-color: #FFB800;
+    border-color: var(--admin-accent);
   }
 }
 
@@ -99,7 +99,7 @@
 
   &:hover {
     transform: translateY(-2px);
-    border-color: #FFB800;
+    border-color: var(--admin-accent);
   }
 
   &:active {
@@ -135,7 +135,7 @@
     .price {
       font-size: 0.9rem;
       font-weight: 700;
-      color: #FFB800;
+      color: var(--admin-accent);
     }
   }
 }
@@ -194,7 +194,7 @@
 
   .item-qty {
     font-weight: 700;
-    color: #FFB800;
+    color: var(--admin-accent);
     font-size: 0.9rem;
   }
 
@@ -278,7 +278,7 @@
       font-size: 0.85rem;
 
       &:focus {
-        border-color: #FFB800;
+        border-color: var(--admin-accent);
       }
     }
   }
@@ -297,7 +297,7 @@
     color: var(--text-primary);
 
     .total-amount {
-      color: #FFB800;
+      color: var(--admin-accent);
       font-size: 1.3rem;
     }
   }
@@ -425,11 +425,11 @@
 
       .cart-icon {
         font-size: 1.5rem;
-        color: #FFB800;
+        color: var(--admin-accent);
       }
       
       .badge {
-        background-color: #FFB800;
+        background-color: var(--admin-accent);
         color: #141414;
         font-weight: bold;
         padding: 2px 6px;
@@ -447,7 +447,7 @@
     .trigger-price {
       font-weight: 700;
       font-size: 1.2rem;
-      color: #FFB800;
+      color: var(--admin-accent);
     }
   }
 }
