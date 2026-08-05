@@ -8,7 +8,7 @@ export const routes: Routes = [
     path: '',
     component: PublicLayoutComponent,
     children: [
-      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+      { path: '', redirectTo: 'menu', pathMatch: 'full' },
       {
         path: 'inicio',
         loadComponent: () => import('./features/public/home/home.component').then(c => c.HomeComponent)
