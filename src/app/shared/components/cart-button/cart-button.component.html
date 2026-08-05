@@ -6,17 +6,13 @@
                 <span class="badge-dot">{{ cartService.count() }}</span>
             </div>
             <div class="price-info">
-                <span class="total-label">TOTAL</span>
+                <span class="total-label">MI SELECCIÓN</span>
                 <span class="price-value">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0'
                     }}</span>
             </div>
         </div>
         <button nz-button class="pay-btn">
-            @if(orderModeService.mode() === 'dine-in') {
-            Ver Lista
-            } @else {
-            Pagar
-            }
+            Ver Selección
         </button>
     </div>
 </div>

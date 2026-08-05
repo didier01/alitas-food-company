@@ -65,67 +65,17 @@
     <div class="cart-footer">
 
 
-        @if (orderModeService.mode() === 'delivery') {
-        <!-- Delivery Section -->
-        <nz-divider class="section-title" nzText="Datos de entrega" nzSize="small" />
-
-        <div class="delivery-form">
-
-            <div class="input-group">
-                <label>Nombre completo</label>
-                <div class="input-wrapper">
-                    <input type="text" [(ngModel)]="customerName" placeholder="Gourmet Explorer">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Teléfono</label>
-                <div class="input-wrapper">
-                    <input type="tel" [(ngModel)]="customer_phone" placeholder="+57 300 000 0000">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Dirección de envío</label>
-                <div class="input-wrapper has-icon">
-                    <input type="text" [(ngModel)]="deliveryAddress" placeholder="Calle 123 #45-67">
-                    <span nz-icon nzType="environment" class="input-icon"></span>
-                </div>
-            </div>
-        </div>
-
         <div class="summary-lines">
             <div class="summary-row">
-                <span>Total</span>
-                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-            </div>
-            <!-- <div class="summary-row shipping">
-                <span>Envío</span>
-                <span>{{ shippingPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-            </div> -->
-        </div>
-
-        <button nz-button nzType="primary" class="btn-confirm" [nzLoading]="isSaving" (click)="checkout()">
-            <span nz-icon nzType="shopping-cart"></span>
-            Confirmar Pedido
-        </button>
-        <div class="estimated-time">Tiempo de entrega: 35-45 MIN
-            <br>
-            <span>Valor del domicilio no incluido en el total.</span>
-        </div>
-        } @else {
-        <div class="summary-lines">
-            <div class="summary-row">
-                <span>Total Estimado</span>
-                <span>{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                <span style="font-weight: 700; font-size: 1.1rem; color: #fff;">Total Estimado de la Cuenta</span>
+                <span style="font-weight: 700; font-size: 1.2rem; color: var(--brand-primary);">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
             </div>
         </div>
 
         <div class="dine-in-message">
             <span nz-icon nzType="info-circle" nzTheme="outline"></span>
-            <p>¡Excelente elección! Muestra esta pantalla a tu mesero para tomar el pedido.</p>
+            <p><strong>¡Excelente elección!</strong><br>Muestra este resumen en tu pantalla a tu mesero al momento de pedir en tu mesa.</p>
         </div>
-        }
     </div>
     }
 </div>

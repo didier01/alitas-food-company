@@ -158,11 +158,15 @@ export class VenuesComponent implements OnInit {
   }
 
   deleteSede(sede: Venue) {
-    // Para simplificar desactivamos en lugar de borrar permanente
-    sede.active = false;
-    this.venueService.update(sede).subscribe(() => {
-      this.message.success('Sede desactivada correctamente');
-      this.loadSedes();
+    this.venueService.delete(sede.id).subscribe({
+      next: () => {
+        this.message.success('Sede eliminada permanentemente');
+        this.loadSedes();
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('Error al eliminar la sede.');
+      }
     });
   }
 

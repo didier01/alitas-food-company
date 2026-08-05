@@ -9,8 +9,8 @@
     </div>
     <ul nz-menu [nzTheme]="themeService.temaAdmin()" nzMode="inline" class="menu-sider">
 
-      <!-- Grupo: Ventas -->
-      <li nz-submenu nz-tooltip nzTooltipTitle="Ventas y Monitoreo" nzTitle="Ventas y Monitoreo" nzIcon="line-chart">
+      <!-- Grupo: Ventas (Solo Dashboard en MVP) -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="General" nzTitle="General" nzIcon="line-chart" [nzOpen]="true">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/dashboard">
@@ -18,24 +18,24 @@
               <span>Dashboard</span>
             </a>
           </li>
-          <li nz-menu-item nzMatchRouter *ngIf="canAccessPOS()">
+          <!-- <li nz-menu-item nzMatchRouter *ngIf="canAccessPOS()">
             <a routerLink="/admin/pos">
               <span nz-icon nzType="wallet"></span>
               <span style="color: var(--california-500); font-weight: bold;">Punto de Venta (POS)</span>
             </a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="canManageOrders()">
+          </li> -->
+          <!-- <li nz-menu-item nzMatchRouter *ngIf="canManageOrders()">
             <a routerLink="/admin/orders">
               <span nz-icon nzType="shopping-cart"></span>
               <span>Pedidos</span>
             </a>
-          </li>
+          </li> -->
         </ul>
       </li>
 
-      <!-- Grupo: Catálogo -->
-      <li nz-submenu nz-tooltip nzTooltipTitle="Configuración del Menú" nzTitle="Configuración del Menú"
-        nzIcon="appstore" [nzOpen]="true" *ngIf="canViewConfig()">
+      <!-- Grupo: Carta Digital -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de la Carta" nzTitle="Gestión de la Carta"
+        nzIcon="appstore" [nzOpen]="true">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/categories">
@@ -56,52 +56,46 @@
             </a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/admin/menus">
-              <span nz-icon nzType="appstore"></span>
-              <span>Menús</span>
-            </a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/promotions">
               <span nz-icon nzType="tag"></span>
               <span>Promociones</span>
             </a>
           </li>
           <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/menus">
+              <span nz-icon nzType="appstore"></span>
+              <span>Menús</span>
+            </a>
+          </li>
+          <!-- <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/complements/allergens">
               <span nz-icon nzType="medicine-box"></span>
               <span>Alérgenos</span>
             </a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
+          </li> -->
+          <!-- <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/complements/modifiers">
               <span nz-icon nzType="plus-square"></span>
               <span>Modificadores</span>
             </a>
-          </li>
+          </li> -->
         </ul>
       </li>
 
       <!-- Grupo: Logística -->
-      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop" *ngIf="isSuperAdmin()">
+      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de Local" nzTitle="Gestión de Local" nzIcon="shop">
         <ul>
-          <!-- <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/venues">
               <span nz-icon nzType="shop"></span>
               <span>Sedes</span>
-            </a>
-          </li> -->
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/admin/inventory">
-              <span nz-icon nzType="database"></span>
-              <span>Inventario (Stock)</span>
             </a>
           </li>
         </ul>
       </li>
 
-      <!-- Grupo: Sistema -->
-      <li nz-submenu nzTitle="Sistema" nzIcon="setting" *ngIf="isSuperAdmin()">
+      <!-- Grupo: Sistema (Deshabilitado en MVP) -->
+      <!-- <li nz-submenu nzTitle="Sistema" nzIcon="setting" *ngIf="isSuperAdmin()">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/users">
@@ -110,7 +104,7 @@
             </a>
           </li>
         </ul>
-      </li>
+      </li> -->
     </ul>
   </nz-sider>
 
