@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Order } from '../../../core/models/order.model';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { AnalyticsService } from '../../../core/services/analytics.service';
+
 
 @Component({
   selector: 'app-cart-drawer',
@@ -29,20 +31,24 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
   templateUrl: './cart-drawer.component.html',
   styleUrls: ['./cart-drawer.component.scss']
 })
-export class CartDrawerComponent {
+export class CartDrawerComponent implements OnInit {
   cartService = inject(CartService);
   venueService = inject(VenueService);
   orderService = inject(OrderService);
   orderModeService = inject(OrderModeService);
   message = inject(NzMessageService);
   drawerRef = inject(NzDrawerRef);
-
+  analyticsService = inject(AnalyticsService);
 
   customerName = '';
   deliveryAddress = '';
   customer_phone = '';
   shippingPrice = 4000;
   isSaving = false;
+
+  ngOnInit() {
+    this.analyticsService.trackViewSelectionSummary(this.cartService.count(), this.cartService.totalAmount());
+  }
 
   close() {
     this.drawerRef.close();

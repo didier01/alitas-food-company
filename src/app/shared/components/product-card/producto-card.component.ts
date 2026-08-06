@@ -10,6 +10,8 @@ import { VenueService } from '../../../core/services/venue.service';
 import { ProductSelectionModalComponent } from './../modals/product-selection-modal.component';
 import { CartService } from '../../../core/services/cart.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { AnalyticsService } from '../../../core/services/analytics.service';
+
 
 @Component({
   selector: 'app-producto-card',
@@ -26,27 +28,30 @@ export class ProductoCardComponent {
   modalService = inject(NzModalService);
   cartService = inject(CartService);
   message = inject(NzMessageService);
+  analyticsService = inject(AnalyticsService);
 
   addToCartDirectly() {
     if (this.producto.modifier_groups && this.producto.modifier_groups.length > 0) {
       this.openSelectionModal();
     } else {
       this.cartService.addItem(this.producto, []);
+      this.analyticsService.trackAddToSelection(this.producto.name, this.producto.price);
       this.message.success(`${this.producto.name} añadido al carrito`);
     }
   }
 
   openSelectionModal() {
+    this.analyticsService.trackProductClick(this.producto.name, '', this.producto.price);
+
     const modal = this.modalService.create({
       nzTitle: `Personalizar ${this.producto.name}`,
       nzContent: ProductSelectionModalComponent,
-      nzData: { product: this.producto }, // NZ-ZORRO 17+ uses nzData, but we can also use componentParams in older versions
+      nzData: { product: this.producto },
       nzFooter: null,
       nzWidth: 440,
-      nzClassName: 'dark-modal' // Optional: if we have dark theme classes
+      nzClassName: 'dark-modal'
     });
 
-    // Handle data passing for standalone components manually if nzData is not enough
     const instance = modal.getContentComponent();
     instance.product = this.producto;
   }

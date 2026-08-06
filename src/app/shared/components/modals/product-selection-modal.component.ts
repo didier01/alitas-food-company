@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
@@ -13,6 +13,8 @@ import { CartService } from '../../../core/services/cart.service';
 import { AllergenService } from '../../../core/services/allergen.service';
 import { Allergen } from '../../../core/models/allergen.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { AnalyticsService } from '../../../core/services/analytics.service';
+
 
 @Component({
   selector: 'app-product-selection-modal',
@@ -24,23 +26,33 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   templateUrl: './product-selection-modal.component.html',
   styleUrl: './product-selection-modal.component.scss'
 })
-export class ProductSelectionModalComponent implements OnInit {
+export class ProductSelectionModalComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
 
   modal = inject(NzModalRef);
   allergenService = inject(AllergenService);
   cartService = inject(CartService);
   message = inject(NzMessageService);
+  analyticsService = inject(AnalyticsService);
   cdr = inject(ChangeDetectorRef);
 
   selections: any = {};
   totalPrice = 0;
   allergens: Allergen[] = [];
+  private startTime = 0;
 
   ngOnInit() {
+    this.startTime = Date.now();
     this.totalPrice = this.product.price;
     this.initializeSelections();
     this.loadAllergens();
+  }
+
+  ngOnDestroy() {
+    if (this.startTime > 0 && this.product) {
+      const durationSeconds = Math.max(1, Math.round((Date.now() - this.startTime) / 1000));
+      this.analyticsService.trackModalViewDuration(this.product.name, durationSeconds);
+    }
   }
 
   loadAllergens() {
@@ -60,10 +72,8 @@ export class ProductSelectionModalComponent implements OnInit {
 
     this.product.modifier_groups.forEach((group: AssignedModifierGroup) => {
       if (group.max_selection === 1) {
-        // Radio: single value
         this.selections[group.group_id] = null;
       } else {
-        // Checkbox: object of option IDs
         this.selections[group.group_id] = {};
         group.options?.forEach((opt: ModifierOption) => {
           this.selections[group.group_id][opt.id] = false;
@@ -105,12 +115,10 @@ export class ProductSelectionModalComponent implements OnInit {
       ? this.selections[group.group_id] === opt.id
       : (this.selections[group.group_id] && this.selections[group.group_id][opt.id]);
 
-    // Si NO está seleccionada: mostrar precio si ya se agotaron las gratis
     if (!isSelected) {
       return selectedCount >= group.free_selections;
     }
 
-    // Si ESTÁ seleccionada: mostrar precio solo si se está cobrando por ella
     const selectedOpts = this.getSelectedOptions(group);
     selectedOpts.sort((a, b) => a.price - b.price);
 
@@ -171,6 +179,7 @@ export class ProductSelectionModalComponent implements OnInit {
     });
 
     this.cartService.addItem(this.product, chosenOptions, 1, this.totalPrice);
+    this.analyticsService.trackAddToSelection(this.product.name, this.totalPrice);
     this.message.success(`${this.product.name} añadido al carrito`);
     this.modal.close(true);
   }

@@ -16,6 +16,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon'; import { TagService, TagGroup
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { AnalyticsService } from '../../../core/services/analytics.service';
+
 
 @Component({
   selector: 'app-menu',
@@ -31,6 +33,7 @@ export class MenuComponent implements OnInit {
   venueService = inject(VenueService);
   seoService = inject(SeoService);
   tagService = inject(TagService);
+  analyticsService = inject(AnalyticsService);
 
   categories: Category[] = [];
   loading = signal(true);
@@ -41,7 +44,6 @@ export class MenuComponent implements OnInit {
   activeTagsCount = computed(() => this.productService.selectedTags().length);
 
   constructor() {
-    // Escuchar cambios en la sede seleccionada podría forzar una recarga en una app real, aquí la data la tenemos cargada
     effect(() => {
       console.log('Menu data updated:', this.productService.filteredMenu());
     });
@@ -54,17 +56,15 @@ export class MenuComponent implements OnInit {
       route: '/menu'
     });
 
-    // Al iniciar, cargamos todo o filtramos lo que la app permita para Mocks
     this.categoriaService.getAll().subscribe(cats => {
       this.categories = cats.filter(c => c.active).sort((a, b) => a.sort_order - b.sort_order);
-      this.productService.loadProductsInSignal(); // Carga real la data a la signal
+      this.productService.loadProductsInSignal();
       this.loadTags();
     });
   }
 
   loadTags() {
     this.tagService.getAll().subscribe(tags => {
-      // Agrupar tags por group_name
       const groups = tags.reduce((acc, tag) => {
         if (!acc[tag.group_name]) {
           acc[tag.group_name] = [];
@@ -80,10 +80,13 @@ export class MenuComponent implements OnInit {
 
   onSearchChange(term: string) {
     this.productService.searchFilter.set(term);
+    this.analyticsService.trackSearch(term);
   }
 
   setCategoria(catId: string) {
     this.productService.categoryFilter.set(catId);
+    const catObj = this.categories.find(c => c.id === catId);
+    this.analyticsService.trackCategoryFilter(catObj ? catObj.name : (catId === 'all' ? 'Todas' : catId));
   }
 
   openFilters() {
