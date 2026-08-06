@@ -4,7 +4,6 @@ import { RouterModule, Router } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
@@ -14,7 +13,7 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
   standalone: true,
   imports: [CommonModule, RouterModule,
     NzLayoutModule, NzMenuModule,
-    NzIconModule, ThemeToggleComponent, NzTooltipModule],
+    NzIconModule, NzTooltipModule],
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.scss'
 })

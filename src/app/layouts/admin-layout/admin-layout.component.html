@@ -73,12 +73,12 @@
               <span>Alérgenos</span>
             </a>
           </li>
-          <!-- <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/complements/modifiers">
               <span nz-icon nzType="plus-square"></span>
               <span>Modificadores</span>
             </a>
-          </li> -->
+          </li>
         </ul>
       </li>
 
@@ -89,6 +89,18 @@
             <a routerLink="/admin/venues">
               <span nz-icon nzType="shop"></span>
               <span>Sedes</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Grupo: Soporte & Ayuda -->
+      <li nz-submenu nz-tooltip nzTooltipTitle="Soporte y Ayuda" nzTitle="Soporte y Ayuda" nzIcon="question-circle" [nzOpen]="true">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/help">
+              <span nz-icon nzType="question-circle"></span>
+              <span>Guía de Ayuda</span>
             </a>
           </li>
         </ul>

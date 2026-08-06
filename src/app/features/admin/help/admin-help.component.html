@@ -1,0 +1,222 @@
+<div class="help-container">
+    <div class="help-header">
+        <div>
+            <h1>📖 Guía de Administración</h1>
+            <p>Manual interactivo para la configuración de la carta digital, combos, modificadores y sedes.</p>
+        </div>
+        <button nz-button nzType="primary" (click)="printManual()" class="btn-print">
+            🖨️ Imprimir / Guardar PDF
+        </button>
+    </div>
+
+    <nz-alert nzType="info" nzShowIcon
+        nzMessage="Sincronización en Tiempo Real"
+        nzDescription="Todos los cambios realizados en estas secciones se reflejarán instantáneamente en la carta digital pública que consultan tus clientes."
+        style="margin-bottom: 24px; border-radius: 12px;">
+    </nz-alert>
+
+    <nz-tabs nzType="card" [nzAnimated]="true">
+
+        <!-- Pestaña 1: Categorías -->
+        <nz-tab nzTitle="📂 Categorías">
+            <div class="tab-content">
+                <h2>1. Gestión de Categorías de la Carta</h2>
+                <p>Las categorías organizan la carta digital (ej. <i>Combos, Boneless, Strips de Pollo, Extras, Bebidas</i>). Permiten al cliente filtrar platos rápidamente.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Listado Principal</span>
+                        <img src="assets/guide/categories-table.png" alt="Tabla de Categorías" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Formulario de Registro</span>
+                        <img src="assets/guide/categories-modal.png" alt="Modal Nueva Categoría" />
+                    </div>
+                </div>
+
+                <div class="steps-card">
+                    <h3>Paso a Paso para Crear una Categoría:</h3>
+                    <ol>
+                        <li>En el menú lateral, ingresa a <strong>Gestión de la Carta ➡️ Categorías</strong>.</li>
+                        <li>Haz clic en el botón amarillo <strong><code>+ Nueva Categoría</code></strong>.</li>
+                        <li><strong>Nombre de la Categoría:</strong> Escribe el nombre visible para los clientes (ej: <i>Hamburguesas, Bebidas, Postres</i>).</li>
+                        <li><strong>Estado de Visibilidad:</strong> Activa el interruptor en amarillo para que sea visible de inmediato.</li>
+                        <li>Presiona <strong>Aceptar</strong>.</li>
+                    </ol>
+
+                    <div class="tip-box">
+                        💡 <strong>Reordenamiento Arrastrable:</strong> Puedes cambiar el orden en que aparecen las categorías en la web del cliente arrastrando las filas mediante el ícono de cruz (<code>+</code>) ubicado a la izquierda de cada fila.
+                    </div>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 2: Modificadores -->
+        <nz-tab nzTitle="🧩 Modificadores">
+            <div class="tab-content">
+                <h2>2. Centro de Modificadores (Opciones y Adicionales)</h2>
+                <p>Los modificadores permiten al cliente personalizar su pedido (ej: <i>Elección de Salsas, Tipo de Bebida, Base de Jugo, Acompañamientos</i>).</p>
+
+                <h3>A. Grupos de Modificadores</h3>
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Grupos Creados</span>
+                        <img src="assets/guide/modifiers-groups.png" alt="Grupos de Modificadores" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Nuevo Grupo</span>
+                        <img src="assets/guide/modifiers-modal-group.png" alt="Modal Grupo Modificador" />
+                    </div>
+                </div>
+
+                <h3>B. Catálogo Global de Opciones</h3>
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Catálogo de Opciones</span>
+                        <img src="assets/guide/modifiers-catalog.png" alt="Catálogo de Opciones" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Nueva Opción</span>
+                        <img src="assets/guide/modifiers-modal-option.png" alt="Modal Nueva Opción" />
+                    </div>
+                </div>
+
+                <div class="steps-card">
+                    <h3>Paso a Paso:</h3>
+                    <ol>
+                        <li>Primero crea el <strong>Catálogo de Opciones</strong> en la segunda pestaña (ej: <i>Salsa BBQ ($3.000), Agua ($0), Leche ($2.000)</i>).</li>
+                        <li>Luego crea el <strong>Grupo de Modificadores</strong> en la primera pestaña (ej: <i>Salsas, Base de Jugo</i>).</li>
+                        <li>Vincula las opciones al grupo correspondiente definiendo el mínimo y máximo de selecciones permitidas.</li>
+                    </ol>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 3: Alérgenos -->
+        <nz-tab nzTitle="⚠️ Alérgenos">
+            <div class="tab-content">
+                <h2>3. Gestión de Alérgenos Alimentarios</h2>
+                <p>Informa a los clientes sobre ingredientes sensibles que puedan causar reacciones alérgicas.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Listado de Alérgenos</span>
+                        <img src="assets/guide/allergens-table.png" alt="Tabla de Alérgenos" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Nuevo Alérgeno</span>
+                        <img src="assets/guide/allergens-modal.png" alt="Modal Nuevo Alérgeno" />
+                    </div>
+                </div>
+
+                <div class="steps-card">
+                    <h3>Paso a Paso:</h3>
+                    <ol>
+                        <li>Ve a <strong>Gestión de la Carta ➡️ Alérgenos</strong>.</li>
+                        <li>Haz clic en <strong><code>+ Nuevo Alérgeno</code></strong>.</li>
+                        <li>Ingresa el nombre del ingrediente alérgeno (ej: <i>Gluten, Lácteos, Huevos, Frutos Secos, Maní, Soya, Mostaza</i>).</li>
+                        <li>Presiona <strong>Aceptar</strong>. Luego podrás vincularlos dentro de la ficha de cada producto.</li>
+                    </ol>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 4: Productos -->
+        <nz-tab nzTitle="🍔 Productos">
+            <div class="tab-content">
+                <h2>4. Catálogo General de Productos</h2>
+                <p>Módulo para agregar y gestionar los platos individuales de tu carta, sus fotos, precios base y grupos de opciones.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Catálogo Activo</span>
+                        <img src="assets/guide/products-table.png" alt="Tabla de Productos" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Ficha de Registro de Producto</span>
+                        <img src="assets/guide/products-modal.png" alt="Modal Nuevo Producto" />
+                    </div>
+                </div>
+
+                <div class="steps-card">
+                    <h3>Campos Clave del Producto:</h3>
+                    <ul>
+                        <li><strong>Nombre del Producto:</strong> Nombre comercial del plato (ej: <i>Jugo Natural, Boneless 10 Unidades</i>).</li>
+                        <li><strong>Precio Gral (COP):</strong> Valor base al público en pesos.</li>
+                        <li><strong>Categoría Principal:</strong> Selecciona la categoría a la que pertenece.</li>
+                        <li><strong>Imagen del Producto:</strong> Sube la foto publicitaria del plato (formatos JPG, PNG, WEBP).</li>
+                        <li><strong>Grupos de Modificadores:</strong> Asigna las opciones requeridas (ej: <i>Base de jugo, Salsas</i>).</li>
+                        <li><strong>Destacar en Inicio:</strong> Activa para mostrarlo en el banner de recomendados.</li>
+                    </ul>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 5: Combos -->
+        <nz-tab nzTitle="🎁 Combos">
+            <div class="tab-content">
+                <h2>5. Gestión de Combos y Paquetes</h2>
+                <p>Crea ofertas empaquetadas combinando varios productos a un precio especial con cálculo automático de ahorro para el cliente.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Listado de Combos</span>
+                        <img src="assets/guide/combos-table.png" alt="Tabla de Combos" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Creación de Combo</span>
+                        <img src="assets/guide/combos-modal.png" alt="Modal Nuevo Combo" />
+                    </div>
+                </div>
+
+                <div class="steps-card">
+                    <h3>Paso a Paso:</h3>
+                    <ol>
+                        <li>Ingresa a <strong>Gestión de la Carta ➡️ Combos</strong>.</li>
+                        <li>Haz clic en <strong><code>+ Nuevo Combo</code></strong>.</li>
+                        <li>Ingresa el <strong>Nombre</strong> (ej: <i>Combo Pareja</i>) y el <strong>Precio Especial</strong> en pesos.</li>
+                        <li>En <strong>Productos que conforman el Combo</strong>, selecciona los artículos incluidos. El sistema mostrará la insignia verde <code>Ahorro $X.XXX</code> automáticamente al cliente.</li>
+                    </ol>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 6: Menús -->
+        <nz-tab nzTitle="📜 Menús por Sede">
+            <div class="tab-content">
+                <h2>6. Asignación de Menús por Sede</h2>
+                <p>Permite activar cartas específicas para sedes individuales o mantener un menú global único.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Catálogos Asignados</span>
+                        <img src="assets/guide/menus-table.png" alt="Tabla de Menús" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Nueva Asignación</span>
+                        <img src="assets/guide/menus-modal.png" alt="Modal Asignación de Menú" />
+                    </div>
+                </div>
+            </div>
+        </nz-tab>
+
+        <!-- Pestaña 7: Sedes -->
+        <nz-tab nzTitle="🏬 Sedes">
+            <div class="tab-content">
+                <h2>7. Gestión de Sedes Físicas</h2>
+                <p>Administra las sedes activas de tu negocio, sus enlaces a Google Maps, horarios de atención y WhatsApp de pedidos.</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <span class="card-badge">Listado de Sedes</span>
+                        <img src="assets/guide/venues-table.png" alt="Tabla de Sedes" />
+                    </div>
+                    <div class="screenshot-card">
+                        <span class="card-badge">Registro de Sede</span>
+                        <img src="assets/guide/venues-modal.png" alt="Modal Nueva Sede" />
+                    </div>
+                </div>
+            </div>
+        </nz-tab>
+    </nz-tabs>
+</div>

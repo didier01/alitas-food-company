@@ -114,6 +114,11 @@ export const routes: Routes = [
         canActivate: [authGuard],
         data: { roles: ['superadmin'] },
         loadComponent: () => import('./features/admin/users/users.component').then(c => c.UsersComponent)
+      },
+      {
+        path: 'help',
+        title: 'Admin - Guía de Ayuda',
+        loadComponent: () => import('./features/admin/help/admin-help.component').then(c => c.AdminHelpComponent)
       }
     ]
   },
