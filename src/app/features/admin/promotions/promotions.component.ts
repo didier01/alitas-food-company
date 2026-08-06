@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -40,14 +40,15 @@ export class PromotionsComponent implements OnInit {
   supabaseService = inject(SupabaseService);
   fb = inject(FormBuilder);
   message = inject(NzMessageService);
+  cdr = inject(ChangeDetectorRef);
 
   promotions: Promotion[] = [];
   venues: Venue[] = [];
   loadingData = signal<boolean>(true);
-  loadingAction = false;
+  loadingAction = signal<boolean>(false);
   selectedFile: File | null = null;
   imagePreview: string | null = null;
-  modalVisible = false;
+  modalVisible = signal<boolean>(false);
   editingId: string | null = null;
   promoForm: FormGroup;
 
@@ -92,7 +93,8 @@ export class PromotionsComponent implements OnInit {
     this.selectedFile = null;
     this.imagePreview = null;
     this.promoForm.reset({ active: true, discount_percentage: 10, venue_ids: ['TODAS'] });
-    this.modalVisible = true;
+    this.modalVisible.set(true);
+    this.cdr.detectChanges();
   }
 
   editPromo(promo: Promotion) {
@@ -109,24 +111,26 @@ export class PromotionsComponent implements OnInit {
       image_url: promo.image_url,
       active: promo.active
     });
-    this.modalVisible = true;
+    this.modalVisible.set(true);
+    this.cdr.detectChanges();
   }
 
   closeModal() {
-    this.modalVisible = false;
+    this.modalVisible.set(false);
     this.selectedFile = null;
     this.imagePreview = null;
+    this.promoForm.reset();
   }
 
   async savePromo() {
     if (this.promoForm.invalid) return;
-    this.loadingAction = true;
+    this.loadingAction.set(true);
 
     try {
       let finalImageUrl = this.promoForm.get('image_url')?.value;
 
       if (this.selectedFile) {
-        finalImageUrl = await this.supabaseService.uploadImage(this.selectedFile, 'uploadImage/promotions');
+        finalImageUrl = await this.supabaseService.uploadImage(this.selectedFile, 'promotions');
       }
 
       const formVal = this.promoForm.value;
@@ -166,21 +170,24 @@ export class PromotionsComponent implements OnInit {
             this.promotions.unshift(saveObj);
           }
           this.closeModal();
-          this.loadingAction = false;
+          this.loadingAction.set(false);
         },
         error: () => {
           this.message.error('Error al guardar');
-          this.loadingAction = false;
+          this.loadingAction.set(false);
         }
       });
     } catch (error) {
       console.error(error);
       this.message.error('Error al subir la imagen.');
-      this.loadingAction = false;
+      this.loadingAction.set(false);
     }
   }
 
-  deletePromo(promo: Promotion) {
+  async deletePromo(promo: Promotion) {
+    if (promo.image_url) {
+      await this.supabaseService.safeDeleteImage(promo.image_url);
+    }
     this.promotionService.delete(promo.id).subscribe(() => {
       this.message.success('Promoción eliminada');
       this.promotions = this.promotions.filter(p => p.id !== promo.id);

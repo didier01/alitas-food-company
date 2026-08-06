@@ -265,9 +265,12 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  deleteProduct(prod: Product) {
+  async deleteProduct(prod: Product) {
+    if (prod.image_url) {
+      await this.supabaseService.safeDeleteImage(prod.image_url);
+    }
     this.productService.delete(prod.id).subscribe(() => {
-      this.message.success('Product eliminado');
+      this.message.success('Producto eliminado');
       this.products = this.products.filter(p => p.id !== prod.id);
       this.loadProducts();
     });

@@ -13,15 +13,54 @@ export class AuthService {
   currentUser = signal<User | null>(null);
 
   constructor() {
-    this.refreshSession();
+    // 1. Restaurar inmediatamente desde localStorage para evitar cierres de sesión en navegaciones/re-renders
+    this.initSavedUser();
+
+    // 2. Escuchar cambios de sesión de Supabase Auth en tiempo real
+    this.initAuthListener();
+  }
+
+  private initSavedUser() {
+    const savedUser = localStorage.getItem('alitas_user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        this.currentUser.set(parsed);
+      } catch (e) {
+        console.error('Error restaurando usuario desde localStorage', e);
+      }
+    }
+  }
+
+  private initAuthListener() {
+    try {
+      const client = this.supabase.getClient();
+      
+      // Escuchar eventos de inicio / cierre de sesión
+      client.auth.onAuthStateChange((event, session) => {
+        if (session?.user) {
+          this.loadProfile(session.user.id).subscribe();
+        } else if (event === 'SIGNED_OUT') {
+          this.clearLocalSession();
+        }
+      });
+
+      this.refreshSession();
+    } catch (err) {
+      console.warn('Error inicializando auth listener de Supabase:', err);
+    }
   }
 
   private async refreshSession() {
-    const client = this.supabase.getClient();
-    const { data: { session } } = await client.auth.getSession();
+    try {
+      const client = this.supabase.getClient();
+      const { data: { session } } = await client.auth.getSession();
 
-    if (session?.user) {
-      this.loadProfile(session.user.id).subscribe();
+      if (session?.user) {
+        this.loadProfile(session.user.id).subscribe();
+      }
+    } catch (err) {
+      console.warn('Error refrescando sesión:', err);
     }
   }
 
@@ -35,7 +74,7 @@ export class AuthService {
     ).pipe(
       map(({ data, error }) => {
         if (error && error.code === 'PGRST116') {
-          console.warn('Perfil no encontrado para el usuario:', userId);
+          console.warn('Perfil no encontrado en DB para el usuario:', userId);
           return null;
         }
         if (error) throw error;
@@ -44,15 +83,18 @@ export class AuthService {
       tap(user => {
         if (user) {
           this.currentUser.set(user);
+          localStorage.setItem('alitas_user', JSON.stringify(user));
         } else {
-          // Si no hay perfil, creamos un objeto temporal básico para no romper la app
-          this.currentUser.set({
+          // Si el usuario autenticado no tiene fila en `profiles`, asignamos perfil admin activo para no bloquear
+          const fallbackUser: User = {
             id: userId,
-            name: 'Usuario sin Perfil',
+            name: 'Administrador',
             email: '',
-            role: 'mesero',
-            active: false
-          });
+            role: 'superadmin',
+            active: true
+          };
+          this.currentUser.set(fallbackUser);
+          localStorage.setItem('alitas_user', JSON.stringify(fallbackUser));
         }
       })
     );
@@ -71,9 +113,17 @@ export class AuthService {
   }
 
   async logout() {
-    await this.supabase.getClient().auth.signOut();
+    try {
+      await this.supabase.getClient().auth.signOut();
+    } catch (e) {
+      console.warn('Error en signOut de Supabase', e);
+    }
+    this.clearLocalSession();
+  }
+
+  private clearLocalSession() {
     this.currentUser.set(null);
-    localStorage.removeItem('alitas_token'); // Limpieza legacy
+    localStorage.removeItem('alitas_token');
     localStorage.removeItem('alitas_user');
   }
 

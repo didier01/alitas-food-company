@@ -34,8 +34,8 @@
       </li>
 
       <!-- Grupo: Carta Digital -->
-      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de la Carta" nzTitle="Gestión de la Carta"
-        nzIcon="appstore" [nzOpen]="true">
+      <li nz-submenu nz-tooltip nzTooltipTitle="Gestión de la Carta" nzTitle="Gestión de la Carta" nzIcon="appstore"
+        [nzOpen]="true">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/categories">
@@ -55,24 +55,24 @@
               <span>Combos</span>
             </a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <!-- <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/promotions">
               <span nz-icon nzType="tag"></span>
               <span>Promociones</span>
             </a>
-          </li>
+          </li> -->
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/menus">
               <span nz-icon nzType="appstore"></span>
               <span>Menús</span>
             </a>
           </li>
-          <!-- <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/complements/allergens">
               <span nz-icon nzType="medicine-box"></span>
               <span>Alérgenos</span>
             </a>
-          </li> -->
+          </li>
           <!-- <li nz-menu-item nzMatchRouter>
             <a routerLink="/admin/complements/modifiers">
               <span nz-icon nzType="plus-square"></span>
@@ -115,7 +115,7 @@
           (click)="isCollapsed = !isCollapsed"></span>
         <div class="header-actions">
           <span class="user-greeting">Hola, {{ authService.currentUser()?.name }}!</span>
-          <app-theme-toggle></app-theme-toggle>
+          <!-- <app-theme-toggle></app-theme-toggle> -->
           <button class="logout-btn" (click)="logout()">
             <span nz-icon nzType="logout"></span>
           </button>

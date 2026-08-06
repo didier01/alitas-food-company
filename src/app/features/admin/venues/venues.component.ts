@@ -157,7 +157,10 @@ export class VenuesComponent implements OnInit {
     }
   }
 
-  deleteSede(sede: Venue) {
+  async deleteSede(sede: Venue) {
+    if (sede.image_url) {
+      await this.supabaseService.safeDeleteImage(sede.image_url);
+    }
     this.venueService.delete(sede.id).subscribe({
       next: () => {
         this.message.success('Sede eliminada permanentemente');

@@ -54,8 +54,8 @@
             <span class="total-label">Total:</span>
             <span class="total-amount">{{ totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
         </div>
-        <button nz-button nzType="primary" nzBlock (click)="confirmSelection()" [disabled]="!isValid()" nzSize="large"
-            style="height: 50px; font-size: 1.1rem; border-radius: 8px;">
+        <button nz-button nzType="primary" nzBlock (click)="confirmSelection()" [disabled]="!isValid()"
+            class="btn-submit-selection">
             Agregar a mi Selección
         </button>
     </div>

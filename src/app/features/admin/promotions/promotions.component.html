@@ -55,8 +55,8 @@
 </div>
 
 <!-- Modal para Crear/Editar -->
-<nz-modal [(nzVisible)]="modalVisible" [nzTitle]="editingId ? 'Editar Promoción' : 'Nueva Promoción'" [nzWidth]="600"
-  (nzOnCancel)="closeModal()" (nzOnOk)="savePromo()" [nzOkLoading]="loadingAction" [nzOkDisabled]="promoForm.invalid">
+<nz-modal [nzVisible]="modalVisible()" (nzVisibleChange)="modalVisible.set($event)" [nzTitle]="editingId ? 'Editar Promoción' : 'Nueva Promoción'" [nzWidth]="600"
+  (nzOnCancel)="closeModal()" (nzOnOk)="savePromo()" [nzOkLoading]="loadingAction()" [nzOkDisabled]="promoForm.invalid">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="promoForm" nzLayout="vertical">
       <nz-form-item>

@@ -360,7 +360,10 @@ export class CombosComponent implements OnInit {
     });
   }
 
-  deleteCombo(combo: Combo) {
+  async deleteCombo(combo: Combo) {
+    if (combo.image_url) {
+      await this.supabaseService.safeDeleteImage(combo.image_url);
+    }
     this.comboService.delete(combo.id).subscribe(() => {
       this.message.success('Combo eliminado');
       this.combos = this.combos.filter(c => c.id !== combo.id);

@@ -56,4 +56,54 @@ export class SupabaseService {
 
     return publicUrl;
   }
+
+  /**
+   * Safe Garbage Collection for images: Checks if the image is used elsewhere before deleting from Storage.
+   * If references <= 1 (only the current item being deleted uses it), it removes the physical file from Storage.
+   * @param imageUrl Public URL of the image to check and delete
+   */
+  async safeDeleteImage(imageUrl: string): Promise<boolean> {
+    if (!this.supabase || !imageUrl) return false;
+
+    // Ignore default fallback image or external URLs (e.g. Unsplash)
+    if (imageUrl.includes('default-image.webp') || !imageUrl.includes(this.BUCKET_NAME)) {
+      return false;
+    }
+
+    try {
+      // Extract storage path from public URL
+      const pathParts = imageUrl.split(`/public/${this.BUCKET_NAME}/`);
+      if (pathParts.length < 2) return false;
+      const storagePath = pathParts[1];
+
+      // Check references across products, combos, and venues tables
+      const [prodRes, comboRes, venueRes] = await Promise.all([
+        this.supabase.from('products').select('id', { count: 'exact', head: true }).eq('image_url', imageUrl),
+        this.supabase.from('combos').select('id', { count: 'exact', head: true }).eq('image_url', imageUrl),
+        this.supabase.from('venues').select('id', { count: 'exact', head: true }).eq('image_url', imageUrl)
+      ]);
+
+      const totalReferences = (prodRes.count || 0) + (comboRes.count || 0) + (venueRes.count || 0);
+
+      // If references <= 1 (only the record being deleted uses it), delete from Storage
+      if (totalReferences <= 1) {
+        const { error } = await this.supabase.storage
+          .from(this.BUCKET_NAME)
+          .remove([storagePath]);
+
+        if (error) {
+          console.error('Error removing file from storage:', error);
+          return false;
+        }
+        console.log(`[Supabase Storage] Imagen física eliminada: ${storagePath} (Referencias <= 1)`);
+        return true;
+      } else {
+        console.log(`[Supabase Storage] Imagen conservada. Usada por ${totalReferences} elementos.`);
+        return false;
+      }
+    } catch (err) {
+      console.error('Error in safeDeleteImage:', err);
+      return false;
+    }
+  }
 }

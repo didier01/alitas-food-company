@@ -42,7 +42,7 @@ export class ProductoCardComponent {
       nzContent: ProductSelectionModalComponent,
       nzData: { product: this.producto }, // NZ-ZORRO 17+ uses nzData, but we can also use componentParams in older versions
       nzFooter: null,
-      nzWidth: 500,
+      nzWidth: 440,
       nzClassName: 'dark-modal' // Optional: if we have dark theme classes
     });
 
