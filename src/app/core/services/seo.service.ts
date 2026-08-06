@@ -9,20 +9,20 @@ export class SeoService {
   private meta = inject(Meta);
 
   setTags(config: { title?: string; description?: string; image?: string; route?: string }) {
-    const baseTitle = 'alitas Food Company | Comida Rápida Gourmet';
-    const pageTitle = config.title ? `${config.title} - alitas` : baseTitle;
+    const baseTitle = 'Alitas Food Company | Carta Digital';
+    const pageTitle = config.title ? `${config.title} - Alitas Food Company` : baseTitle;
 
     this.title.setTitle(pageTitle);
 
-    const desc = config.description || 'Descubre la mejor experiencia de comida rápida gourmet en Medellín. Hamburguesas, alitas, combos y más.';
-    const img = config.image || 'https://alitas.com/assets/images/og-image.jpg';
-    const url = `https://alitas.com${config.route || ''}`;
+    const desc = config.description || 'Descubre la mejor experiencia de comida rápida en Alitas Food Company. Hamburguesas, alitas, combos y más.';
+    const img = config.image || 'https://alitasfoodcompany.netlify.app/assets/images/og-image.jpg';
+    const url = `https://alitasfoodcompany.netlify.app/${config.route || ''}`;
 
     this.meta.updateTag({ name: 'description', content: desc });
 
     // Open Graph
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:site_name', content: 'alitas Food Company' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'Alitas Food Company' });
     this.meta.updateTag({ property: 'og:title', content: pageTitle });
     this.meta.updateTag({ property: 'og:description', content: desc });
     this.meta.updateTag({ property: 'og:image', content: img });
