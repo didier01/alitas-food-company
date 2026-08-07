@@ -22,10 +22,10 @@ export class CartButtonComponent {
 
   openCart() {
     this.drawerService.create({
-      nzTitle: 'Tu Pedido',
+      nzTitle: undefined,
       nzContent: CartDrawerComponent,
       nzWidth: 400,
-      nzClosable: true
+      nzClosable: false
     });
   }
 }

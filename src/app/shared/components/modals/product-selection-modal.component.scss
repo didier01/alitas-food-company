@@ -160,6 +160,20 @@
     }
 }
 
+.dine-in-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(24, 144, 255, 0.1);
+    border: 1px solid #1890ff;
+    color: #40a9ff;
+    font-size: 0.84rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
 .allergen-list {
     margin: 6px 0;
     display: flex;

@@ -13,6 +13,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { AnalyticsService } from '../../../core/services/analytics.service';
 
 
+import { OrderModeService } from '../../../core/services/order-mode.service';
+
 @Component({
   selector: 'app-producto-card',
   standalone: true,
@@ -29,6 +31,7 @@ export class ProductoCardComponent {
   cartService = inject(CartService);
   message = inject(NzMessageService);
   analyticsService = inject(AnalyticsService);
+  orderModeService = inject(OrderModeService);
 
   addToCartDirectly() {
     if (this.producto.modifier_groups && this.producto.modifier_groups.length > 0) {

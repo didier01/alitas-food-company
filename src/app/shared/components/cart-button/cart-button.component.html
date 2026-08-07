@@ -1,4 +1,4 @@
-<div class="cart-pill-container" *ngIf="cartService.count() > 0" (click)="openCart()">
+<div class="cart-pill-container" *ngIf="orderModeService.mode() !== 'dine-in' && cartService.count() > 0" (click)="openCart()">
     <div class="cart-pill">
         <div class="pill-left">
             <div class="icon-wrapper">

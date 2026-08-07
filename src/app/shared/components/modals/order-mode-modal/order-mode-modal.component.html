@@ -1,6 +1,9 @@
-@if(mode() === 'pending') {
-<div class="welcome-overlay" [class.fade-out]="isLeaving">
-  <div class="welcome-modal">
+@if(isModalOpen()) {
+<div class="welcome-overlay" [class.fade-out]="isLeaving" (click)="closeModal()">
+  <div class="welcome-modal" (click)="$event.stopPropagation()">
+    <button class="btn-close-modal" (click)="closeModal()" title="Cerrar">
+      <span nz-icon nzType="close"></span>
+    </button>
     <div class="welcome-header">
       <div class="welcome-logo-emoji">🔥</div>
       <h2>¡Hola! 👋</h2>

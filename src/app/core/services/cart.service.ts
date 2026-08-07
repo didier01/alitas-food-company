@@ -10,7 +10,13 @@ export interface CartItem {
   totalPrice: number; // Price of product + extras * quantity
 }
 
+interface CartStoragePayload {
+  items: CartItem[];
+  timestamp: number;
+}
+
 const CART_STORAGE_KEY = 'alitas_cart';
+const ONE_HOUR_MS = 60 * 60 * 1000; // 1 hour expiration
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +28,24 @@ export class CartService {
   private loadCart(): CartItem[] {
     try {
       const stored = localStorage.getItem(CART_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
+      if (!stored) return [];
+
+      const parsed = JSON.parse(stored);
+
+      if (Array.isArray(parsed)) {
+        // Legacy format: save with timestamp now
+        return parsed;
+      } else if (parsed && Array.isArray(parsed.items) && parsed.timestamp) {
+        const now = Date.now();
+        if (now - parsed.timestamp < ONE_HOUR_MS) {
+          return parsed.items;
+        } else {
+          // Expired (> 1 hour), clear storage
+          localStorage.removeItem(CART_STORAGE_KEY);
+          return [];
+        }
+      }
+      return [];
     } catch {
       return [];
     }
@@ -30,7 +53,11 @@ export class CartService {
 
   private saveCart() {
     try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.cartItems()));
+      const payload: CartStoragePayload = {
+        items: this.cartItems(),
+        timestamp: Date.now()
+      };
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(payload));
     } catch {}
   }
 
@@ -108,29 +135,35 @@ export class CartService {
 
   clearCart() {
     this.cartItems.set([]);
-    this.saveCart();
+    localStorage.removeItem(CART_STORAGE_KEY);
   }
 
-  generateWhatsAppMessage(venueName: string, customerName?: string, deliveryAddress?: string): string {
+  generateWhatsAppMessage(venueName: string, customerName?: string, deliveryAddress?: string, customerPhone?: string): string {
     const items = this.cartItems();
     if (items.length === 0) return '';
 
-    let message = `*Pedido alitas - ${venueName}* 🍗\n\n`;
-    
-    if (customerName) message += `*Cliente:* ${customerName}\n`;
-    if (deliveryAddress) message += `*Entrega/Mesa:* ${deliveryAddress}\n\n`;
+    let message = `🍗 *¡NUEVO PEDIDO A DOMICILIO!* 🍗\n`;
+    message += `📍 *Sede:* ${venueName}\n\n`;
+
+    if (customerName) message += `👤 *Cliente:* ${customerName}\n`;
+    if (deliveryAddress) message += `🏠 *Dirección / Punto:* ${deliveryAddress}\n`;
+    if (customerPhone) message += `📞 *Teléfono:* ${customerPhone}\n`;
+
+    message += `\n🛒 *DETALLE DEL PEDIDO:*\n`;
+    message += `──────────────────────────\n`;
 
     items.forEach(item => {
-      message += `*${item.quantity}x ${item.product.name}*\n`;
-      if (item.selectedOptions.length > 0) {
-        message += `_Variantes:_ ${item.selectedOptions.map(o => o.name).join(', ')}\n`;
+      message += `• *${item.quantity}x ${item.product.name}*\n`;
+      if (item.selectedOptions && item.selectedOptions.length > 0) {
+        message += `  _Opciones:_ ${item.selectedOptions.map(o => o.name).join(', ')}\n`;
       }
-      message += `Subtotal: $${item.totalPrice.toLocaleString()}\n\n`;
+      message += `  Subtotal: $${item.totalPrice.toLocaleString('es-CO')} COP\n\n`;
     });
 
-    message += `--------------------------\n`;
-    message += `*TOTAL: $${this.totalAmount().toLocaleString()} COP*`;
-    
+    message += `──────────────────────────\n`;
+    message += `💰 *TOTAL A PAGAR: $${this.totalAmount().toLocaleString('es-CO')} COP*\n\n`;
+    message += `_Quedamos atentos a la confirmación de su pedido. ¡Gracias por elegir Alitas Food Company!_`;
+
     return encodeURIComponent(message);
   }
 }

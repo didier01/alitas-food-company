@@ -94,17 +94,18 @@ export class CartDrawerComponent implements OnInit {
       next: () => {
         // Prepare WhatsApp message
         const phone = venue.whatsapp || '+573000000000';
+        const cleanPhone = phone.replace(/[^0-9]/g, '');
         const msg = this.cartService.generateWhatsAppMessage(
           venue.name,
           this.customerName,
-          this.deliveryAddress
+          this.deliveryAddress,
+          this.customer_phone
         );
 
-        // window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
+        window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
 
-        this.cartService.clearCart();
         this.isSaving = false;
-        this.message.success('Pedido registrado correctamente');
+        this.message.success('¡Pedido registrado! Tu selección estará guardada en tu carrito.');
         this.drawerRef.close();
       },
       error: (err) => {

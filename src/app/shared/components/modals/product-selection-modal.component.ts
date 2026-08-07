@@ -14,6 +14,7 @@ import { AllergenService } from '../../../core/services/allergen.service';
 import { Allergen } from '../../../core/models/allergen.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AnalyticsService } from '../../../core/services/analytics.service';
+import { OrderModeService } from '../../../core/services/order-mode.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class ProductSelectionModalComponent implements OnInit, OnDestroy {
   cartService = inject(CartService);
   message = inject(NzMessageService);
   analyticsService = inject(AnalyticsService);
+  orderModeService = inject(OrderModeService);
   cdr = inject(ChangeDetectorRef);
 
   selections: any = {};

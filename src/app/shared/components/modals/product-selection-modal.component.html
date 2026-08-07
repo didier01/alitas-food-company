@@ -54,9 +54,13 @@
             <span class="total-label">Total:</span>
             <span class="total-amount">{{ totalPrice | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
         </div>
-        <button nz-button nzType="primary" nzBlock (click)="confirmSelection()" [disabled]="!isValid()"
+        <button *ngIf="orderModeService.mode() !== 'dine-in'" nz-button nzType="primary" nzBlock (click)="confirmSelection()" [disabled]="!isValid()"
             class="btn-submit-selection">
             Agregar a mi Selección
         </button>
+        <div *ngIf="orderModeService.mode() === 'dine-in'" class="dine-in-notice">
+            <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+            <span>Carta informativa en mesa: consulta estas deliciosas opciones con tu mesero.</span>
+        </div>
     </div>
 </div>

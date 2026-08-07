@@ -1,27 +1,29 @@
 <div class="cart-container">
     <!-- Custom Header -->
-    <!-- <div class="cart-header">
+    <div class="custom-cart-header">
         <div class="header-left">
-            <span nz-icon nzType="shopping-cart-outline" class="bag-icon"></span>
-            <h3>Tu Pedido</h3>
+            <div class="header-icon-badge">🛒</div>
+            <div class="header-titles">
+                <h3>Tu Pedido</h3>
+                <span class="count-subtitle">Tu selección ({{ cartService.count() }} {{ cartService.count() === 1 ? 'producto' : 'productos' }})</span>
+            </div>
         </div>
-        <button class="close-btn" (click)="close()">
-            <span nz-icon nzType="close"></span>
-        </button>
-    </div> -->
+        <div class="header-actions">
+            <button *ngIf="cartService.count() > 0" class="btn-vaciar-custom" (click)="cartService.clearCart()" title="Vaciar selección">
+                <span nz-icon nzType="delete"></span> Vaciar
+            </button>
+            <button class="btn-close-custom" (click)="close()" title="Cerrar">
+                <span nz-icon nzType="close"></span>
+            </button>
+        </div>
+    </div>
 
     @if (cartService.items().length === 0) {
-    <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Tu carrito está vacío"></nz-empty>
+    <div class="empty-cart-wrapper">
+        <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Tu carrito está vacío"></nz-empty>
+    </div>
     } @else {
     <div class="cart-scroll-area">
-        <!-- Selection Section -->
-        <div class="section-title">Tu selección</div>
-
-
-        <button class="btn-clear" nz-button nzType="text" nzDanger nzSize="small" (click)="cartService.clearCart()">
-            <span nz-icon nzType="delete"></span> Vaciar
-        </button>
-
         <div class="cart-items">
             @for (item of cartService.items(); track item.id) {
             <div class="cart-card">
@@ -63,16 +65,39 @@
     </div>
 
     <div class="cart-footer">
-
-
         <div class="summary-lines">
             <div class="summary-row">
-                <span style="font-weight: 700; font-size: 1.1rem; color: #fff;">Total Estimado de la Cuenta</span>
+                <span style="font-weight: 700; font-size: 1.1rem; color: #fff;">Total Estimado:</span>
                 <span style="font-weight: 700; font-size: 1.2rem; color: var(--brand-primary);">{{ cartService.totalAmount() | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
             </div>
         </div>
 
-        <div class="dine-in-message">
+        <!-- Formulario para Domicilio -->
+        <div *ngIf="orderModeService.mode() === 'delivery'" class="delivery-form">
+            <nz-divider style="margin: 12px 0; border-color: var(--public-border);"></nz-divider>
+            <div class="form-field">
+                <label>Tu Nombre *</label>
+                <input nz-input placeholder="Ej: Juan Pérez" [(ngModel)]="customerName" />
+            </div>
+            <div class="form-field">
+                <label>Barrio y Dirección de Entrega *</label>
+                <input nz-input placeholder="Ej: Laureles, Calle 10 # 40-20 Apto 302" [(ngModel)]="deliveryAddress" />
+            </div>
+            <div class="form-field">
+                <label>Teléfono de Contacto *</label>
+                <input nz-input placeholder="Ej: 3001234567" [(ngModel)]="customer_phone" />
+            </div>
+            <div class="delivery-notice-box">
+                <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+                <span>El valor del domicilio no está incluido en el total y se calculará según el barrio y la dirección de entrega vía WhatsApp.</span>
+            </div>
+            <button nz-button nzType="primary" nzBlock (click)="checkout()" [nzLoading]="isSaving" class="btn-checkout-wa" style="margin-top: 12px; height: 42px; border-radius: 25px; font-weight: 700; background: #25D366; border-color: #25D366; color: #fff;">
+                <img src="/assets/outline/whatsapp.svg" width="20" height="20" style="vertical-align: middle; margin-right: 6px; filter: brightness(0);" /> Pedir por WhatsApp
+            </button>
+        </div>
+
+        <!-- Mensaje para Comer en Sitio -->
+        <div *ngIf="orderModeService.mode() === 'dine-in'" class="dine-in-message">
             <span nz-icon nzType="info-circle" nzTheme="outline"></span>
             <p><strong>¡Excelente elección!</strong><br>Muestra este resumen en tu pantalla a tu mesero al momento de pedir en tu mesa.</p>
         </div>

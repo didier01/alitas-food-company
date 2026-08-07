@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-export type OrderMode = 'delivery' | 'dine-in' | 'pending';
+export type OrderMode = 'delivery' | 'dine-in';
 
 interface OrderModeStorage {
   mode: OrderMode;
@@ -14,8 +14,11 @@ const EXPIRY_HOURS = 3;
   providedIn: 'root'
 })
 export class OrderModeService {
-  private readonly _mode = signal<OrderMode>('pending');
+  private readonly _mode = signal<OrderMode>('dine-in');
   public readonly mode = this._mode.asReadonly();
+
+  private readonly _isModalOpen = signal<boolean>(false);
+  public readonly isModalOpen = this._isModalOpen.asReadonly();
 
   constructor() {}
 
@@ -37,25 +40,24 @@ export class OrderModeService {
         const now = new Date().getTime();
         const diffHours = (now - stored.timestamp) / (1000 * 60 * 60);
 
-        if (diffHours < EXPIRY_HOURS) {
+        if (diffHours < EXPIRY_HOURS && (stored.mode === 'dine-in' || stored.mode === 'delivery')) {
           this._mode.set(stored.mode);
-        } else {
-          // Expired, clear it and remain 'pending'
-          localStorage.removeItem(STORAGE_KEY);
-          this._mode.set('pending');
+          this._isModalOpen.set(false);
+          return;
         }
       } catch (e) {
-        // Bad JSON
         localStorage.removeItem(STORAGE_KEY);
-        this._mode.set('pending');
       }
-    } else {
-      this._mode.set('pending');
     }
+
+    // First visit or expired: default to dine-in and open welcome modal
+    this._mode.set('dine-in');
+    this._isModalOpen.set(true);
   }
 
   setMode(newMode: OrderMode): void {
     this._mode.set(newMode);
+    this._isModalOpen.set(false);
     
     const objToStore: OrderModeStorage = {
       mode: newMode,
@@ -63,5 +65,13 @@ export class OrderModeService {
     };
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(objToStore));
+  }
+
+  openModal(): void {
+    this._isModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    this._isModalOpen.set(false);
   }
 }

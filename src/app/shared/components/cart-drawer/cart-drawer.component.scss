@@ -5,48 +5,104 @@
     justify-content: space-between;
 }
 
-// Header
-.cart-header {
-    padding: 24px;
+// Custom Header
+.custom-cart-header {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+
+  .header-left {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
 
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        .bag-icon {
-            font-size: 24px;
-            color: var(--brand-primary);
-        }
-
-        h3 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-        }
+    .header-icon-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
     }
 
-    .close-btn {
-        background: rgba(255, 255, 255, 0.08);
-        border: none;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+
+      h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
         color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
+        line-height: 1.2;
+      }
 
-        &:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
+      .count-subtitle {
+        font-size: 0.75rem;
+        color: var(--brand-primary);
+        font-weight: 600;
+      }
     }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.btn-vaciar-custom {
+  background: rgba(255, 77, 79, 0.1) !important;
+  border: 1px solid rgba(255, 77, 79, 0.3) !important;
+  color: #ff4d4f !important;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 77, 79, 0.2) !important;
+    border-color: #ff4d4f !important;
+    transform: translateY(-1px);
+  }
+}
+
+.btn-close-custom {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+.empty-cart-wrapper {
+  padding: 60px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cart-scroll-area {
@@ -64,9 +120,9 @@
 }
 
 .section-title {
-    // font-weight: 700;
     color: var(--admin-text-secondary);
-    margin-block: 8px;
+    margin: 6px 0 8px 0;
+    font-size: 0.82rem;
 }
 
 .btn-clear {
@@ -81,7 +137,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    // margin-bottom: 32px;
+    margin-top: 10px;
 }
 
 .cart-card {
@@ -193,9 +249,52 @@
     flex-direction: column;
     gap: 10px;
 
-    label {
-        font-size: 12px;
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
 
+        label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--admin-text-secondary);
+        }
+
+        input {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.88rem;
+
+            &:focus {
+                border-color: var(--brand-primary);
+            }
+        }
+    }
+
+    .delivery-notice-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        background: rgba(255, 215, 0, 0.08);
+        border: 1px dashed var(--brand-primary);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-top: 4px;
+        color: var(--public-text-primary);
+
+        span:first-child {
+            color: var(--brand-primary);
+            font-size: 1rem;
+            margin-top: 1px;
+        }
+
+        span:last-child {
+            font-size: 0.78rem;
+            line-height: 1.35;
+            color: rgba(255, 255, 255, 0.85);
+        }
     }
 }
 

@@ -6,9 +6,11 @@
         <button class="hamburger" (click)="toggleMenu()">
           <span></span><span></span><span></span>
         </button>
-        <!-- <span class="logo" >🔥</span> -->
         <img src="/images/alita-1.png" alt="Alitas Food Company" class="logo" />
-        <span class="brand-name">Alitas Food Company</span>
+        <span class="brand-name">
+          <span class="brand-full">Alitas Food Company</span>
+          <span class="brand-short">AFC</span>
+        </span>
       </div>
 
       <div class="desktop-menu" [class.show]="menuOpen">
@@ -18,15 +20,15 @@
         <a routerLink="/contacto" routerLinkActive="active" (click)="closeMenu()">Contacto</a>
       </div>
 
-      <!-- <div class="actions">
-        <app-sede-select class="sede-select-desktop"></app-sede-select>
-
-      </div> -->
+      <div class="actions">
+        <button class="mode-badge" [class.dine-in]="orderModeService.mode() === 'dine-in'"
+          (click)="openOrderModeModal()" title="Cambiar modo de consumo">
+          <span *ngIf="orderModeService.mode() === 'dine-in'">📍 Comer en sitio</span>
+          <span *ngIf="orderModeService.mode() === 'delivery'">🛵 Domicilio</span>
+          <small class="change-lbl">Cambiar</small>
+        </button>
+      </div>
     </div>
-    <!-- Mobile menu sede select fallback -->
-    <!-- <div class="mobile-sede-select" *ngIf="menuOpen">
-      <app-sede-select></app-sede-select>
-    </div> -->
   </nav>
 
   <!-- Main Content con Animaciones -->
@@ -51,6 +53,6 @@
   <!-- Botón Flotante de Mi Selección -->
   <app-cart-button></app-cart-button>
 
-  <!-- Modo de Orden Modal (Deshabilitado en MVP Carta Digital) -->
-  <!-- <app-order-mode-modal></app-order-mode-modal> -->
+  <!-- Modo de Orden Modal -->
+  <app-order-mode-modal></app-order-mode-modal>
 </div>

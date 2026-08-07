@@ -11,16 +11,21 @@ import { OrderModeService } from '../../../../core/services/order-mode.service';
   styleUrl: './order-mode-modal.component.scss'
 })
 export class OrderModeModalComponent {
-  private orderModeService = inject(OrderModeService);
+  orderModeService = inject(OrderModeService);
 
-  // Expose signal to UI so we know when to hide completely or add a leaving animation
-  mode = this.orderModeService.mode;
+  isModalOpen = this.orderModeService.isModalOpen;
+  currentMode = this.orderModeService.mode;
   isLeaving = false;
 
   selectMode(modeType: 'delivery' | 'dine-in') {
     this.isLeaving = true;
     setTimeout(() => {
       this.orderModeService.setMode(modeType);
-    }, 300); // 300ms matches the fade-out animation
+      this.isLeaving = false;
+    }, 300);
+  }
+
+  closeModal() {
+    this.orderModeService.closeModal();
   }
 }

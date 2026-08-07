@@ -33,8 +33,11 @@
 
 
     <div class="card-footer-buttons">
-      <button nz-button nzType="primary" nzShape="round" (click)="$event.stopPropagation(); addToCartDirectly()">
+      <button *ngIf="orderModeService.mode() !== 'dine-in'" nz-button nzType="primary" nzShape="round" (click)="$event.stopPropagation(); addToCartDirectly()">
         <span nz-icon nzType="plus"></span>
+      </button>
+      <button *ngIf="orderModeService.mode() === 'dine-in'" nz-button nzType="default" nzShape="circle" (click)="$event.stopPropagation(); openSelectionModal()" title="Ver detalles y opciones" class="btn-view-options">
+        <span nz-icon nzType="eye"></span>
       </button>
     </div>
   </div>
