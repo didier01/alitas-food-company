@@ -30,10 +30,10 @@
 
     <!-- Chips de Categorías -->
     <div class="categories-scroll">
-      <button class="cat-chip" [class.active]="productService.categoryFilter() === 'all'"
+      <!-- <button class="cat-chip" [class.active]="productService.categoryFilter() === 'all'"
         (click)="setCategoria('all')">
         🍽️ Todas
-      </button>
+      </button> -->
       @for (cat of categories; track cat.id) {
       <button class="cat-chip" [class.active]="productService.categoryFilter() === cat.id"
         (click)="setCategoria(cat.id)">

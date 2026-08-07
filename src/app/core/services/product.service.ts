@@ -336,6 +336,14 @@ export class ProductService extends BaseSupabaseService<Product> {
         this.allProducts.set(data.products);
         this.allCombos.set(data.combos);
         this.allCategories.set(data.categories);
+        if (this.categoryFilter() === 'all' || !this.categoryFilter()) {
+          const comboCategory = data.categories.find(c => c.name.toLowerCase().includes('combo'));
+          if (comboCategory) {
+            this.categoryFilter.set(comboCategory.id);
+          } else if (data.categories.length > 0) {
+            this.categoryFilter.set(data.categories[0].id);
+          }
+        }
       },
       error: (err) => {
         console.error('Error loading public menu data', err);

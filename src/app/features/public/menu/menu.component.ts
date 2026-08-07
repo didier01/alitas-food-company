@@ -58,6 +58,12 @@ export class MenuComponent implements OnInit {
 
     this.categoriaService.getAll().subscribe(cats => {
       this.categories = cats.filter(c => c.active).sort((a, b) => a.sort_order - b.sort_order);
+      const comboCat = this.categories.find(c => c.name.toLowerCase().includes('combo'));
+      if (comboCat) {
+        this.productService.categoryFilter.set(comboCat.id);
+      } else if (this.categories.length > 0) {
+        this.productService.categoryFilter.set(this.categories[0].id);
+      }
       this.productService.loadProductsInSignal();
       this.loadTags();
     });
